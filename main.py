@@ -38,7 +38,7 @@ if __name__ == '__main__':
         from validators import *
         user = User(
             tokens=db.tokens,
-            debug='DEBUG'
+            debug='INFO'
         )
         user.set_blueprints(
             *commands_bp
