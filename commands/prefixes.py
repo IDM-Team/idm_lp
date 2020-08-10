@@ -1,3 +1,5 @@
+import sys
+
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
@@ -14,6 +16,7 @@ def show_self_prefixes(db: Database) -> str:
     message = '📃 Ваши префиксы для собственных сигналов\n'
     for prefix in db.self_prefixes:
         message += f'{index}. {prefix}\n'
+        index += 1
     return message
 
 
@@ -22,6 +25,7 @@ def show_duty_prefixes(db: Database) -> str:
     message = '📃 Ваши префиксы для сигналов дежурному\n'
     for prefix in db.duty_prefixes:
         message += f'{index}. {prefix}\n'
+        index += 1
     return message
 
 
@@ -48,6 +52,7 @@ def remove_duty_prefix(db: Database, prefix: str) -> None:
 @user.on.message(FromMe(), text="<prefix:service_prefix> префиксы свои")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> префиксы свои")
 async def show_self_prefixes_wrapper(message: Message, **kwargs):
+    sys.stdout.write(f'Просмотр своих префиксов\n')
     db = Database.load()
     await edit_message(
         message,
@@ -58,6 +63,7 @@ async def show_self_prefixes_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> префиксы дежурный")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> префиксы дежурный")
 async def show_duty_prefixes_wrapper(message: Message, **kwargs):
+    sys.stdout.write(f'Просмотр префиксов дежурного\n')
     db = Database.load()
     await edit_message(
         message,
@@ -68,6 +74,7 @@ async def show_duty_prefixes_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>")
 async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
+    sys.stdout.write(f'Создание своего префикса\n')
     db = Database.load()
     new_prefix = new_prefix.replace(' ', '')
     if new_prefix in db.self_prefixes:
@@ -86,6 +93,7 @@ async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>")
 async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
+    sys.stdout.write(f'Создание префикса дежурного\n')
     db = Database.load()
     new_prefix = new_prefix.replace(' ', '')
     if new_prefix in db.duty_prefixes:
@@ -104,6 +112,7 @@ async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>")
 async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
+    sys.stdout.write(f'Удаление своего префикса\n')
     db = Database.load()
     old_prefix = old_prefix.replace(' ', '')
     if old_prefix not in db.self_prefixes:
@@ -122,6 +131,7 @@ async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs
 @user.on.message(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>")
 async def remove_duty_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
+    sys.stdout.write(f'Удаление префикса дежурного\n')
     db = Database.load()
     old_prefix = old_prefix.replace(' ', '')
     if old_prefix not in db.duty_prefixes:

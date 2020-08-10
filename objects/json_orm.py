@@ -1,4 +1,6 @@
 import json
+import os
+import platform
 from typing import List
 
 from const import DEFAULT_DATABASE
@@ -91,21 +93,30 @@ class Database(DotDict):
             raise Database.SmallAmountTokensError(0 if not self.tokens else len(self.tokens))
 
     @staticmethod
-    def load(
-            path_to_file: str = 'config.json'
-    ) -> "Database":
+    def get_path():
+        if 'win' in platform.system().lower():
+            local_data_path = os.environ["APPDATA"]
+            return os.path.join(
+                local_data_path,
+                'IDM',
+                'config.json'
+            )
+        else:
+            return 'config.json'
+
+    @staticmethod
+    def load() -> "Database":
         """
         Загружает значение из базы
         """
-
+        path_to_file = Database.get_path()
         with open(path_to_file, 'r', encoding='utf-8') as file:
             raw = json.loads(file.read())
             return Database(path_to_file, raw)
 
     @staticmethod
-    def recreate(
-            path_to_file: str = 'config.json'
-    ) -> "Database":
+    def recreate() -> "Database":
+        path_to_file = Database.get_path()
         with open(path_to_file, 'w', encoding='utf-8') as file:
             file.write(
                 json.dumps(
@@ -114,7 +125,7 @@ class Database(DotDict):
                     indent=2
                 )
             )
-        return Database.load(path_to_file)
+        return Database.load()
 
     def save(self) -> None:
         self.check_all()

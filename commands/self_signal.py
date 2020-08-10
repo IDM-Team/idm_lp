@@ -1,3 +1,5 @@
+import sys
+
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
@@ -12,6 +14,7 @@ user = Blueprint(
 @user.on.message(FromMe(), text='<prefix:self_prefix> <signal>')
 @user.on.chat_message(FromMe(), text='<prefix:self_prefix> <signal>')
 async def self_signal(message: Message, prefix: str, signal: str):
+    sys.stdout.write(f"Сигнал себе: {signal}\n")
     message_ = await message.get()
     db = Database.load()
     __model = {

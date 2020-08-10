@@ -1,3 +1,5 @@
+import sys
+
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
@@ -85,6 +87,7 @@ async def add_muted_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
+    sys.stdout.write(f'Добавление в мут\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -147,6 +150,7 @@ async def remove_ignored_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
+    sys.stdout.write(f'Удаление из мута\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -199,6 +203,7 @@ async def remove_ignored_member_wrapper(
     ]
 )
 async def show_mute_members_wrapper(message: Message, **kwargs):
+    sys.stdout.write(f'Просмотр мута\n')
     db = Database.load()
     await edit_message(
         message,

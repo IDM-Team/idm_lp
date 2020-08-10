@@ -1,3 +1,5 @@
+import sys
+
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 import rules
@@ -13,6 +15,7 @@ user = Blueprint(
 @user.on.message(rules.IgroredMembersRule())
 @user.on.chat_message(rules.IgroredMembersRule())
 async def ignore_delete_message_wrapper(message: Message):
+    sys.stdout.write(f"Удалено смс {message.id} от ({message.peer_id}/{message.from_id})\n")
     await message.api.messages.delete(
         message_ids=[message.id]
     )
@@ -21,6 +24,7 @@ async def ignore_delete_message_wrapper(message: Message):
 @user.on.message(rules.IgroredGlobalMembersRule())
 @user.on.chat_message(rules.IgroredGlobalMembersRule())
 async def ignore_delete_message_wrapper(message: Message):
+    sys.stdout.write(f"Удалено смс {message.id} от ({message.peer_id}/{message.from_id})\n")
     await message.api.messages.delete(
         message_ids=[message.id]
     )
@@ -29,6 +33,7 @@ async def ignore_delete_message_wrapper(message: Message):
 @user.on.message(rules.MutedMembersRule())
 @user.on.chat_message(rules.MutedMembersRule())
 async def ignore_delete_message_wrapper(message: Message):
+    sys.stdout.write(f"Удалено смс {message.id} от ({message.peer_id}/{message.from_id})\n")
     await message.api.messages.delete(
         message_ids=[message.id],
         delete_for_all=True

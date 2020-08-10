@@ -1,3 +1,5 @@
+import sys
+
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
@@ -12,6 +14,8 @@ user = Blueprint(
 @user.on.message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
 @user.on.chat_message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
 async def duty_signal(message: Message, alias: Alias, signal: str = None):
+    sys.stdout.write(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
+
     message_ = await message.get()
     db = Database.load()
 

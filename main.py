@@ -1,8 +1,9 @@
+import sys
+
 from const import __version__, __author__
 from vkbottle.user import User
 from vkbottle.api import UserApi
 from objects import Database
-from loguru import logger
 from commands import commands_bp
 
 
@@ -23,22 +24,21 @@ async def lp_shutdown():
         message=f'IDM multi LP v{__version__} остановлен'
     )
 
-
 if __name__ == '__main__':
-    logger.info(f'Запускаю IDM multi LP by {__author__} v{__version__}')
+
     try:
         db = Database.load()
     except Database.DatabaseError as ex:
-        logger.exception(ex)
+        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n')
         exit(-1)
     except Exception as ex:
-        logger.exception(ex)
+        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n')
         exit(-1)
     else:
         from validators import *
         user = User(
             tokens=db.tokens,
-            debug='INFO'
+            debug='ERROR'
         )
         user.set_blueprints(
             *commands_bp
@@ -48,3 +48,4 @@ if __name__ == '__main__':
             on_startup=lp_startup,
             on_shutdown=lp_shutdown
         )
+        sys.stdout.write(f'Пуллинг запущен\n')

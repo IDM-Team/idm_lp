@@ -1,3 +1,5 @@
+import sys
+
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
@@ -46,6 +48,7 @@ def delete_last_space(value: str) -> str:
 @user.on.message(FromMe(), text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>")
 async def add_alias_wrapper(message: Message, alias_name: str, command_from: str, command_to: str, **kwargs):
+    sys.stdout.write(f"Создание алиаса\n")
     db = Database.load()
     alias_name = delete_last_space(alias_name)
     command_from = delete_last_space(command_from)
@@ -70,6 +73,7 @@ async def add_alias_wrapper(message: Message, alias_name: str, command_from: str
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы")
 async def show_aliases_wrapper(message: Message, **kwargs):
+    sys.stdout.write(f"Просмотр алиасов\n")
     db = Database.load()
     await edit_message(
         message,
@@ -80,6 +84,7 @@ async def show_aliases_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> -алиас <alias_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -алиас <alias_name>")
 async def remove_alias_wrapper(message: Message, alias_name: str, **kwargs):
+    sys.stdout.write(f"Удаление алиаса\n")
     db = Database.load()
     alias_name = delete_last_space(alias_name)
     for alias in db.aliases:
