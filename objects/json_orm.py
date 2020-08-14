@@ -3,6 +3,7 @@ import os
 import platform
 from typing import List
 
+import const
 from const import DEFAULT_DATABASE
 from objects import (
     DotDict,
@@ -94,15 +95,14 @@ class Database(DotDict):
 
     @staticmethod
     def get_path():
-        # if 'win' in platform.system().lower():
-        #     local_data_path = os.environ["APPDATA"]
-        #     return os.path.join(
-        #         local_data_path,
-        #         'IDM',
-        #         'config.json'
-        #     )
-        # else:
-        return 'config.json'
+        if const.USE_APP_DATA:
+            local_data_path = os.environ["APPDATA"]
+            return os.path.join(
+                local_data_path,
+                "IDM",
+                const.CONFIG_PATH
+            )
+        return const.CONFIG_PATH
 
     @staticmethod
     def load() -> "Database":

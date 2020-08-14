@@ -10,5 +10,8 @@ DEFAULT_DATABASE = {
     "duty_prefixes": ["!лд", ".лд"]
 }
 
+CONFIG_PATH = "config.json"
+USE_APP_DATA = False
+
 __version__ = '1.1'
 __author__ = 'Yuri Yushmanov'
