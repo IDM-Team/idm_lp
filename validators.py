@@ -1,4 +1,5 @@
 from vbml.blanket import validator
+
 from objects import Database
 
 __all__ = (

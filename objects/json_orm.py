@@ -1,6 +1,5 @@
 import json
 import os
-import platform
 from typing import List
 
 import const

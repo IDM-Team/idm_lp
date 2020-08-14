@@ -1,4 +1,5 @@
 from vkbottle.rule import AbstractMessageRule, Message
+
 from objects import Database
 
 

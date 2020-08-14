@@ -1,13 +1,12 @@
+import argparse
 import sys
 
-import const
-from vkbottle.user import User
 from vkbottle.api import UserApi
-from objects import Database
-from commands import commands_bp
-import argparse
-import os
+from vkbottle.user import User
 
+import const
+from commands import commands_bp
+from objects import Database
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
