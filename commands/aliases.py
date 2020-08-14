@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 
 import requests
 from vkbottle.rule import FromMe
@@ -11,16 +12,16 @@ user = Blueprint(
 )
 
 
-@user.on.message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
-@user.on.chat_message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
-async def duty_signal(message: Message, alias: Alias, signal: str = None):
-    sys.stdout.write(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
-
+async def send_signal(
+        db: Database,
+        message: Message,
+        alias: Alias,
+        separator: str = ' ',
+        signal: Optional[str] = None
+):
     message_ = await message.get()
-    db = Database.load()
-
     prepared_text = db.self_prefixes[0] + ' ' + alias.command_to
-    prepared_text += f" {signal}" if signal else ''
+    prepared_text += f"{separator}{signal}" if signal else ''
 
     __model = {
         "user_id": message_['from_id'],
@@ -46,3 +47,20 @@ async def duty_signal(message: Message, alias: Alias, signal: str = None):
         'https://irisduty.ru/callback/',
         json=__model
     )
+
+
+@user.on.message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
+@user.on.chat_message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
+async def duty_signal(message: Message, alias: Alias, signal: str = None):
+    sys.stdout.write(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
+    db = Database.load()
+    await send_signal(db, message, alias, ' ', signal)
+
+
+@user.on.message(FromMe(), text='<alias:alias>\n<signal>')
+@user.on.chat_message(FromMe(), text='<alias:alias>\n<signal>')
+async def duty_signal_new_line(message: Message, alias: Alias, signal: str):
+    sys.stdout.write(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
+    db = Database.load()
+    await send_signal(db, message, alias, '\n', signal)
+

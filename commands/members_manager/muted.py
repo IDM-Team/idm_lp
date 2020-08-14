@@ -23,7 +23,10 @@ def add_muted_member(db: Database, member_id: int, peer_id: int) -> None:
 
 
 def remove_muted_member(db: Database, member_id: int, peer_id: int) -> None:
-    ignored_member = MutedMembers(member_id=member_id, peer_id=peer_id)
+    ignored_member = None
+    for ign in db.muted_members:
+        if ign.member_id == member_id and ign.chat_id == peer_id:
+            ignored_member = ign
     db.muted_members.remove(ignored_member)
     db.save()
 

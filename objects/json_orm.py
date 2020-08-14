@@ -94,15 +94,15 @@ class Database(DotDict):
 
     @staticmethod
     def get_path():
-        if 'win' in platform.system().lower():
-            local_data_path = os.environ["APPDATA"]
-            return os.path.join(
-                local_data_path,
-                'IDM',
-                'config.json'
-            )
-        else:
-            return 'config.json'
+        # if 'win' in platform.system().lower():
+        #     local_data_path = os.environ["APPDATA"]
+        #     return os.path.join(
+        #         local_data_path,
+        #         'IDM',
+        #         'config.json'
+        #     )
+        # else:
+        return 'config.json'
 
     @staticmethod
     def load() -> "Database":

@@ -22,7 +22,10 @@ def add_ignore_global_member(db: Database, member_id: int) -> None:
 
 
 def remove_ignore_global_member(db: Database, member_id: int) -> None:
-    ignored_member = IgroredGlobalMembers(member_id=member_id)
+    ignored_member = None
+    for ign in db.igrored_global_members:
+        if ign.member_id == member_id:
+            ignored_member = ign
     db.igrored_global_members.remove(ignored_member)
     db.save()
 
