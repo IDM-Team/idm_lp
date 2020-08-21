@@ -1,12 +1,16 @@
 import argparse
 import sys
+import traceback
 
 from vkbottle.api import UserApi
 from vkbottle.user import User
 
 import const
+
 from commands import commands_bp
+from error_handlers import error_handlers_bp
 from objects import Database
+from objects.json_orm import DatabaseError
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
@@ -28,6 +32,14 @@ parser.add_argument(
     const=True,
     help='Использовать папку AppData/IDM (Windows).\n'
          'При использовании этой настройки AppData/IDM и config_path складываются'
+)
+
+parser.add_argument(
+    '--logger_level',
+    dest="logger_level",
+    type=str,
+    default="INFO",
+    help='Уровень логгирования.'
 )
 
 
@@ -56,26 +68,27 @@ if __name__ == '__main__':
 
     sys.stdout.write(
         f"Запуск с параметрами:\n"
-        f"    Путь до файла с конфингом         -> {const.CONFIG_PATH}\n"
-        f"    Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
+        f" -> Уровень логгирования              -> {args.logger_level}\n"
+        f" -> Путь до файла с конфингом         -> {const.CONFIG_PATH}\n"
+        f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
     )
 
     try:
-        db = Database.load()
-    except Database.DatabaseError as ex:
-        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n')
+        db = Database.load(is_startup=True)
+    except DatabaseError as ex:
         exit(-1)
     except Exception as ex:
-        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n')
+        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n{traceback.format_exc()}')
         exit(-1)
     else:
         from validators import *
         user = User(
             tokens=db.tokens,
-            debug='ERROR'
+            debug=args.logger_level
         )
         user.set_blueprints(
-            *commands_bp
+            *commands_bp,
+            *error_handlers_bp
         )
         user.run_polling(
             auto_reload=False,

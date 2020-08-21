@@ -124,7 +124,7 @@ async def add_muted_member_wrapper(
     add_muted_member(db, member_id, message.peer_id)
     await edit_message(
         message,
-        f'✅ {name} добавлен в игнор-лист'
+        f'✅ {name} добавлен в мутлист'
     )
 
 

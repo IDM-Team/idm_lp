@@ -10,6 +10,7 @@ idna==2.10
 immutables==0.14
 multidict==4.7.6
 pydantic==1.6.1
+python-rucaptcha==3.0
 requests==2.24.0
 typing-extensions==3.7.4.2
 urllib3==1.25.10

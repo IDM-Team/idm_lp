@@ -4,6 +4,7 @@ from commands import delete_messages
 from commands import duty_signal
 from commands import members_manager
 from commands import ping
+from commands import info
 from commands import prefixes
 from commands import self_signal
 
@@ -13,6 +14,7 @@ commands_bp = (
     delete_messages.user,
     duty_signal.user,
     ping.user,
+    info.user,
     prefixes.user,
     self_signal.user,
 
