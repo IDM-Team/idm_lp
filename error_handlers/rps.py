@@ -11,4 +11,4 @@ user = Blueprint(
 @user.error_handler.error_handler(6)
 async def rps_handler(e: VKError):
     await sleep(1)
-    await e.method_requested(**e.params_requested)
+    return await e.method_requested(**e.params_requested)
