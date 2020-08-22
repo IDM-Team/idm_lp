@@ -32,7 +32,7 @@ def show_aliases(db: Database) -> str:
         message = '📃 Ваши алиасы:\n'
         index = 1
         for alias in db.aliases:
-            message += f"{index}. {alias.name} ({alias.command_from} -> {alias.command_to})\n"
+            message += f"{index}. {alias.name} ({alias.command_from} -> !л {alias.command_to})\n"
             index += 1
         return message
     else:
@@ -66,7 +66,7 @@ async def add_alias_wrapper(message: Message, alias_name: str, command_from: str
     await edit_message(
         message,
         f"✅ Новый алиас <<{alias_name}>> создан\n"
-        f"Команды: {new_alias.command_from} -> {command_to}"
+        f"Команды: {new_alias.command_from} -> !л {command_to}"
     )
 
 

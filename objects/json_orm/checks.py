@@ -21,13 +21,21 @@ class CheckClass(object):
 
 class FieldsCheck(CheckClass):
 
+    fix_database = {
+        "ru_captcha_key": ""
+    }
+
     def check(self):
         for key in self.database.__all_fields__:
             if key not in self.database:
-                raise DatabaseError(
-                    name='Нет поля',
-                    description=f"В базе данных не хватает поля \"{key}\""
-                )
+                if key in self.fix_database:
+                    self.database.update({key: self.fix_database[key]})
+                    self.database.save()
+                else:
+                    raise DatabaseError(
+                        name='Нет поля',
+                        description=f"В базе данных не хватает поля \"{key}\""
+                    )
 
 
 class TokensCountCheck(CheckClass):
