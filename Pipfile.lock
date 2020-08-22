@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "28f241fc18c4314f928ae2cbc0cd021ba4472dda5fa084659c4d02381a489c38"
+            "sha256": "dedd74b324a6c2ba8bbc8d246c454835443069723e7dccd31d2d878e289954c0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -64,14 +64,6 @@
             ],
             "version": "==3.0.4"
         },
-        "colorama": {
-            "hashes": [
-                "sha256:7d73d2a99753107a36ac6b455ee49046802e59d9d076ef8e47b61499fa29afff",
-                "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==0.4.3"
-        },
         "contextvars": {
             "hashes": [
                 "sha256:f38c908aaa59c14335eeea12abea5f443646216c4e29380d7bf34d2018e2c39e"
@@ -103,14 +95,6 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==0.14"
-        },
-        "loguru": {
-            "hashes": [
-                "sha256:70201d5fce26da89b7a5f168caa2bb674e06b969829f56737db1d6472e53e7c3",
-                "sha256:e5d362a43cd2fc2da63551d79a6830619c4d5b3a8b976515748026f92f351b61"
-            ],
-            "markers": "python_version >= '3.5'",
-            "version": "==0.5.1"
         },
         "multidict": {
             "hashes": [
@@ -201,18 +185,18 @@
         },
         "vbml": {
             "hashes": [
-                "sha256:49bfe482627cbb1e72b35b66ee9dab4d12727047a3b4f349611cb37b6a719699",
-                "sha256:967457aa1d4f7580d290af4349b307778635a02d6fe210f04f051f26f24b1fca"
+                "sha256:239bc954c67350a32407b5cca41165c9e23f5e60f88d9f30b2fef2d049f00c11",
+                "sha256:77b25923eb7d57b05d0c221f89a2e7a389874cad458681ac816c56c17d8986cd"
             ],
-            "markers": "python_version >= '3.6' and python_version < '4.0'",
-            "version": "==0.5.93"
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "version": "==1.0"
         },
         "vkbottle": {
             "hashes": [
-                "sha256:f10f89edc4861f410a3c0e1e21de1301e7ea86d65628edf1abad82788d77f0cc"
+                "sha256:83933e088e7de19bedf87e191c6f623dfab3565b92673d9760ddbdc2e30e2ce7"
             ],
             "index": "pypi",
-            "version": "==2.7.11"
+            "version": "==2.7.8"
         },
         "watchgod": {
             "hashes": [
@@ -221,14 +205,6 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==0.6"
-        },
-        "win32-setctime": {
-            "hashes": [
-                "sha256:568fd636c68350bcc54755213fe01966fe0a6c90b386c0776425944a0382abef",
-                "sha256:b47e5023ec7f0b4962950902b15bc56464a380d869f59d27dbf9ab423b23e8f9"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==1.0.1"
         },
         "yarl": {
             "hashes": [
@@ -286,7 +262,7 @@
                 "sha256:70201d5fce26da89b7a5f168caa2bb674e06b969829f56737db1d6472e53e7c3",
                 "sha256:e5d362a43cd2fc2da63551d79a6830619c4d5b3a8b976515748026f92f351b61"
             ],
-            "markers": "python_version >= '3.5'",
+            "index": "pypi",
             "version": "==0.5.1"
         },
         "win32-setctime": {
