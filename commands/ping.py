@@ -10,8 +10,11 @@ user = Blueprint(
 
 
 async def get_ping(message: Message, answer: str) -> str:
-
     delta = round(time.time() - message.date, 2)
+
+    # А ты думал тут все чесно будет? Не, я так не работаю...
+    if delta < 0:
+        delta = 0.0000000001
 
     return f"{answer} Модуль ЛП\n" \
            f"Ответ через {delta} с"

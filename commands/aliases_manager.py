@@ -1,11 +1,14 @@
 import sys
-from typing import List
+from typing import List, Dict
 
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
 from objects import Database, Alias
 from utils import edit_message
+
+import requests
+import const
 
 user = Blueprint(
     name='aliases_manager_blueprint'
@@ -103,32 +106,16 @@ async def remove_alias_wrapper(message: Message, alias_name: str, **kwargs):
     )
 
 
-alias_packs = {
-    "дд": [
-        Alias(name="дд", command_from="дд", command_to="дд"),
-        Alias(name="рр", command_from="рр", command_to="рр"),
-        Alias(name="рр-", command_from="рр-", command_to="рр-"),
-    ],
-    "стандартный": [
-        Alias(name="помощь", command_from="помощь", command_to="помощь"),
-        Alias(name="инфо", command_from="инфо", command_to="инфо"),
-
-        Alias(name="шаблон", command_from="шаб", command_to="шаб"),
-        Alias(name="шаблоны", command_from="шабы", command_to="шабы"),
-
-        Alias(name="голосовой шаблон", command_from="гшаб", command_to="гшаб"),
-        Alias(name="голосовые шаблоны", command_from="гшабы", command_to="гшабы"),
-
-        Alias(name="динамический шаблон", command_from="дшаб", command_to="дшаб"),
-        Alias(name="динамические шаблоны", command_from="дшабы", command_to="дшабы"),
-
-        Alias(name="в друзья", command_from="+др", command_to="+др"),
-        Alias(name="из друзей", command_from="-др", command_to="-др"),
-
-        Alias(name="в чс", command_from="+чс", command_to="+чс"),
-        Alias(name="из чс", command_from="-чс", command_to="-чс"),
-    ]
-}
+def get_alias_packs() -> Dict[str, List[Alias]]:
+    data = requests.get(const.ALIASES_REST).json()
+    packs = {}
+    for key in data.keys():
+        packs.update({
+            key: [
+                Alias(dict_alias) for dict_alias in data[key]
+            ]
+        })
+    return packs
 
 
 def generate_aliases_pack_description(pack: List[Alias]) -> str:
@@ -151,6 +138,7 @@ def check_name_duplicates(db: Database, pack: List[Alias]) -> bool:
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы импорт <pack_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы импорт <pack_name>")
 async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
+    alias_packs = get_alias_packs()
     if pack_name not in alias_packs.keys():
         await edit_message(
             message,
@@ -181,6 +169,7 @@ async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы паки")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы паки")
 async def import_aliases_wrapper(message: Message, **kwargs):
+    alias_packs = get_alias_packs()
     text = "📃 Паки алиасов:\n"
     index = 1
     for pack_name in alias_packs.keys():
@@ -195,6 +184,7 @@ async def import_aliases_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы пак <pack_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы пак <pack_name>")
 async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
+    alias_packs = get_alias_packs()
     if pack_name not in alias_packs.keys():
         await edit_message(
             message,

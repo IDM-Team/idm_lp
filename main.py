@@ -2,11 +2,11 @@ import argparse
 import sys
 import traceback
 
+import requests
 from vkbottle.api import UserApi
 from vkbottle.user import User
 
 import const
-
 from commands import commands_bp
 from error_handlers import error_handlers_bp
 from objects import Database
@@ -45,20 +45,21 @@ parser.add_argument(
 
 async def lp_startup():
     api = UserApi.get_current()
+    text = f'IDM multi LP запущен\n' \
+           f'Текущая версия: v{const.__version__}'
+    version_rest = requests.get(const.VERSION_REST).json()
+
+    if version_rest['version'] != const.__version__:
+        text += f"\n\n Доступно обновление {version_rest['version']}\n" \
+                f"{version_rest['description']}\n" \
+                f"{const.GITHUB_LINK}"
+
     await api.messages.send(
         peer_id=await api.user_id,
         random_id=0,
-        message=f'IDM multi LP v{const.__version__} запущен'
+        message=text
     )
 
-
-async def lp_shutdown():
-    api = UserApi.get_current()
-    await api.messages.send(
-        peer_id=await api.user_id,
-        random_id=0,
-        message=f'IDM multi LP v{const.__version__} остановлен'
-    )
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -82,6 +83,7 @@ if __name__ == '__main__':
         exit(-1)
     else:
         from validators import *
+
         user = User(
             tokens=db.tokens,
             debug=args.logger_level
@@ -92,7 +94,6 @@ if __name__ == '__main__':
         )
         user.run_polling(
             auto_reload=False,
-            on_startup=lp_startup,
-            on_shutdown=lp_shutdown
+            on_startup=lp_startup
         )
         sys.stdout.write(f'Пуллинг запущен\n')

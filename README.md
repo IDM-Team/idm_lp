@@ -1,6 +1,6 @@
 ### IDM multi - LP module
 ![Python version](https://img.shields.io/badge/python-3.7-blue)
-![Version](https://img.shields.io/badge/version-1.3-blue)
+![Version](https://img.shields.io/badge/version-1.3.1-blue)
 ![GitHub](https://img.shields.io/github/license/LordRalInc/idmmulti_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/LordRalInc/idmmulti_lp)
 
@@ -128,6 +128,9 @@ service idmlp start
 - `{сервисный префикс}` алиасы - просмотр алиасов
 - `{сервисный префикс}` +алиас `{имя}` {enter} `{команда которую получает модуль ЛП}` {enter} `{команда которую отсылает модуль ЛП}`  - создание алиаса
 - `{сервисный префикс}` -алиас `{имя}` - удаление алиаса
+- `{сервисный префикс}` алиасы паки - просмотр паков алиасов
+- `{сервисный префикс}` алиасы пак `{имя пака}` - просмотр пака алиасов
+- `{сервисный префикс}` алиасы импорт `{имя пака}` - импорт пака алиасов
 ***
 - `{сервисный префикс}` игнорлист - просмотр игнорлиста
 - `{сервисный префикс}` +игнор `[{ссылка}/{упоминание}/{реплай}]` - добавить в игнорлист
