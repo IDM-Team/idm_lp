@@ -16,5 +16,5 @@ DEFAULT_DATABASE = {
 CONFIG_PATH = "config.json"
 USE_APP_DATA = False
 
-__version__ = '1.2'
+__version__ = '1.3'
 __author__ = 'Yuri Yushmanov'

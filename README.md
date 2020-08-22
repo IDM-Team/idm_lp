@@ -1,6 +1,6 @@
 ### IDM multi - LP module
 ![Python version](https://img.shields.io/badge/python-3.7-blue)
-![Version](https://img.shields.io/badge/version-1.2-blue)
+![Version](https://img.shields.io/badge/version-1.3-blue)
 ![GitHub](https://img.shields.io/github/license/LordRalInc/idmmulti_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/LordRalInc/idmmulti_lp)
 
