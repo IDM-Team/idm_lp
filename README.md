@@ -103,7 +103,7 @@ service idmlp start
 - `--logger_level [DEBUG | INFO | WARNING | ERROR | CRITICAL]` - Уровень логгирования
 - `--config_path CONFIG_PATH` - Путь до файла с конфингом
 - `--use_app_data` - Использовать папку AppData/IDM (Windows). При использовании этой настройки AppData/IDM и config_path складываются
-
+- `--log_to_path` - Логи в файл
 ## Структура кофигурационного файла config.json
 
 - `tokens`            - Токены вк в количестве 3х штук. Получить можно [здесь](https://oauth.vk.com/authorize?client_id=2685278&scope=1073737727&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1)

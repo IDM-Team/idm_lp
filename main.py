@@ -41,6 +41,13 @@ parser.add_argument(
     default="INFO",
     help='Уровень логгирования.'
 )
+parser.add_argument(
+    '--log_to_path',
+    dest="log_to_path",
+    action="store_const",
+    const=True,
+    help='Логи в файл'
+)
 
 
 async def lp_startup():
@@ -66,10 +73,12 @@ if __name__ == '__main__':
 
     const.CONFIG_PATH = args.config_path
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
+    log_to_path = args.log_to_path if args.log_to_path else False
 
     sys.stdout.write(
         f"Запуск с параметрами:\n"
         f" -> Уровень логгирования              -> {args.logger_level}\n"
+        f" -> Логи в файл                       -> {log_to_path}\n"
         f" -> Путь до файла с конфингом         -> {const.CONFIG_PATH}\n"
         f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
     )
@@ -86,7 +95,8 @@ if __name__ == '__main__':
 
         user = User(
             tokens=db.tokens,
-            debug=args.logger_level
+            debug=args.logger_level,
+            log_to_path=log_to_path
         )
         user.set_blueprints(
             *commands_bp,
