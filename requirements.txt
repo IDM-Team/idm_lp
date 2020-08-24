@@ -1,4 +1,5 @@
 python-rucaptcha==3.0
 requests==2.23.0
 typing-extensions==3.7.4.2
+vbml==0.5.93
 vkbottle==2.7.8
