@@ -15,6 +15,7 @@ user = Blueprint(
 async def self_signal(message: Message, prefix: str, signal: str):
 
     db = Database.get_current()
+    logger.info(f'Сигнал себе -> {signal}')
     message_ = await message.get()
     __model = {
         "user_id": message_['from_id'],
@@ -35,7 +36,7 @@ async def self_signal(message: Message, prefix: str, signal: str):
         },
         "vkmessage": message_
     }
-    logger.info(f'Сигнал себе -> {__model}')
+
     requests.post(
         'https://irisduty.ru/callback/',
         json=__model
