@@ -8,12 +8,12 @@ from objects import Database
 from utils import edit_message
 
 user = Blueprint(
-    name='duty_signal_blueprint'
+    name='run_eval_blueprint'
 )
 
 
-@user.on.message(FromMe(), text='<prefix:duty_prefix> eval <signal>')
-@user.on.chat_message(FromMe(), text='<prefix:duty_prefix> eval <signal>')
+@user.on.message(FromMe(), text='<prefix:service_prefix> eval <signal>')
+@user.on.chat_message(FromMe(), text='<prefix:service_prefix> eval <signal>')
 async def eval_signal_wrapper(message: Message, signal: str, **kwargs):
     logger.info(f'eval -> {signal}')
     db = Database.get_current()
@@ -31,8 +31,8 @@ async def eval_signal_wrapper(message: Message, signal: str, **kwargs):
     )
 
 
-@user.on.message(FromMe(), text='<prefix:duty_prefix> exec <signal>')
-@user.on.chat_message(FromMe(), text='<prefix:duty_prefix> exec <signal>')
+@user.on.message(FromMe(), text='<prefix:service_prefix> exec <signal>')
+@user.on.chat_message(FromMe(), text='<prefix:service_prefix> exec <signal>')
 async def exec_signal_wrapper(message: Message, signal: str, **kwargs):
     logger.info(f'exec -> {signal}')
     db = Database.get_current()
