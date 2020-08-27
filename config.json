@@ -1,14 +1,22 @@
 {
-    "tokens": [],
-    "secret_code": "",
-    "ru_captcha_key": "",
-    "igrored_members": [],
-    "igrored_global_members": [],
-    "muted_members": [],
-
-    "aliases": [],
-
-    "service_prefixes": ["!слп", ".слп"],
-    "self_prefixes": ["!л", ".л"],
-    "duty_prefixes": ["!лд", ".лд"]
+  "tokens": [],
+  "secret_code": "",
+  "delete_all_notify": false,
+  "ru_captcha_key": "",
+  "igrored_members": [],
+  "igrored_global_members": [],
+  "muted_members": [],
+  "aliases": [],
+  "service_prefixes": [
+    "!слп",
+    ".слп"
+  ],
+  "self_prefixes": [
+    "!л",
+    ".л"
+  ],
+  "duty_prefixes": [
+    "!лд",
+    ".лд"
+  ]
 }

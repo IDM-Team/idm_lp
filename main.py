@@ -1,16 +1,15 @@
 import argparse
-import sys
 import traceback
 
 import requests
 from vkbottle.api import UserApi
 from vkbottle.user import User
+from vkbottle.utils import logger
 
 import const
 from commands import commands_bp
 from error_handlers import error_handlers_bp
-from objects import Database
-from objects.json_orm import DatabaseError
+from objects.json_orm import Database, DatabaseError
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
@@ -73,37 +72,39 @@ if __name__ == '__main__':
 
     const.CONFIG_PATH = args.config_path
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
-    log_to_path = args.log_to_path if args.log_to_path else False
+    const.LOG_TO_PATH = args.log_to_path if args.log_to_path else False
+    const.LOGGER_LEVEL = args.logger_level
 
-    sys.stdout.write(
+    logger.warning(
         f"Запуск с параметрами:\n"
-        f" -> Уровень логгирования              -> {args.logger_level}\n"
-        f" -> Логи в файл                       -> {log_to_path}\n"
+        f" -> Уровень логгирования              -> {const.LOGGER_LEVEL}\n"
+        f" -> Логи в файл                       -> {const.LOG_TO_PATH}\n"
         f" -> Путь до файла с конфингом         -> {const.CONFIG_PATH}\n"
         f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
     )
 
     try:
         db = Database.load(is_startup=True)
+        Database.set_current(db)
     except DatabaseError as ex:
         exit(-1)
     except Exception as ex:
-        sys.stdout.write(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n{traceback.format_exc()}')
+        logger.error(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n{traceback.format_exc()}')
         exit(-1)
     else:
         from validators import *
 
         user = User(
             tokens=db.tokens,
-            debug=args.logger_level,
-            log_to_path=log_to_path
+            debug=const.LOGGER_LEVEL,
+            log_to_path=const.LOG_TO_PATH
         )
         user.set_blueprints(
             *commands_bp,
-            *error_handlers_bp
+            *error_handlers_bp,
         )
+
         user.run_polling(
             auto_reload=False,
             on_startup=lp_startup
         )
-        sys.stdout.write(f'Пуллинг запущен\n')

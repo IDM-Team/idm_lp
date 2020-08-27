@@ -1,8 +1,7 @@
-import sys
-
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+from vkbottle.utils import logger
 
 from objects import Database
 
@@ -14,9 +13,9 @@ user = Blueprint(
 @user.on.message(FromMe(), text='<prefix:self_prefix> <signal>')
 @user.on.chat_message(FromMe(), text='<prefix:self_prefix> <signal>')
 async def self_signal(message: Message, prefix: str, signal: str):
-    sys.stdout.write(f"Сигнал себе: {signal}\n")
+
+    db = Database.get_current()
     message_ = await message.get()
-    db = Database.load()
     __model = {
         "user_id": message_['from_id'],
         "method": "lpSendMySignal",
@@ -36,7 +35,7 @@ async def self_signal(message: Message, prefix: str, signal: str):
         },
         "vkmessage": message_
     }
-
+    logger.info(f'Сигнал себе -> {__model}')
     requests.post(
         'https://irisduty.ru/callback/',
         json=__model

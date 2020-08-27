@@ -1,7 +1,8 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.3.1-blue)
+![Version](https://img.shields.io/badge/version-1.3.2-blue)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/LordRalInc/idmmulti_lp)
 ![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vkbottle)
+![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vbml)
 ![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/python-rucaptcha)
 ![GitHub](https://img.shields.io/github/license/LordRalInc/idmmulti_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/LordRalInc/idmmulti_lp)
@@ -106,6 +107,8 @@ service idmlp start
 - `--config_path CONFIG_PATH` - Путь до файла с конфингом
 - `--use_app_data` - Использовать папку AppData/IDM (Windows). При использовании этой настройки AppData/IDM и config_path складываются
 - `--log_to_path` - Логи в файл
+
+
 ## Структура кофигурационного файла config.json
 
 - `tokens`            - Токены вк в количестве 3х штук. Получить можно [здесь](https://oauth.vk.com/authorize?client_id=2685278&scope=1073737727&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1)
@@ -145,7 +148,11 @@ service idmlp start
 - `{сервисный префикс}` мутлист - просмотр мутлиста
 - `{сервисный префикс}` +мут `[{ссылка}/{упоминание}/{реплай}]` - добавить в мутлист
 - `{сервисный префикс}` -мут `[{ссылка}/{упоминание}/{реплай}]` - удалить из мутлиста
-
+***
+- `{сервисный префикс}` eval/exec `{script}` - выполнение скрипта
+***
+- `{сервисный префикс}` -уведы - модуль будет удалять упоминания типа `@all`, `@online`...
+- `{сервисный префикс}` +уведы - модуль не будет удалять упоминания типа `@all`, `@online`...
 
 
 

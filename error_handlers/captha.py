@@ -1,6 +1,7 @@
 from python_rucaptcha import ImageCaptcha
 from vkbottle.exceptions import VKError
 from vkbottle.framework.blueprint.user import Blueprint
+
 from objects import Database
 
 user = Blueprint(

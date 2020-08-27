@@ -1,5 +1,3 @@
-from typing import List
-
 # from objects import Database
 from objects.json_orm.errors import *
 
@@ -22,7 +20,8 @@ class CheckClass(object):
 class FieldsCheck(CheckClass):
 
     fix_database = {
-        "ru_captcha_key": ""
+        "ru_captcha_key": "",
+        "delete_all_notify": False
     }
 
     def check(self):

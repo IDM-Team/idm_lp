@@ -2,6 +2,7 @@ import time
 
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+
 from utils import edit_message
 
 user = Blueprint(
@@ -14,7 +15,7 @@ async def get_ping(message: Message, answer: str) -> str:
 
     # А ты думал тут все чесно будет? Не, я так не работаю...
     if delta < 0:
-        delta = 0.0000000001
+        delta = "666"
 
     return f"{answer} Модуль ЛП\n" \
            f"Ответ через {delta} с"

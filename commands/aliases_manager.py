@@ -1,41 +1,43 @@
 import sys
 from typing import List, Dict
 
+import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+from vkbottle.utils import logger
 
+
+import const
 from objects import Database, Alias
 from utils import edit_message
 
-import requests
-import const
 
 user = Blueprint(
     name='aliases_manager_blueprint'
 )
 
 
-def add_alias(db: Database, name: str, command_from: str, command_to: str) -> Alias:
+def add_alias(database: Database, name: str, command_from: str, command_to: str) -> Alias:
     new_alias = Alias({
         'name': name,
         'command_from': command_from,
         'command_to': command_to
     })
-    db.aliases.append(new_alias)
-    db.save()
+    database.aliases.append(new_alias)
+    database.save()
     return new_alias
 
 
-def remove_alias(db: Database, alias: Alias) -> None:
-    db.aliases.remove(alias)
-    db.save()
+def remove_alias(database: Database, alias: Alias) -> None:
+    database.aliases.remove(alias)
+    database.save()
 
 
-def show_aliases(db: Database) -> str:
-    if len(db.aliases):
+def show_aliases(database: Database) -> str:
+    if len(database.aliases):
         message = '📃 Ваши алиасы:\n'
         index = 1
-        for alias in db.aliases:
+        for alias in database.aliases:
             message += f"{index}. {alias.name} ({alias.command_from} -> !л {alias.command_to})\n"
             index += 1
         return message
@@ -52,8 +54,8 @@ def delete_last_space(value: str) -> str:
 @user.on.message(FromMe(), text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>")
 async def add_alias_wrapper(message: Message, alias_name: str, command_from: str, command_to: str, **kwargs):
-    sys.stdout.write(f"Создание алиаса\n")
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f"Создание алиаса\n")
     alias_name = delete_last_space(alias_name)
     command_from = delete_last_space(command_from)
     command_to = delete_last_space(command_to)
@@ -77,8 +79,8 @@ async def add_alias_wrapper(message: Message, alias_name: str, command_from: str
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы")
 async def show_aliases_wrapper(message: Message, **kwargs):
-    sys.stdout.write(f"Просмотр алиасов\n")
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f"Просмотр алиасов\n")
     await edit_message(
         message,
         show_aliases(db)
@@ -88,8 +90,8 @@ async def show_aliases_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> -алиас <alias_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -алиас <alias_name>")
 async def remove_alias_wrapper(message: Message, alias_name: str, **kwargs):
-    sys.stdout.write(f"Удаление алиаса\n")
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f"Удаление алиаса\n")
     alias_name = delete_last_space(alias_name)
     for alias in db.aliases:
         if alias_name == alias.name:
@@ -138,6 +140,7 @@ def check_name_duplicates(db: Database, pack: List[Alias]) -> bool:
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы импорт <pack_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы импорт <pack_name>")
 async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
+    db = Database.get_current()
     alias_packs = get_alias_packs()
     if pack_name not in alias_packs.keys():
         await edit_message(
@@ -146,10 +149,8 @@ async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
         )
         return
 
-    sys.stdout.write(f"Импорт алиасов\n")
+    logger.info(f"Импорт алиасов\n")
     pack = alias_packs[pack_name]
-
-    db = Database.load()
 
     if not check_name_duplicates(db, pack):
         await edit_message(
@@ -169,6 +170,7 @@ async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы паки")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы паки")
 async def import_aliases_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
     alias_packs = get_alias_packs()
     text = "📃 Паки алиасов:\n"
     index = 1
@@ -184,6 +186,7 @@ async def import_aliases_wrapper(message: Message, **kwargs):
 @user.on.message(FromMe(), text="<prefix:service_prefix> алиасы пак <pack_name>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> алиасы пак <pack_name>")
 async def import_aliases_wrapper(message: Message, pack_name: str, **kwargs):
+    db = Database.get_current()
     alias_packs = get_alias_packs()
     if pack_name not in alias_packs.keys():
         await edit_message(

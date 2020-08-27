@@ -1,8 +1,7 @@
-import sys
-
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+from vkbottle.utils import logger
 
 from objects import Database, IgroredMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
@@ -12,38 +11,38 @@ user = Blueprint(
 )
 
 
-def add_ignore_member(db: Database, member_id: int, peer_id: int) -> None:
-    db.igrored_members.append(
+def add_ignore_member(database: Database, member_id: int, peer_id: int) -> None:
+    database.igrored_members.append(
         IgroredMembers(
             member_id=member_id,
             chat_id=peer_id
         )
     )
-    db.save()
+    database.save()
 
 
-def remove_ignore_member(db: Database, member_id: int, peer_id: int) -> None:
+def remove_ignore_member(database: Database, member_id: int, peer_id: int) -> None:
     ignored_member = None
-    for ign in db.igrored_members:
+    for ign in database.igrored_members:
         if ign.member_id == member_id and ign.chat_id == peer_id:
             ignored_member = ign
-    db.igrored_members.remove(ignored_member)
-    db.save()
+    database.igrored_members.remove(ignored_member)
+    database.save()
 
 
 async def show_ignore_members(
-        db: Database,
+        database: Database,
         api: UserApi,
         peer_id: int
 ) -> str:
     user_ids = [
         ignore_member.member_id
-        for ignore_member in db.igrored_members
+        for ignore_member in database.igrored_members
         if ignore_member.chat_id == peer_id and ignore_member.member_id > 0
     ]
     group_ids = [
         abs(ignore_member.member_id)
-        for ignore_member in db.igrored_members
+        for ignore_member in database.igrored_members
         if ignore_member.chat_id == peer_id and ignore_member.member_id < 0
     ]
 
@@ -90,7 +89,8 @@ async def add_ignored_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Добавление в игнор\n')
+    db = Database.get_current()
+    logger.info(f'Добавление в игнор\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -103,7 +103,6 @@ async def add_ignored_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -153,7 +152,8 @@ async def remove_ignored_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Удаление из игнора\n')
+    db = Database.get_current()
+    logger.info(f'Удаление из игнора\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -166,7 +166,6 @@ async def remove_ignored_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -206,8 +205,8 @@ async def remove_ignored_member_wrapper(
     ]
 )
 async def show_ignore_members_wrapper(message: Message, **kwargs):
-    sys.stdout.write(f'Просмотр игнора\n')
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f'Просмотр игнора\n')
     await edit_message(
         message,
         await show_ignore_members(

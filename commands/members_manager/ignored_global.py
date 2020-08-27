@@ -3,6 +3,8 @@ import sys
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+from vkbottle.utils import logger
+
 
 from objects import Database, IgroredGlobalMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
@@ -12,36 +14,36 @@ user = Blueprint(
 )
 
 
-def add_ignore_global_member(db: Database, member_id: int) -> None:
-    db.igrored_global_members.append(
+def add_ignore_global_member(database: Database, member_id: int) -> None:
+    database.igrored_global_members.append(
         IgroredGlobalMembers(
             member_id=member_id
         )
     )
-    db.save()
+    database.save()
 
 
-def remove_ignore_global_member(db: Database, member_id: int) -> None:
+def remove_ignore_global_member(database: Database, member_id: int) -> None:
     ignored_member = None
-    for ign in db.igrored_global_members:
+    for ign in database.igrored_global_members:
         if ign.member_id == member_id:
             ignored_member = ign
-    db.igrored_global_members.remove(ignored_member)
-    db.save()
+    database.igrored_global_members.remove(ignored_member)
+    database.save()
 
 
 async def show_ignore_global_members(
-        db: Database,
+        database: Database,
         api: UserApi
 ) -> str:
     user_ids = [
         ignore_member.member_id
-        for ignore_member in db.igrored_global_members
+        for ignore_member in database.igrored_global_members
         if ignore_member.member_id > 0
     ]
     group_ids = [
         abs(ignore_member.member_id)
-        for ignore_member in db.igrored_global_members
+        for ignore_member in database.igrored_global_members
         if ignore_member.member_id < 0
     ]
 
@@ -89,7 +91,8 @@ async def add_ignored_global_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Добавление в глоигнор\n')
+    db = Database.get_current()
+    logger.info(f'Добавление в глоигнор\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -102,7 +105,6 @@ async def add_ignored_global_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -151,7 +153,8 @@ async def remove_ignored_global_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Удаление из глоигнора\n')
+    db = Database.get_current()
+    logger.info(f'Удаление из глоигнора\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -164,7 +167,6 @@ async def remove_ignored_global_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -203,8 +205,8 @@ async def remove_ignored_global_member_wrapper(
     ]
 )
 async def show_ignore_members_wrapper(message: Message, **kwargs):
-    sys.stdout.write(f'Просмотр глоигнора\n')
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f'Просмотр глоигнора\n')
     await edit_message(
         message,
         await show_ignore_global_members(

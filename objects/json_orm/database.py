@@ -1,12 +1,10 @@
+import json
 import os
 from typing import List
 
 from vkbottle.utils import logger
-import json
+
 import const
-from objects.json_orm.errors import DatabaseWarning, DatabaseError
-from objects.json_orm.checks import CheckClass
-from objects.json_orm.loaders import Loaders
 from objects import (
     DotDict,
     IgroredMembers,
@@ -14,10 +12,14 @@ from objects import (
     MutedMembers,
     Alias
 )
+from objects.json_orm.checks import CheckClass
+from objects.json_orm.errors import DatabaseWarning, DatabaseError
+from objects.json_orm.loaders import Loaders
+from objects.json_orm.mixins import ContextInstanceMixin
 from objects.json_orm.savers import Savers
 
 
-class Database(DotDict):
+class Database(DotDict, ContextInstanceMixin):
     tokens: List[str]
     secret_code: str
     ru_captcha_key: str
@@ -28,6 +30,7 @@ class Database(DotDict):
     service_prefixes: List[str]
     self_prefixes: List[str]
     duty_prefixes: List[str]
+    delete_all_notify: bool
 
     __all_fields__ = [
         'tokens',
@@ -39,7 +42,8 @@ class Database(DotDict):
         'aliases',
         'service_prefixes',
         'self_prefixes',
-        'duty_prefixes'
+        'duty_prefixes',
+        'delete_all_notify'
     ]
 
     loaders = Loaders()
@@ -53,6 +57,7 @@ class Database(DotDict):
     ):
         super(Database, self).__init__(raw_data)
         self._path_to_file = path_to_file
+
         logger.debug(f"Путь до файла {self._path_to_file}")
         logger.debug("Загрузка базы данных...")
         for loader in self.loaders():
@@ -129,7 +134,7 @@ class Database(DotDict):
             logger.warning(f"При проверке базы данных выявлено {issues} проблем.")
 
     @staticmethod
-    def load(is_startup: bool = False) -> "Database":
+    def load(is_startup: bool = False) -> 'Database':
         path_to_file = Database.get_path()
         try:
             with open(path_to_file, 'r', encoding='utf-8') as file:

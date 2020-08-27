@@ -82,6 +82,7 @@ async def get_full_name_by_member_id(
         api: UserApi,
         member_id: int
 ) -> str:
+    """Полное имя по ID"""
     if member_id > 0:
         user = (await api.users.get(user_ids=member_id))[0]
         return f"{user.first_name} {user.last_name}"

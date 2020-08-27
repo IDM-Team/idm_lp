@@ -4,8 +4,8 @@ from vkbottle.user import Blueprint, Message
 
 import const
 from const import __version__, __author__
-
 from objects import Database
+from utils import edit_message
 
 user = Blueprint(
     name='info_blueprint'
@@ -14,9 +14,8 @@ user = Blueprint(
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> инфо")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> инфо")
-async def ping_wrapper(message: Message, **kwargs):
-    db = Database.load()
-
+async def info_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
     version_rest = requests.get(const.VERSION_REST).json()
 
     if version_rest['version'] != const.__version__:
@@ -29,14 +28,19 @@ async def ping_wrapper(message: Message, **kwargs):
     IDM LP v{__version__} by {__author__}
 
     Ключ рукаптчи: {"&#9989;" if db.ru_captcha_key else "&#10060;"}
+    Удаление уведомлений: {"&#9989;" if db.delete_all_notify else "&#10060;"}
 
     В игноре: {len(db.igrored_members)}
     В глобальном игноре: {len(db.igrored_global_members)}
     В муте: {len(db.muted_members)}
     Алиасов: {len(db.aliases)}
     
+    
     Сервисные префиксы: {' '.join(db.service_prefixes)}
     Свои префиксы: {' '.join(db.self_prefixes) if db.self_prefixes else ''}
     Префиксы дежурного: {' '.join(db.duty_prefixes) if db.duty_prefixes else ''}{update_text}
     """.replace('    ', '')
-    await message(text)
+    await edit_message(
+        message,
+        text
+    )

@@ -3,6 +3,8 @@ import sys
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
+from vkbottle.utils import logger
+
 
 from objects import Database, MutedMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
@@ -12,38 +14,38 @@ user = Blueprint(
 )
 
 
-def add_muted_member(db: Database, member_id: int, peer_id: int) -> None:
-    db.muted_members.append(
+def add_muted_member(database: Database, member_id: int, peer_id: int) -> None:
+    database.muted_members.append(
         MutedMembers(
             member_id=member_id,
             chat_id=peer_id
         )
     )
-    db.save()
+    database.save()
 
 
-def remove_muted_member(db: Database, member_id: int, peer_id: int) -> None:
+def remove_muted_member(database: Database, member_id: int, peer_id: int) -> None:
     ignored_member = None
-    for ign in db.muted_members:
+    for ign in database.muted_members:
         if ign.member_id == member_id and ign.chat_id == peer_id:
             ignored_member = ign
-    db.muted_members.remove(ignored_member)
-    db.save()
+    database.muted_members.remove(ignored_member)
+    database.save()
 
 
 async def show_muted_members(
-        db: Database,
+        database: Database,
         api: UserApi,
         peer_id: int
 ) -> str:
     user_ids = [
         muted_member.member_id
-        for muted_member in db.muted_members
+        for muted_member in database.muted_members
         if muted_member.chat_id == peer_id and muted_member.member_id > 0
     ]
     group_ids = [
         abs(muted_member.member_id)
-        for muted_member in db.muted_members
+        for muted_member in database.muted_members
         if muted_member.chat_id == peer_id and muted_member.member_id < 0
     ]
 
@@ -90,7 +92,8 @@ async def add_muted_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Добавление в мут\n')
+    db = Database.get_current()
+    logger.info(f'Добавление в мут\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -103,7 +106,6 @@ async def add_muted_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -153,7 +155,8 @@ async def remove_ignored_member_wrapper(
         group_id: int = None,
         **kwargs
 ):
-    sys.stdout.write(f'Удаление из мута\n')
+    db = Database.get_current()
+    logger.info(f'Удаление из мута\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -166,7 +169,6 @@ async def remove_ignored_member_wrapper(
         )
         return
 
-    db = Database.load()
     member_id = member_ids[0]
 
     if member_id > 0:
@@ -206,8 +208,8 @@ async def remove_ignored_member_wrapper(
     ]
 )
 async def show_mute_members_wrapper(message: Message, **kwargs):
-    sys.stdout.write(f'Просмотр мута\n')
-    db = Database.load()
+    db = Database.get_current()
+    logger.info(f'Просмотр мута\n')
     await edit_message(
         message,
         await show_muted_members(
