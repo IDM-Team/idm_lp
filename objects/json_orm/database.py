@@ -2,7 +2,7 @@ import json
 import os
 from typing import List
 
-from vkbottle.utils import logger
+from logger import logger
 
 import const
 from objects import (

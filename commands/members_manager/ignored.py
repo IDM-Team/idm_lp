@@ -1,7 +1,7 @@
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 from objects import Database, IgroredMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id

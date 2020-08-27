@@ -3,7 +3,7 @@ import sys
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 
 from objects import Database, MutedMembers

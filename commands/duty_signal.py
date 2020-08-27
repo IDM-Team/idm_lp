@@ -1,6 +1,6 @@
 import requests
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 from objects import Database
 
@@ -13,7 +13,7 @@ user = Blueprint(
 @user.on.chat_message(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
 async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, **kwargs):
     db = Database.get_current()
-    logger.info(f"Сигнал дежурному: {signal}\n")
+    logger.info(f"Сигнал дежурному\n")
     if user_id != await message.api.user_id:
         return
     message_ = await message.get()

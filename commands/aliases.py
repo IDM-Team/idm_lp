@@ -4,7 +4,7 @@ from typing import Optional
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 from objects import Database, Alias
 

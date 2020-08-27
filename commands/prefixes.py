@@ -5,7 +5,7 @@ from vkbottle.user import Blueprint, Message
 
 from objects import Database
 from utils import edit_message
-from vkbottle.utils import logger
+from logger import logger
 
 user = Blueprint(
     name='prefixes_blueprint'

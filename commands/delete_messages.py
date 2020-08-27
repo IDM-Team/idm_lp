@@ -1,7 +1,7 @@
 import sys
 
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 import rules
 

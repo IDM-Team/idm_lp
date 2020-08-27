@@ -1,7 +1,7 @@
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from vkbottle.utils import logger
+from logger import logger
 
 from objects import Database
 
@@ -15,7 +15,7 @@ user = Blueprint(
 async def self_signal(message: Message, prefix: str, signal: str):
 
     db = Database.get_current()
-    logger.info(f'Сигнал себе -> {signal}')
+    logger.info(f'Сигнал себе')
     message_ = await message.get()
     __model = {
         "user_id": message_['from_id'],
