@@ -16,7 +16,7 @@ async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, 
     logger.info(f"Сигнал дежурному\n")
     if user_id != await message.api.user_id:
         return
-    message_ = await message.get()
+    message_ = message.dict()
     __model = {
         "user_id": await message.api.user_id,
         "method": "lpSendSignal",

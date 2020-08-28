@@ -106,5 +106,5 @@ if __name__ == '__main__':
 
         user.run_polling(
             auto_reload=False,
-            on_startup=lp_startup
+            on_startup=lp_startup,
         )

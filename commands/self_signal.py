@@ -16,7 +16,7 @@ async def self_signal(message: Message, prefix: str, signal: str):
 
     db = Database.get_current()
     logger.info(f'Сигнал себе')
-    message_ = await message.get()
+    message_ = message.dict()
     __model = {
         "user_id": message_['from_id'],
         "method": "lpSendMySignal",
