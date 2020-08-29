@@ -1,11 +1,11 @@
-import sys
 from typing import Optional
 
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from logger import logger
 
+from const import CALLBACK_LINK
+from logger import logger_decorator
 from objects import Database, Alias
 
 user = Blueprint(
@@ -20,7 +20,7 @@ async def send_signal(
         separator: str = ' ',
         signal: Optional[str] = None
 ):
-    message_ = await message.get()
+    message_ = message.dict()
     prepared_text = database.self_prefixes[0] + ' ' + alias.command_to
     prepared_text += f"{separator}{signal}" if signal else ''
 
@@ -45,23 +45,23 @@ async def send_signal(
     }
 
     requests.post(
-        'https://irisduty.ru/callback/',
+        CALLBACK_LINK,
         json=__model
     )
 
 
 @user.on.message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
 @user.on.chat_message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
+@logger_decorator
 async def duty_signal(message: Message, alias: Alias, signal: str = None):
     db = Database.get_current()
-    logger.info(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
     await send_signal(db, message, alias, ' ', signal)
 
 
 @user.on.message(FromMe(), text='<alias:alias>\n<signal>')
 @user.on.chat_message(FromMe(), text='<alias:alias>\n<signal>')
+@logger_decorator
 async def duty_signal_new_line(message: Message, alias: Alias, signal: str):
     db = Database.get_current()
-    logger.info(f"Новый алиас: {alias.command_to} -> {alias.command_from} {signal}\n")
     await send_signal(db, message, alias, '\n', signal)
 

@@ -1,7 +1,8 @@
 import requests
 from vkbottle.user import Blueprint, Message
-from logger import logger
 
+from const import CALLBACK_LINK
+from logger import logger_decorator
 from objects import Database
 
 user = Blueprint(
@@ -11,9 +12,9 @@ user = Blueprint(
 
 @user.on.message(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
 @user.on.chat_message(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
+@logger_decorator
 async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, **kwargs):
     db = Database.get_current()
-    logger.info(f"Сигнал дежурному\n")
     if user_id != await message.api.user_id:
         return
     message_ = message.dict()
@@ -37,6 +38,6 @@ async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, 
         "vkmessage": message_
     }
     requests.post(
-        'https://irisduty.ru/callback/',
+        CALLBACK_LINK,
         json=__model
     )

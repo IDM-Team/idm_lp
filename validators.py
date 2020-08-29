@@ -1,12 +1,11 @@
 from vbml.blanket import validator
+from objects import Database
 
 __all__ = (
     'self_prefix',
     'duty_prefix',
     'service_prefix',
 )
-
-from objects import Database
 
 
 @validator

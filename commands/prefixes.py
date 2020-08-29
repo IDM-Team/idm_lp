@@ -1,11 +1,9 @@
-import sys
-
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
+from logger import logger_decorator
 from objects import Database
 from utils import edit_message
-from logger import logger
 
 user = Blueprint(
     name='prefixes_blueprint'
@@ -52,9 +50,9 @@ def remove_duty_prefix(database: Database, prefix: str) -> None:
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> префиксы свои")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> префиксы свои")
+@logger_decorator
 async def show_self_prefixes_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    logger.info(f'Просмотр своих префиксов\n')
     await edit_message(
         message,
         show_self_prefixes(db)
@@ -63,8 +61,8 @@ async def show_self_prefixes_wrapper(message: Message, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> префиксы дежурный")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> префиксы дежурный")
+@logger_decorator
 async def show_duty_prefixes_wrapper(message: Message, **kwargs):
-    logger.info(f'Просмотр префиксов дежурного\n')
     db = Database.get_current()
     await edit_message(
         message,
@@ -74,9 +72,9 @@ async def show_duty_prefixes_wrapper(message: Message, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>")
+@logger_decorator
 async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     db = Database.get_current()
-    logger.info(f'Создание своего префикса\n')
     new_prefix = new_prefix.replace(' ', '')
     if new_prefix in db.self_prefixes:
         await edit_message(
@@ -93,9 +91,9 @@ async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>")
+@logger_decorator
 async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     db = Database.get_current()
-    logger.info(f'Создание префикса дежурного\n')
     new_prefix = new_prefix.replace(' ', '')
     if new_prefix in db.duty_prefixes:
         await edit_message(
@@ -112,9 +110,9 @@ async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>")
+@logger_decorator
 async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
     db = Database.get_current()
-    logger.info(f'Удаление своего префикса\n')
     old_prefix = old_prefix.replace(' ', '')
     if old_prefix not in db.self_prefixes:
         await edit_message(
@@ -131,9 +129,9 @@ async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>")
+@logger_decorator
 async def remove_duty_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
     db = Database.get_current()
-    logger.info(f'Удаление префикса дежурного\n')
     old_prefix = old_prefix.replace(' ', '')
     if old_prefix not in db.duty_prefixes:
         await edit_message(

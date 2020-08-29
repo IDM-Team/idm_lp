@@ -18,6 +18,8 @@ USE_APP_DATA = False
 __version__ = '1.3.2'
 __author__ = 'Yury Yushmanov'
 
+CALLBACK_LINK = "https://irisduty.ru/callback/"
+
 GITHUB_LINK = "https://github.com/LordRalInc/idmmulti_lp"
 VERSION_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/version.json"
 ALIASES_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/aliases.json"

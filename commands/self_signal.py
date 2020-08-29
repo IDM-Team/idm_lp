@@ -1,8 +1,9 @@
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from logger import logger
 
+from const import CALLBACK_LINK
+from logger import logger_decorator
 from objects import Database
 
 user = Blueprint(
@@ -12,10 +13,9 @@ user = Blueprint(
 
 @user.on.message(FromMe(), text='<prefix:self_prefix> <signal>')
 @user.on.chat_message(FromMe(), text='<prefix:self_prefix> <signal>')
+@logger_decorator
 async def self_signal(message: Message, prefix: str, signal: str):
-
     db = Database.get_current()
-    logger.info(f'Сигнал себе')
     message_ = message.dict()
     __model = {
         "user_id": message_['from_id'],
@@ -38,6 +38,6 @@ async def self_signal(message: Message, prefix: str, signal: str):
     }
 
     requests.post(
-        'https://irisduty.ru/callback/',
+        CALLBACK_LINK,
         json=__model
     )

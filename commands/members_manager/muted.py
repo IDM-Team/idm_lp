@@ -1,11 +1,8 @@
-import sys
-
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from logger import logger
 
-
+from logger import logger_decorator
 from objects import Database, MutedMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
 
@@ -85,6 +82,7 @@ async def show_muted_members(
         '<prefix:service_prefix> +мут',
     ]
 )
+@logger_decorator
 async def add_muted_member_wrapper(
         message: Message,
         domain: str = None,
@@ -93,7 +91,6 @@ async def add_muted_member_wrapper(
         **kwargs
 ):
     db = Database.get_current()
-    logger.info(f'Добавление в мут\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -148,6 +145,7 @@ async def add_muted_member_wrapper(
         '<prefix:service_prefix> -мут',
     ]
 )
+@logger_decorator
 async def remove_ignored_member_wrapper(
         message: Message,
         domain: str = None,
@@ -156,7 +154,6 @@ async def remove_ignored_member_wrapper(
         **kwargs
 ):
     db = Database.get_current()
-    logger.info(f'Удаление из мута\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -207,9 +204,9 @@ async def remove_ignored_member_wrapper(
         '<prefix:service_prefix> мут лист',
     ]
 )
+@logger_decorator
 async def show_mute_members_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    logger.info(f'Просмотр мута\n')
     await edit_message(
         message,
         await show_muted_members(

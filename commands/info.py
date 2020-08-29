@@ -4,6 +4,7 @@ from vkbottle.user import Blueprint, Message
 
 import const
 from const import __version__, __author__
+from logger import logger_decorator
 from objects import Database
 from utils import edit_message
 
@@ -14,6 +15,7 @@ user = Blueprint(
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> инфо")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> инфо")
+@logger_decorator
 async def info_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     version_rest = requests.get(const.VERSION_REST).json()

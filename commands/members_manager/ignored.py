@@ -1,8 +1,8 @@
 from vkbottle.api import UserApi
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
-from logger import logger
 
+from logger import logger_decorator
 from objects import Database, IgroredMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
 
@@ -82,6 +82,7 @@ async def show_ignore_members(
         '<prefix:service_prefix> +игнор',
     ]
 )
+@logger_decorator
 async def add_ignored_member_wrapper(
         message: Message,
         domain: str = None,
@@ -90,7 +91,6 @@ async def add_ignored_member_wrapper(
         **kwargs
 ):
     db = Database.get_current()
-    logger.info(f'Добавление в игнор\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -145,6 +145,7 @@ async def add_ignored_member_wrapper(
         '<prefix:service_prefix> -игнор',
     ]
 )
+@logger_decorator
 async def remove_ignored_member_wrapper(
         message: Message,
         domain: str = None,
@@ -153,7 +154,6 @@ async def remove_ignored_member_wrapper(
         **kwargs
 ):
     db = Database.get_current()
-    logger.info(f'Удаление из игнора\n')
     member_id = user_id if user_id else None
     if not user_id and group_id:
         member_id = -group_id
@@ -204,9 +204,9 @@ async def remove_ignored_member_wrapper(
         '<prefix:service_prefix> игнор лист',
     ]
 )
+@logger_decorator
 async def show_ignore_members_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    logger.info(f'Просмотр игнора\n')
     await edit_message(
         message,
         await show_ignore_members(

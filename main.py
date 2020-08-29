@@ -4,7 +4,7 @@ import traceback
 import requests
 from vkbottle.api import UserApi
 from vkbottle.user import User
-from vkbottle.utils import logger
+from logger import logger, Logger, LoggerLevel
 
 import const
 from commands import commands_bp
@@ -74,6 +74,9 @@ if __name__ == '__main__':
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
     const.LOG_TO_PATH = args.log_to_path if args.log_to_path else False
     const.LOGGER_LEVEL = args.logger_level
+
+    if isinstance(logger, Logger):
+        logger.global_logger_level = LoggerLevel.get_int(const.LOGGER_LEVEL)
 
     logger.warning(
         f"Запуск с параметрами:\n"

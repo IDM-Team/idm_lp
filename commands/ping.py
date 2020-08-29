@@ -3,6 +3,7 @@ import time
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
+from logger import logger_decorator
 from utils import edit_message
 
 user = Blueprint(
@@ -23,6 +24,7 @@ async def get_ping(message: Message, answer: str) -> str:
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> пинг")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> пинг")
+@logger_decorator
 async def ping_wrapper(message: Message, **kwargs):
     await edit_message(
         message,
@@ -32,7 +34,8 @@ async def ping_wrapper(message: Message, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> пиу")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> пиу")
-async def ping_wrapper(message: Message, **kwargs):
+@logger_decorator
+async def pau_wrapper(message: Message, **kwargs):
     await edit_message(
         message,
         await get_ping(message, "ПАУ")
@@ -41,7 +44,8 @@ async def ping_wrapper(message: Message, **kwargs):
 
 @user.on.message(FromMe(), text="<prefix:service_prefix> кинг")
 @user.on.chat_message(FromMe(), text="<prefix:service_prefix> кинг")
-async def ping_wrapper(message: Message, **kwargs):
+@logger_decorator
+async def king_wrapper(message: Message, **kwargs):
     await edit_message(
         message,
         await get_ping(message, "КОНГ")
