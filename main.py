@@ -40,6 +40,15 @@ parser.add_argument(
     default="INFO",
     help='Уровень логгирования.'
 )
+
+parser.add_argument(
+    '--vkbottle_logger_level',
+    dest="vkbottle_logger_level",
+    type=str,
+    default="ERROR",
+    help='Уровень логгирования VKBottle.'
+)
+
 parser.add_argument(
     '--log_to_path',
     dest="log_to_path",
@@ -74,16 +83,18 @@ if __name__ == '__main__':
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
     const.LOG_TO_PATH = args.log_to_path if args.log_to_path else False
     const.LOGGER_LEVEL = args.logger_level
+    const.VKBOTTLE_LOGGER_LEVEL = args.vkbottle_logger_level
 
     if isinstance(logger, Logger):
         logger.global_logger_level = LoggerLevel.get_int(const.LOGGER_LEVEL)
 
     logger.warning(
-        f"Запуск с параметрами:\n"
+        f"\n\nЗапуск с параметрами:\n"
         f" -> Уровень логгирования              -> {const.LOGGER_LEVEL}\n"
+        f" -> Уровень логгирования VKBottle     -> {const.VKBOTTLE_LOGGER_LEVEL}\n"
         f" -> Логи в файл                       -> {const.LOG_TO_PATH}\n"
-        f" -> Путь до файла с конфингом         -> {const.CONFIG_PATH}\n"
-        f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
+        f" -> Путь до файла с конфингом         -> {Database.get_path()}\n"
+        f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n\n"
     )
 
     try:
@@ -99,7 +110,7 @@ if __name__ == '__main__':
 
         user = User(
             tokens=db.tokens,
-            debug=const.LOGGER_LEVEL,
+            debug=const.VKBOTTLE_LOGGER_LEVEL,
             log_to_path=const.LOG_TO_PATH
         )
         user.set_blueprints(

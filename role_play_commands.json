@@ -1,0 +1,109 @@
+{
+  "role_play_commands": [
+    {
+      "name": "",
+      "gen": "",
+      "formatter_man": "",
+      "formatter_woman": "",
+      "all_ending": ""
+    },
+    {
+      "name": "выебать",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC49\uD83D\uDC4C\uD83D\uDE2C | {first_user} принудил к жёсткому интиму {second_user}",
+      "formatter_woman": "\uD83D\uDC49\uD83D\uDC4C\uD83D\uDE2C | {first_user} принудила к жёсткому интиму {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "дать пять",
+      "gen": "dat",
+      "formatter_man": "\uD83D\uDE4F\uD83C\uDFFB | {first_user} дал пять {second_user}",
+      "formatter_woman": "\uD83D\uDE4F\uD83C\uDFFB| {first_user} дала пять {second_user}",
+      "all_ending": "сразу всем"
+    },
+    {
+      "name": "записать на ноготочки",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC85 | {first_user} записал на ноготочки {second_user}",
+      "formatter_woman": "\uD83D\uDC85 | {first_user} записала на ноготочки {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "испугать",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDE31 | {first_user} испугал {second_user}",
+      "formatter_woman": "\uD83D\uDE31 | {first_user} испугала {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "извиниться",
+      "gen": "ins",
+      "formatter_man": "\uD83D\uDE4F | {first_user} извинился перед {second_user}",
+      "formatter_woman": "\uD83D\uDE4F | {first_user} извинилась перед {second_user}",
+      "all_ending": "всеми сразу"
+    },
+    {
+      "name": "изнасиловать",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC49\uD83D\uDC4C\uD83D\uDE2C | {first_user} надругался над {second_user}",
+      "formatter_woman": "\uD83D\uDC49\uD83D\uDC4C\uD83D\uDE2C | {first_user} надругалась над {second_user}",
+      "all_ending": "всеми сразу"
+    },
+    {
+      "name": "кусь",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDE2C | {first_user} кусьнул {second_user}",
+      "formatter_woman": "\uD83D\uDE2C | {first_user} кусьнула {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "кастрировать",
+      "gen": "acc",
+      "formatter_man": "✂ | {first_user} кастрировал {second_user}",
+      "formatter_woman": "✂ | {first_user} кастрировала {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "лизнуть",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC45 | {first_user} лизнул {second_user}",
+      "formatter_woman": "\uD83D\uDC45 | {first_user} лизнула {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "обнять",
+      "gen": "acc",
+      "formatter_man": "\uD83E\uDD17 | {first_user} обнял {second_user}",
+      "formatter_woman": "\uD83E\uDD17 | {first_user} обняла {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "отравить",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC8A | {first_user} отравила {second_user}",
+      "formatter_woman": "\uD83D\uDC8A | {first_user} отравила {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "отдаться",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDC9D | {first_user} отдался {second_user}",
+      "formatter_woman": "\uD83D\uDC9D | {first_user} отдалась {second_user}",
+      "all_ending": "сразу всем"
+    },
+    {
+      "name": "поздравить",
+      "gen": "acc",
+      "formatter_man": "\uD83E\uDD73 | {first_user} поздравил {second_user}",
+      "formatter_woman": "\uD83E\uDD73 | {first_user} поздравила {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "поцеловать",
+      "gen": "acc",
+      "formatter_man": "\uD83D\uDE18 | {first_user} поцеловал {second_user}",
+      "formatter_woman": "\uD83D\uDE18 | {first_user} поцеловала {second_user}",
+      "all_ending": "сразу всех"
+    }
+  ]
+}

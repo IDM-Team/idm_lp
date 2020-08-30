@@ -1,10 +1,8 @@
 from typing import Optional
 
-import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
-from const import CALLBACK_LINK
 from logger import logger_decorator
 from objects import Database, Alias
 from utils import send_request

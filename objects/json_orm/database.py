@@ -10,7 +10,8 @@ from objects import (
     IgroredMembers,
     IgroredGlobalMembers,
     MutedMembers,
-    Alias
+    Alias,
+    RolePlayCommand
 )
 from objects.json_orm.checks import CheckClass
 from objects.json_orm.errors import DatabaseWarning, DatabaseError
@@ -27,6 +28,7 @@ class Database(DotDict, ContextInstanceMixin):
     igrored_global_members: List[IgroredGlobalMembers]
     muted_members: List[MutedMembers]
     aliases: List[Alias]
+    role_play_commands: List[RolePlayCommand]
     service_prefixes: List[str]
     self_prefixes: List[str]
     duty_prefixes: List[str]
@@ -40,6 +42,7 @@ class Database(DotDict, ContextInstanceMixin):
         'igrored_global_members',
         'muted_members',
         'aliases',
+        'role_play_commands',
         'service_prefixes',
         'self_prefixes',
         'duty_prefixes',
@@ -88,12 +91,14 @@ class Database(DotDict, ContextInstanceMixin):
     def get_path() -> str:
         if const.USE_APP_DATA:
             local_data_path = os.environ["APPDATA"]
-            return os.path.join(
-                local_data_path,
-                "IDM",
-                const.CONFIG_PATH
+            return os.path.abspath(
+                os.path.join(
+                    local_data_path,
+                    "IDM",
+                    const.CONFIG_PATH
+                )
             )
-        return const.CONFIG_PATH
+        return os.path.abspath(const.CONFIG_PATH)
 
     def check(self) -> None:
         checks = CheckClass.get_all_checks()
@@ -123,9 +128,9 @@ class Database(DotDict, ContextInstanceMixin):
                 cls(self).check()
             except DatabaseWarning as ex:
                 issues += 1
-                logger.warning(f"Предупреждение \"{ex.name}\"\n{ex.description}")
+                logger.warning(f"Предупреждение \"{ex.name}\". {ex.description}")
             except DatabaseError as ex:
-                logger.error(f"Ошибка \"{ex.name}\"\n{ex.description}")
+                logger.error(f"Ошибка \"{ex.name}\". {ex.description}")
                 raise ex
 
         if not issues:

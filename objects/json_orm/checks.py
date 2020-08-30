@@ -1,4 +1,3 @@
-# from objects import Database
 from objects.json_orm.errors import *
 
 
@@ -21,7 +20,8 @@ class FieldsCheck(CheckClass):
 
     fix_database = {
         "ru_captcha_key": "",
-        "delete_all_notify": False
+        "delete_all_notify": False,
+        "role_play_commands": []
     }
 
     def check(self):
@@ -33,7 +33,7 @@ class FieldsCheck(CheckClass):
                 else:
                     raise DatabaseError(
                         name='Нет поля',
-                        description=f"В базе данных не хватает поля \"{key}\""
+                        description=f'В базе данных не хватает поля "{key}"'
                     )
 
 
@@ -42,14 +42,14 @@ class TokensCountCheck(CheckClass):
     def check(self):
         if len(self.database.tokens) < 1:
             raise DatabaseError(
-                name="Нет токенов",
-                description="Укажите токены в файле конфигурации"
+                name='Нет токенов',
+                description='Укажите токены в файле конфигурации'
             )
 
         if len(self.database.tokens) < 3:
             raise DatabaseWarning(
                 name='Малое количество токенов',
-                description="Слишком мало токенов, рекомендуемое количество 3 и более."
+                description='Слишком мало токенов, рекомендуемое количество 3 и более.'
             )
 
 
@@ -58,6 +58,6 @@ class SecretCodeCheck(CheckClass):
     def check(self):
         if not self.database.secret_code:
             raise DatabaseError(
-                name="Нет секретного кода",
-                description="Укажите секретный код в файле конфигурации"
+                name='Нет секретного кода',
+                description='Укажите секретный код в файле конфигурации'
             )

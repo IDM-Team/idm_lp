@@ -1,3 +1,6 @@
+__version__ = '1.3.4'
+__author__ = 'lordralinc'
+
 DEFAULT_DATABASE = {
     "tokens": [],
     "secret_code": "",
@@ -15,14 +18,13 @@ DEFAULT_DATABASE = {
 CONFIG_PATH = "config.json"
 USE_APP_DATA = False
 
-__version__ = '1.3.3'
-__author__ = 'Yury Yushmanov'
+LOGGER_LEVEL = 'INFO'
+VKBOTTLE_LOGGER_LEVEL = 'ERROR'
+LOG_TO_PATH = False
 
 CALLBACK_LINK = "https://irisduty.ru/callback/"
 
 GITHUB_LINK = "https://github.com/LordRalInc/idmmulti_lp"
 VERSION_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/version.json"
 ALIASES_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/aliases.json"
-
-LOGGER_LEVEL = 'INFO'
-LOG_TO_PATH = False
+ROLE_PLAY_COMMANDS_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/role_play_commands.json"

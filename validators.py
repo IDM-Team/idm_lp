@@ -2,6 +2,8 @@ from vbml.blanket import validator
 from objects import Database
 
 __all__ = (
+    'alias',
+    'role_play_command',
     'self_prefix',
     'duty_prefix',
     'service_prefix',
@@ -14,6 +16,14 @@ def alias(value: str):
     for alias_ in db.aliases:
         if value.lower() == alias_.command_from:
             return alias_
+
+
+@validator
+def role_play_command(value: str):
+    db = Database.get_current()
+    for rp_cmd in db.role_play_commands:
+        if value.lower() == rp_cmd.name.lower():
+            return rp_cmd
 
 
 @validator

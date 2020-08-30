@@ -9,6 +9,7 @@ class Savers:
         self.savers.append(self.igrored_global_members)
         self.savers.append(self.muted_members)
         self.savers.append(self.aliases)
+        self.savers.append(self.role_play_commands)
 
     def __call__(self, *args, **kwargs):
         return self.savers
@@ -39,4 +40,11 @@ class Savers:
         return [
             alias.save()
             for alias in data['aliases']
+        ]
+
+    @staticmethod
+    def role_play_commands(data: dict) -> List[dict]:
+        return [
+            role_play_command.save()
+            for role_play_command in data['role_play_commands']
         ]
