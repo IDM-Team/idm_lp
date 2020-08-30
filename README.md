@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.3.3-blue)
+![Version](https://img.shields.io/badge/version-1.3.4-blue)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/LordRalInc/idmmulti_lp)
 ![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vkbottle)
 ![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vbml)
