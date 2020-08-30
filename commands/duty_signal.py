@@ -4,6 +4,7 @@ from vkbottle.user import Blueprint, Message
 from const import CALLBACK_LINK
 from logger import logger_decorator
 from objects import Database
+from utils import send_request
 
 user = Blueprint(
     name='duty_signal_blueprint'
@@ -37,7 +38,4 @@ async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, 
         },
         "vkmessage": message_
     }
-    requests.post(
-        CALLBACK_LINK,
-        json=__model
-    )
+    await send_request(__model)
