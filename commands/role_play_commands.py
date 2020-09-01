@@ -38,8 +38,8 @@ async def get_role_play_message(
 
 
 all_role_play_cmd = [
-    "<role_play_command:role_play_command> всех",
-    "<role_play_command:role_play_command> всем",
+    "<service_prefix:service_prefix> <role_play_command:role_play_command> всех",
+    "<service_prefix:service_prefix> <role_play_command:role_play_command> всем",
 ]
 
 
@@ -61,7 +61,7 @@ async def role_play_command_wrapper(
     )
 
 
-user_id_cmd = "<role_play_command:role_play_command> [id<user_id:int>|<name>]"
+user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command> [id<user_id:int>|<name>]"
 
 
 @user.on.message(FromMe(), text=user_id_cmd)
@@ -83,7 +83,7 @@ async def role_play_command_wrapper(
     )
 
 
-no_user_id_cmd = "<role_play_command:role_play_command>"
+no_user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command>"
 
 
 @user.on.message(FromMe(), text=no_user_id_cmd)
