@@ -10,6 +10,16 @@
 LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.
 Так же он добавляет игнор, глоигнор, мут и алиасы.
 
+<!--
+4: 252535322122234232
+  1  2  3  4  5
+1 a  b  c  d  e
+2 f  g  h  ij k
+3 l  m  n  o  p
+4 q  r  s  y  u
+5 v  w  x  y  z
+-->
+
 ## Оглавление
 1. [Установка](#установка)
 2. [Аргументы запуска](#аргументы-запуска)
@@ -22,8 +32,8 @@ LP модуль позволяет работать приемнику сигн�
 ```shell script
 pkg install git
 pkg install python
-git clone https://github.com/LordRalInc/idmmulti_lp.git
-cd idmmulti_lp
+git clone https://github.com/lordralinc/idm_lp.git
+cd idm_lp
 pip install -r requirements.txt
 nano config.json
 ```
@@ -69,9 +79,10 @@ make -j {число ядер} && sudo make altinstall
 ```
 `{число ядер}` можно узнать командой `nproc`
 ```shell script
+cd /root/
 sudo apt-get install git nano -y
-git clone https://github.com/LordRalInc/idmmulti_lp.git
-cd idmmulti_lp
+git clone https://github.com/lordralinc/idm_lp.git
+cd idm_lp
 nano config.json
 
 python3.7 -m venv env
@@ -91,7 +102,7 @@ After=network.target
 User=root
 Group=www-data
 WorkingDirectory=/root/idmmulti_lp
-ExecStart=/root/idmmulti_lp/env/bin/python3.7 /root/idmmulti_lp/main.py --config_path /root/idmmulti_lp/config.json
+ExecStart=/root/idm_lp/env/bin/python3.7 /root/idm_lp/main.py --config_path /root/idm_lp/config.json
 
 [Install]
 WantedBy=multi-user.target
