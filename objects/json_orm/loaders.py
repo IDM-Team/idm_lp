@@ -69,11 +69,14 @@ class Loaders:
     @staticmethod
     def role_play_commands(data: dict) -> List[RolePlayCommand]:
         try:
+            role_play_commands = requests.get(
+                const.ROLE_PLAY_COMMANDS_REST
+            ).json()['role_play_commands'] if const.ROLE_PLAY_COMMANDS_USE_REST else data['role_play_commands']
+
             return [
                 RolePlayCommand(role_play_command)
-                for role_play_command in requests.get(
-                    const.ROLE_PLAY_COMMANDS_REST
-                ).json()['role_play_commands']
+                for role_play_command in
+                role_play_commands
             ]
-        except:
+        except KeyError:
             return []

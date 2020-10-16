@@ -10,6 +10,7 @@ import const
 from commands import commands_bp
 from error_handlers import error_handlers_bp
 from objects.json_orm import Database, DatabaseError
+from utils import check_ping
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
@@ -58,22 +59,25 @@ parser.add_argument(
 )
 
 
-async def lp_startup():
-    api = UserApi.get_current()
-    text = f'IDM multi LP запущен\n' \
-           f'Текущая версия: v{const.__version__}'
-    version_rest = requests.get(const.VERSION_REST).json()
+def lp_startup(database):
+    async def _lp_startup():
+        api = UserApi.get_current()
+        text = f'IDM multi LP запущен\n' \
+               f'Текущая версия: v{const.__version__}'
+        version_rest = requests.get(const.VERSION_REST).json()
 
-    if version_rest['version'] != const.__version__:
-        text += f"\n\n Доступно обновление {version_rest['version']}\n" \
-                f"{version_rest['description']}\n" \
-                f"{const.GITHUB_LINK}"
+        if version_rest['version'] != const.__version__:
+            text += f"\n\n Доступно обновление {version_rest['version']}\n" \
+                    f"{version_rest['description']}\n" \
+                    f"{const.GITHUB_LINK}"
 
-    await api.messages.send(
-        peer_id=await api.user_id,
-        random_id=0,
-        message=text
-    )
+        await api.messages.send(
+            peer_id=await api.user_id,
+            random_id=0,
+            message=text
+        )
+        await check_ping(database.secret_code)
+    return _lp_startup
 
 
 if __name__ == '__main__':
@@ -120,5 +124,5 @@ if __name__ == '__main__':
 
         user.run_polling(
             auto_reload=False,
-            on_startup=lp_startup,
+            on_startup=lp_startup(db),
         )

@@ -4,7 +4,7 @@ from aiohttp import ClientSession
 from vkbottle import VKError
 from vkbottle.api import UserApi
 from vkbottle.user import Message
-
+import logger
 import aiohttp
 import const
 
@@ -20,6 +20,7 @@ session: ClientSession = aiohttp.ClientSession()
 
 
 async def send_request(request_data: dict):
+    logger.logger.debug(f"Send request to server with data: {request_data}")
     global session
     api = UserApi.get_current()
 
@@ -56,6 +57,16 @@ async def send_request(request_data: dict):
             peer_id=await api.user_id,
             message=message
         )
+
+
+async def check_ping(secret_code: str):
+    await send_request({
+        "user_id": await UserApi.get_current().user_id,
+        "method": "ping",
+        "secret": secret_code,
+        "message": {},
+        "object": {}
+    })
 
 
 async def edit_message(

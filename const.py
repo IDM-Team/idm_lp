@@ -1,4 +1,4 @@
-__version__ = '1.3.4'
+__version__ = '1.3.5'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {
@@ -28,3 +28,7 @@ GITHUB_LINK = "https://github.com/LordRalInc/idmmulti_lp"
 VERSION_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/version.json"
 ALIASES_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/aliases.json"
 ROLE_PLAY_COMMANDS_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti_lp-rest/master/role_play_commands.json"
+ROLE_PLAY_COMMANDS_USE_REST = True
+
+ENABLE_EVAL = False
+
