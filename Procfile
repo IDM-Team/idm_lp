@@ -1,1 +1,1 @@
-worker: python run.py --config_path config.json
+worker: python main.py --config_path config.json
