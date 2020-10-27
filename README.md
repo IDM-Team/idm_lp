@@ -1,11 +1,7 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.3.4-blue)
-![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/LordRalInc/idmmulti_lp)
-![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vkbottle)
-![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/vbml)
-![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/LordRalInc/idmmulti_lp/python-rucaptcha)
-![GitHub](https://img.shields.io/github/license/LordRalInc/idmmulti_lp)
-![GitHub repo size](https://img.shields.io/github/repo-size/LordRalInc/idmmulti_lp)
+![Version](https://img.shields.io/badge/version-1.3.5-blue)
+![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
+![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 
 LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.
 Так же он добавляет игнор, глоигнор, мут и алиасы.
@@ -27,22 +23,38 @@ LP модуль позволяет работать приемнику сигн�
 4. [Команды модуля ЛП](#команды-модуля-лп)
 
 ## Установка
-### Termux (Android)
-Вводим по очереди команды
-```shell script
-pkg install git
-pkg install python
-git clone https://github.com/lordralinc/idm_lp.git
-cd idm_lp
-pip install -r requirements.txt
-nano config.json
-```
-Заполняем `config.json`
-```shell script
-Запуск:
-python3 main.py
-```
-[![Установка IDM LP на Android (Termux)](https://img.youtube.com/vi/ULgyVBAXKqw/hqdefault.jpg)](https://youtu.be/ULgyVBAXKqw)
+### Heroku 
+_Инструкцию ~~любезно~~ предоставил [Юн Дэмин](https://vk.com/id616052556)_
+
+`<nick>` - ваш ник в гитхабе.<br>
+`<name>` - имя репозитория.
+
+1. Регистрируемся на [GitHub](https://github.com)
+2. Создаем закрытый репозиторий
+    ![](https://sun9-5.userapi.com/ZdunWUy0_UtICPscb8DDDXlKXrYpjY2GRHZK1Q/-tt19NoXdC4.jpg)
+3. Заходим в термукс или гит на ПК и пишем следующие команды:
+    ```shell script
+    git clone --bare https://github.com/lordralinc/idm_lp.git
+    cd idm_lp.git
+    git push --mirror https://github.com/<nick>/<name>.git
+    ```
+    _Может появится просьба войти в аккаунт, вводим логин и пароль от аккаунта и все готово_
+    ```shell script
+    cd ..
+    rm -rf idm_lp.git
+    ```
+4. Заходим на наш закрытый репозиторий и там где написано `2.0` изменяем на `master`.<br>
+5. Далее заходим в `config.json`, вставляем токен от Kate Mobile и секретный код IDM.
+6. Регистрируемся на [Heroku](https://heroku.com) и выбираем python.
+7. Переходим по ссылке: [dashboard.heroku.com/apps](https://dashboard.heroku.com/apps) и создаем приложение. 
+    Выбираем европу и название приложение любое, чтоб угодить хероку.
+8. После создания мы окажемся в панели управления, нажимаем на GitHub и входим в аккаунт.
+    ![](https://sun9-47.userapi.com/pLLeZCAo1P4sQR1brlFdBwHtfBWhBQGfuILR-g/edHTCYYZ2CE.jpg)
+9. Нам нужно имя закрытого репозитория, вставляем и нажимаем `Search`, выбираем нужный нам репозиторий и нажимаем на `Connect`.
+10. Листаем вниз и видим кнопку `Deploy Branch`, рядом с кнопкой будет `2.0`, нажимаем и выбираем `master`, далее тыкаем на кнопку `Deploy Branch` и ждем.
+11. Вверху нажимаем на кнопку `Resources`.
+12. Нажмаем на карандашик слева, включаем и тыкаем на `Confirm`.
+13. Переходим обратно в `Deploy` и мотаем вниз делаем все как по пункту 10
 
 ### Windows
 
