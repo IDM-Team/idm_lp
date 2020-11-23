@@ -11,8 +11,7 @@ user = Blueprint(
 )
 
 
-@user.on.message(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
-@user.on.chat_message(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
+@user.on.message_handler(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>', lower=True)
 @logger_decorator
 async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, **kwargs):
     db = Database.get_current()

@@ -13,8 +13,7 @@ user = Blueprint(
 )
 
 
-@user.on.message(FromMe(), text="<prefix:service_prefix> инфо")
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> инфо")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> инфо", lower=True)
 @logger_decorator
 async def info_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -32,8 +31,8 @@ async def info_wrapper(message: Message, **kwargs):
     Ключ рукаптчи: {"&#9989;" if db.ru_captcha_key else "&#10060;"}
     Удаление уведомлений: {"&#9989;" if db.delete_all_notify else "&#10060;"}
 
-    В игноре: {len(db.igrored_members)}
-    В глобальном игноре: {len(db.igrored_global_members)}
+    В игноре: {len(db.ignored_members)}
+    В глобальном игноре: {len(db.ignored_global_members)}
     В муте: {len(db.muted_members)}
     Алиасов: {len(db.aliases)}
     

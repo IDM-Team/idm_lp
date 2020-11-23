@@ -3,7 +3,7 @@ from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
 from logger import logger_decorator
-from objects import Database, IgroredGlobalMembers
+from objects import Database, IgnoredGlobalMembers
 from utils import edit_message, get_ids_by_message, get_full_name_by_member_id
 
 user = Blueprint(
@@ -12,8 +12,8 @@ user = Blueprint(
 
 
 def add_ignore_global_member(database: Database, member_id: int) -> None:
-    database.igrored_global_members.append(
-        IgroredGlobalMembers(
+    database.ignored_global_members.append(
+        IgnoredGlobalMembers(
             member_id=member_id
         )
     )
@@ -22,10 +22,10 @@ def add_ignore_global_member(database: Database, member_id: int) -> None:
 
 def remove_ignore_global_member(database: Database, member_id: int) -> None:
     ignored_member = None
-    for ign in database.igrored_global_members:
+    for ign in database.ignored_global_members:
         if ign.member_id == member_id:
             ignored_member = ign
-    database.igrored_global_members.remove(ignored_member)
+    database.ignored_global_members.remove(ignored_member)
     database.save()
 
 
@@ -35,12 +35,12 @@ async def show_ignore_global_members(
 ) -> str:
     user_ids = [
         ignore_member.member_id
-        for ignore_member in database.igrored_global_members
+        for ignore_member in database.ignored_global_members
         if ignore_member.member_id > 0
     ]
     group_ids = [
         abs(ignore_member.member_id)
-        for ignore_member in database.igrored_global_members
+        for ignore_member in database.ignored_global_members
         if ignore_member.member_id < 0
     ]
 
@@ -63,23 +63,15 @@ async def show_ignore_global_members(
     return message
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> +глоигнор [id<user_id:int>|<foo>',
         '<prefix:service_prefix> +глоигнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> +глоигнор https://vk.com/<domain>',
         '<prefix:service_prefix> +глоигнор',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> +глоигнор [id<user_id:int>|<foo>',
-        '<prefix:service_prefix> +глоигнор [club<group_id:int>|<foo>',
-        '<prefix:service_prefix> +глоигнор https://vk.com/<domain>',
-        '<prefix:service_prefix> +глоигнор',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def add_ignored_global_member_wrapper(
@@ -111,7 +103,7 @@ async def add_ignored_global_member_wrapper(
 
     if member_id in [
         igrored_member.member_id
-        for igrored_member in db.igrored_global_members
+        for igrored_member in db.ignored_global_members
     ]:
         await edit_message(
             message,
@@ -125,23 +117,15 @@ async def add_ignored_global_member_wrapper(
     )
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> -глоигнор [id<user_id:int>|<foo>',
         '<prefix:service_prefix> -глоигнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> -глоигнор https://vk.com/<domain>',
         '<prefix:service_prefix> -глоигнор',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> -глоигнор [id<user_id:int>|<foo>',
-        '<prefix:service_prefix> -глоигнор [club<group_id:int>|<foo>',
-        '<prefix:service_prefix> -глоигнор https://vk.com/<domain>',
-        '<prefix:service_prefix> -глоигнор',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def remove_ignored_global_member_wrapper(
@@ -173,7 +157,7 @@ async def remove_ignored_global_member_wrapper(
 
     if member_id not in [
         igrored_member.member_id
-        for igrored_member in db.igrored_global_members
+        for igrored_member in db.ignored_global_members
     ]:
         await edit_message(
             message,
@@ -187,19 +171,13 @@ async def remove_ignored_global_member_wrapper(
     )
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> глоигнорлист',
         '<prefix:service_prefix> глоигнор лист',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> глоигнорлист',
-        '<prefix:service_prefix> глоигнор лист',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def show_ignore_members_wrapper(message: Message, **kwargs):

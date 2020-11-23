@@ -5,8 +5,8 @@ class Savers:
     savers: List[Callable] = []
 
     def __init__(self):
-        self.savers.append(self.igrored_members)
-        self.savers.append(self.igrored_global_members)
+        self.savers.append(self.ignored_members)
+        self.savers.append(self.ignored_global_members)
         self.savers.append(self.muted_members)
         self.savers.append(self.aliases)
         self.savers.append(self.role_play_commands)
@@ -15,17 +15,17 @@ class Savers:
         return self.savers
 
     @staticmethod
-    def igrored_members(data: dict) -> List[dict]:
+    def ignored_members(data: dict) -> List[dict]:
         return [
             ign_member.save()
-            for ign_member in data['igrored_members']
+            for ign_member in data['ignored_members']
         ]
 
     @staticmethod
-    def igrored_global_members(data: dict) -> List[dict]:
+    def ignored_global_members(data: dict) -> List[dict]:
         return [
             ign_member.save()
-            for ign_member in data['igrored_global_members']
+            for ign_member in data['ignored_global_members']
         ]
 
     @staticmethod

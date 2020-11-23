@@ -8,8 +8,7 @@ user = Blueprint(
 )
 
 
-@user.on.message(rules.IgroredMembersRule())
-@user.on.chat_message(rules.IgroredMembersRule())
+@user.on.message_handler(rules.IgnoredMembersRule())
 @logger_decorator
 async def ignore_delete_message_wrapper(message: Message):
     await message.api.messages.delete(
@@ -17,8 +16,7 @@ async def ignore_delete_message_wrapper(message: Message):
     )
 
 
-@user.on.message(rules.IgroredGlobalMembersRule())
-@user.on.chat_message(rules.IgroredGlobalMembersRule())
+@user.on.message_handler(rules.IgnoredGlobalMembersRule())
 @logger_decorator
 async def ignore_delete_message_wrapper(message: Message):
     await message.api.messages.delete(
@@ -26,8 +24,7 @@ async def ignore_delete_message_wrapper(message: Message):
     )
 
 
-@user.on.message(rules.MutedMembersRule())
-@user.on.chat_message(rules.MutedMembersRule())
+@user.on.message_handler(rules.MutedMembersRule())
 @logger_decorator
 async def ignore_delete_message_wrapper(message: Message):
     await message.api.messages.delete(

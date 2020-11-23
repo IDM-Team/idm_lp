@@ -7,8 +7,8 @@ from logger import logger
 import const
 from objects import (
     DotDict,
-    IgroredMembers,
-    IgroredGlobalMembers,
+    IgnoredMembers,
+    IgnoredGlobalMembers,
     MutedMembers,
     Alias,
     RolePlayCommand
@@ -24,8 +24,8 @@ class Database(DotDict, ContextInstanceMixin):
     tokens: List[str]
     secret_code: str
     ru_captcha_key: str
-    igrored_members: List[IgroredMembers]
-    igrored_global_members: List[IgroredGlobalMembers]
+    ignored_members: List[IgnoredMembers]
+    ignored_global_members: List[IgnoredGlobalMembers]
     muted_members: List[MutedMembers]
     aliases: List[Alias]
     role_play_commands: List[RolePlayCommand]
@@ -38,8 +38,8 @@ class Database(DotDict, ContextInstanceMixin):
         'tokens',
         'secret_code',
         'ru_captcha_key',
-        'igrored_members',
-        'igrored_global_members',
+        'ignored_members',
+        'ignored_global_members',
         'muted_members',
         'aliases',
         'role_play_commands',
@@ -78,10 +78,16 @@ class Database(DotDict, ContextInstanceMixin):
         for saver in self.savers():
             data[saver.__name__] = saver(data)
 
+        data_to_save = {}
+
+        for key in data.keys():
+            if key in self.__all_fields__:
+                data_to_save[key] = data[key]
+
         with open(self._path_to_file, 'w', encoding='utf-8') as file:
             file.write(
                 json.dumps(
-                    data,
+                    data_to_save,
                     ensure_ascii=False,
                     indent=2
                 )

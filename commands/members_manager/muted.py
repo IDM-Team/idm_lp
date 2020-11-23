@@ -64,23 +64,15 @@ async def show_muted_members(
     return message
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> +мут [id<user_id:int>|<foo>',
         '<prefix:service_prefix> +мут [club<group_id:int>|<foo>',
         '<prefix:service_prefix> +мут https://vk.com/<domain>',
         '<prefix:service_prefix> +мут',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> +мут [id<user_id:int>|<foo>',
-        '<prefix:service_prefix> +мут [club<group_id:int>|<foo>',
-        '<prefix:service_prefix> +мут https://vk.com/<domain>',
-        '<prefix:service_prefix> +мут',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def add_muted_member_wrapper(
@@ -127,23 +119,15 @@ async def add_muted_member_wrapper(
     )
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> -мут [id<user_id:int>|<foo>',
         '<prefix:service_prefix> -мут [club<group_id:int>|<foo>',
         '<prefix:service_prefix> -мут https://vk.com/<domain>',
         '<prefix:service_prefix> -мут',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> -мут [id<user_id:int>|<foo>',
-        '<prefix:service_prefix> -мут [club<group_id:int>|<foo>',
-        '<prefix:service_prefix> -мут https://vk.com/<domain>',
-        '<prefix:service_prefix> -мут',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def remove_ignored_member_wrapper(
@@ -190,19 +174,13 @@ async def remove_ignored_member_wrapper(
     )
 
 
-@user.on.message(
+@user.on.message_handler(
     FromMe(),
     text=[
         '<prefix:service_prefix> мутлист',
         '<prefix:service_prefix> мут лист',
-    ]
-)
-@user.on.chat_message(
-    FromMe(),
-    text=[
-        '<prefix:service_prefix> мутлист',
-        '<prefix:service_prefix> мут лист',
-    ]
+    ],
+    lower=True
 )
 @logger_decorator
 async def show_mute_members_wrapper(message: Message, **kwargs):

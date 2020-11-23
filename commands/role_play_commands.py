@@ -4,7 +4,7 @@ from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
 from logger import logger_decorator
-from objects import RolePlayCommand
+from objects import RolePlayCommand, Database
 from utils import edit_message
 
 user = Blueprint(
@@ -43,8 +43,21 @@ all_role_play_cmd = [
 ]
 
 
-@user.on.message(FromMe(), text=all_role_play_cmd)
-@user.on.chat_message(FromMe(), text=all_role_play_cmd)
+@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> рп", lower=True)
+async def show_rp_commands(message: Message, **kwargs):
+    db = Database.get_current()
+    text = "📃 Доступные РП-команды:\n"
+    index = 1
+    for rp_cmd in db.role_play_commands:
+        text += f"{index}. {rp_cmd.name}\n"
+        index += 1
+    await edit_message(
+        message,
+        text
+    )
+
+
+@user.on.message_handler(FromMe(), text=all_role_play_cmd, lower=True)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,
@@ -64,8 +77,7 @@ async def role_play_command_wrapper(
 user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command> [id<user_id:int>|<name>]"
 
 
-@user.on.message(FromMe(), text=user_id_cmd)
-@user.on.chat_message(FromMe(), text=user_id_cmd)
+@user.on.message_handler(FromMe(), text=user_id_cmd, lower=True)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,
@@ -86,8 +98,7 @@ async def role_play_command_wrapper(
 no_user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command>"
 
 
-@user.on.message(FromMe(), text=no_user_id_cmd)
-@user.on.chat_message(FromMe(), text=no_user_id_cmd)
+@user.on.message_handler(FromMe(), text=no_user_id_cmd, lower=True)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,

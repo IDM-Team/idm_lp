@@ -2,8 +2,8 @@ from typing import List, Callable
 
 import const
 from objects import (
-    IgroredMembers,
-    IgroredGlobalMembers,
+    IgnoredMembers,
+    IgnoredGlobalMembers,
     MutedMembers,
     Alias,
     RolePlayCommand
@@ -16,8 +16,8 @@ class Loaders:
     loaders: List[Callable] = []
 
     def __init__(self):
-        self.loaders.append(self.igrored_members)
-        self.loaders.append(self.igrored_global_members)
+        self.loaders.append(self.ignored_members)
+        self.loaders.append(self.ignored_global_members)
         self.loaders.append(self.muted_members)
         self.loaders.append(self.aliases)
         self.loaders.append(self.role_play_commands)
@@ -26,21 +26,21 @@ class Loaders:
         return self.loaders
 
     @staticmethod
-    def igrored_members(data: dict) -> List[IgroredMembers]:
+    def ignored_members(data: dict) -> List[IgnoredMembers]:
         try:
             return [
-                IgroredMembers(ign_member)
-                for ign_member in data['igrored_members']
+                IgnoredMembers(ign_member)
+                for ign_member in data['ignored_members']
             ]
         except KeyError:
             return []
 
     @staticmethod
-    def igrored_global_members(data: dict) -> List[IgroredGlobalMembers]:
+    def ignored_global_members(data: dict) -> List[IgnoredGlobalMembers]:
         try:
             return [
-                IgroredGlobalMembers(ign_member)
-                for ign_member in data['igrored_global_members']
+                IgnoredGlobalMembers(ign_member)
+                for ign_member in data['ignored_global_members']
             ]
         except KeyError:
             return []

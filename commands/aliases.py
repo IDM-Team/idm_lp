@@ -46,16 +46,14 @@ async def send_signal(
     await send_request(__model)
 
 
-@user.on.message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
-@user.on.chat_message(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'])
+@user.on.message_handler(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>'], lower=True)
 @logger_decorator
 async def duty_signal(message: Message, alias: Alias, signal: str = None):
     db = Database.get_current()
     await send_signal(db, message, alias, ' ', signal)
 
 
-@user.on.message(FromMe(), text='<alias:alias>\n<signal>')
-@user.on.chat_message(FromMe(), text='<alias:alias>\n<signal>')
+@user.on.message_handler(FromMe(), text='<alias:alias>\n<signal>', lower=True)
 @logger_decorator
 async def duty_signal_new_line(message: Message, alias: Alias, signal: str):
     db = Database.get_current()

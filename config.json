@@ -3,8 +3,8 @@
   "secret_code": "",
   "delete_all_notify": false,
   "ru_captcha_key": "",
-  "igrored_members": [],
-  "igrored_global_members": [],
+  "ignored_members": [],
+  "ignored_global_members": [],
   "muted_members": [],
   "aliases": [],
   "service_prefixes": [

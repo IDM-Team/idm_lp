@@ -1,4 +1,4 @@
-__version__ = '1.3.5'
+__version__ = '1.3.6'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {
@@ -6,8 +6,8 @@ DEFAULT_DATABASE = {
     "secret_code": "",
     "ru_captcha_key": "",
     "delete_all_notify": False,
-    "igrored_members": [],
-    "igrored_global_members": [],
+    "ignored_members": [],
+    "ignored_global_members": [],
     "muted_members": [],
     "aliases": [],
     "service_prefixes": ["!слп", ".слп"],

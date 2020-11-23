@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.3.5-blue)
+![Version](https://img.shields.io/badge/version-1.3.6-blue)
 ![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 
@@ -176,8 +176,10 @@ service idmlp start
 ***
 - `{сервисный префикс}` -уведы - модуль будет удалять упоминания типа `@all`, `@online`...
 - `{сервисный префикс}` +уведы - модуль не будет удалять упоминания типа `@all`, `@online`...
-
-
+***
+- `{сервисный префикс}` рп - просмотр РП команд
+***
+- `{сервисный префикс}` секретный код - установка секретного кода
 
 
 

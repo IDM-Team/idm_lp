@@ -11,15 +11,13 @@ user = Blueprint(
 )
 
 
-@user.on.chat_message(DeleteNotifyRule())
-@user.on.message(DeleteNotifyRule())
+@user.on.message_handler(DeleteNotifyRule())
 @logger_decorator
 async def delete_notify_wrapper(message: Message):
     await message.api.messages.delete(message_ids=[message.id])
 
 
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> -уведы")
-@user.on.message(FromMe(), text="<prefix:service_prefix> -уведы")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -уведы", lower=True)
 @logger_decorator
 async def activate_delete_all_notify_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -31,8 +29,7 @@ async def activate_delete_all_notify_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> +уведы")
-@user.on.message(FromMe(), text="<prefix:service_prefix> +уведы")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +уведы", lower=True)
 @logger_decorator
 async def deactivate_delete_all_notify_wrapper(message: Message, **kwargs):
     db = Database.get_current()

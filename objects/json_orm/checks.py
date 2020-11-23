@@ -21,7 +21,9 @@ class FieldsCheck(CheckClass):
     fix_database = {
         "ru_captcha_key": "",
         "delete_all_notify": False,
-        "role_play_commands": []
+        "role_play_commands": [],
+        "ignored_members": [],
+        "ignored_global_members": [],
     }
 
     def check(self):

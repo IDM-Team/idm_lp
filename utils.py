@@ -14,6 +14,7 @@ __all__ = (
     'get_ids_by_message',
     'get_full_name_by_member_id',
     'send_request',
+    'check_ping'
 )
 
 session: ClientSession = aiohttp.ClientSession()

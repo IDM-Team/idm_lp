@@ -13,8 +13,7 @@ user = Blueprint(
 )
 
 
-@user.on.message(FromMe(), text='<prefix:service_prefix> eval <signal>')
-@user.on.chat_message(FromMe(), text='<prefix:service_prefix> eval <signal>')
+@user.on.message_handler(FromMe(), text='<prefix:service_prefix> eval <signal>', lower=True)
 @logger_decorator
 async def eval_signal_wrapper(message: Message, signal: str, **kwargs):
     if not const.ENABLE_EVAL:
@@ -34,8 +33,7 @@ async def eval_signal_wrapper(message: Message, signal: str, **kwargs):
     )
 
 
-@user.on.message(FromMe(), text='<prefix:service_prefix> exec <signal>')
-@user.on.chat_message(FromMe(), text='<prefix:service_prefix> exec <signal>')
+@user.on.message_handler(FromMe(), text='<prefix:service_prefix> exec <signal>', lower=True)
 @logger_decorator
 async def exec_signal_wrapper(message: Message, signal: str, **kwargs):
     if not const.ENABLE_EVAL:

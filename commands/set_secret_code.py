@@ -10,8 +10,7 @@ user = Blueprint(
 )
 
 
-@user.on.message(FromMe(), text='<prefix:service_prefix> секретный код <secret_code>')
-@user.on.chat_message(FromMe(), text='<prefix:service_prefix> секретный код <secret_code>')
+@user.on.message(FromMe(), text='<prefix:service_prefix> секретный код <secret_code>', lower=True)
 @logger_decorator
 async def set_secret_code_wrapper(message: Message, secret_code: str, **kwargs):
     db = Database.get_current()

@@ -22,8 +22,7 @@ async def get_ping(message: Message, answer: str) -> str:
            f"Ответ через {delta} с"
 
 
-@user.on.message(FromMe(), text="<prefix:service_prefix> пинг")
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> пинг")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> пинг", lower=True)
 @logger_decorator
 async def ping_wrapper(message: Message, **kwargs):
     await edit_message(
@@ -32,8 +31,7 @@ async def ping_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message(FromMe(), text="<prefix:service_prefix> пиу")
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> пиу")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> пиу", lower=True)
 @logger_decorator
 async def pau_wrapper(message: Message, **kwargs):
     await edit_message(
@@ -42,8 +40,7 @@ async def pau_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message(FromMe(), text="<prefix:service_prefix> кинг")
-@user.on.chat_message(FromMe(), text="<prefix:service_prefix> кинг")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> кинг", lower=True)
 @logger_decorator
 async def king_wrapper(message: Message, **kwargs):
     await edit_message(

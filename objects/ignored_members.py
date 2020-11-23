@@ -3,13 +3,13 @@ from typing import Dict
 from objects import DotDict
 
 __all__ = (
-    'IgroredMembers',
-    'IgroredGlobalMembers',
+    'IgnoredMembers',
+    'IgnoredGlobalMembers',
     'MutedMembers',
 )
 
 
-class IgroredMembers(DotDict):
+class IgnoredMembers(DotDict):
     member_id: int
     chat_id: int
 
@@ -20,7 +20,7 @@ class IgroredMembers(DotDict):
         }
 
 
-class IgroredGlobalMembers(DotDict):
+class IgnoredGlobalMembers(DotDict):
     member_id: int
 
     def save(self) -> Dict[str, int]:

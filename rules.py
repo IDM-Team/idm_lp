@@ -25,21 +25,21 @@ class DeleteNotifyRule(AbstractMessageRule):
         return False
 
 
-class IgroredMembersRule(AbstractMessageRule):
+class IgnoredMembersRule(AbstractMessageRule):
 
     async def check(self, message: Message) -> bool:
         db = Database.get_current()
-        for ignore_member in db.igrored_members:
+        for ignore_member in db.ignored_members:
             if ignore_member.chat_id == message.peer_id and ignore_member.member_id == message.from_id:
                 return True
         return False
 
 
-class IgroredGlobalMembersRule(AbstractMessageRule):
+class IgnoredGlobalMembersRule(AbstractMessageRule):
 
     async def check(self, message: Message) -> bool:
         db = Database.get_current()
-        for ignore_member in db.igrored_global_members:
+        for ignore_member in db.ignored_global_members:
             if ignore_member.member_id == message.from_id:
                 return True
         return False
