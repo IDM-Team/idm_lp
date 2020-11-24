@@ -1,4 +1,4 @@
-__version__ = '1.3.6'
+__version__ = '1.3.6.1'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {
@@ -31,4 +31,7 @@ ROLE_PLAY_COMMANDS_REST = "https://raw.githubusercontent.com/LordRalInc/idmmulti
 ROLE_PLAY_COMMANDS_USE_REST = True
 
 ENABLE_EVAL = False
+ALLOW_SENTRY = True
+SENTRY_URL = "https://7a3f1b116c67453c91600ad54d4b7087@o481403.ingest.sentry.io/5529960"
+
 

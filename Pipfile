@@ -27,6 +27,7 @@ vbml = "==0.5.93"
 watchgod = "==0.6"
 win32-setctime = "==1.0.1"
 yarl = "==1.5.1"
+sentry-sdk = "*"
 
 [requires]
 python_version = "3.8"

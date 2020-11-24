@@ -12,6 +12,13 @@ from error_handlers import error_handlers_bp
 from objects.json_orm import Database, DatabaseError
 from utils import check_ping
 
+if const.ALLOW_SENTRY:
+    import sentry_sdk
+    sentry_sdk.init(
+        const.SENTRY_URL,
+        traces_sample_rate=1.0
+    )
+
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
                 'Так же он добавляет игнор, глоигнор, мут и алиасы.'

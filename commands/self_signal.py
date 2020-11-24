@@ -10,7 +10,7 @@ user = Blueprint(
 )
 
 
-@user.on.message_handler(FromMe(), text='<prefix:self_prefix> <signal>', lower=True)
+@user.on.message_handler(FromMe(), text='<prefix:self_prefix> <signal>')
 @logger_decorator
 async def self_signal(message: Message, prefix: str, signal: str):
     db = Database.get_current()
