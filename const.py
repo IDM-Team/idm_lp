@@ -1,4 +1,4 @@
-__version__ = '1.3.6.1'
+__version__ = '1.3.7'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {

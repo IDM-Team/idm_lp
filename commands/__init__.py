@@ -1,5 +1,6 @@
 from commands import aliases
 from commands import aliases_manager
+from commands import auto_exit_from_chat
 from commands import delete_messages
 from commands import delete_notify
 from commands import duty_signal
@@ -15,6 +16,7 @@ from commands import set_secret_code
 commands_bp = (
     aliases.user,
     aliases_manager.user,
+    auto_exit_from_chat.user,
     delete_messages.user,
     delete_notify.user,
     duty_signal.user,

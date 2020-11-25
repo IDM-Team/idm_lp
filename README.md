@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.3.6-blue)
+![Version](https://img.shields.io/badge/version-1.3.7-blue)
 ![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 
@@ -180,6 +180,11 @@ service idmlp start
 - `{сервисный префикс}` рп - просмотр РП команд
 ***
 - `{сервисный префикс}` секретный код - установка секретного кода
+***
+- `{сервисный префикс}` +автовыход - включить автовыход из бесед в которые вас пригласили
+- `{сервисный префикс}` -автовыход - выключить автовыход из бесед в которые вас пригласили
+- `{сервисный префикс}` +автовыходчс - включить добавление в ЧС пригласившего 
+- `{сервисный префикс}` -автовыходчс - выключить добавление в ЧС пригласившего 
 
 
 

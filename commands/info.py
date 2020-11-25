@@ -20,26 +20,29 @@ async def info_wrapper(message: Message, **kwargs):
     version_rest = requests.get(const.VERSION_REST).json()
 
     if version_rest['version'] != const.__version__:
-        update_text = f"\n\n Доступно обновление {version_rest['version']}\n" \
+        update_text = f"\n\n⚠ Доступно обновление {version_rest['version']}\n" \
                       f"{version_rest['description']}\n"
     else:
         update_text = ""
 
     text = f"""
-    IDM LP v{__version__} by {__author__}
+    ❤ IDM LP v{__version__} by {__author__}
 
-    Ключ рукаптчи: {"&#9989;" if db.ru_captcha_key else "&#10060;"}
-    Удаление уведомлений: {"&#9989;" if db.delete_all_notify else "&#10060;"}
+    ▶ Ключ рукаптчи: {"&#9989;" if db.ru_captcha_key else "&#10060;"}
+    ▶ Удаление уведомлений: {"&#9989;" if db.delete_all_notify else "&#10060;"}
 
-    В игноре: {len(db.ignored_members)}
-    В глобальном игноре: {len(db.ignored_global_members)}
-    В муте: {len(db.muted_members)}
-    Алиасов: {len(db.aliases)}
+    ▶ В игноре: {len(db.ignored_members)}
+    ▶ В глобальном игноре: {len(db.ignored_global_members)}
+    ▶ В муте: {len(db.muted_members)}
+    ▶ Алиасов: {len(db.aliases)}
+
+    ▶ Выходить из бесед: {"&#9989;" if db.auto_exit_from_chat else "&#10060;"}
+    ▶ Добавлять пригласившего в ЧС: {"&#9989;" if db.auto_exit_from_chat_add_to_black_list else "&#10060;"}
     
     
-    Сервисные префиксы: {' '.join(db.service_prefixes)}
-    Свои префиксы: {' '.join(db.self_prefixes) if db.self_prefixes else ''}
-    Префиксы дежурного: {' '.join(db.duty_prefixes) if db.duty_prefixes else ''}{update_text}
+    ▶ Сервисные префиксы: {' '.join(db.service_prefixes)}
+    ▶ Свои префиксы: {' '.join(db.self_prefixes) if db.self_prefixes else ''}
+    ▶ Префиксы дежурного: {' '.join(db.duty_prefixes) if db.duty_prefixes else ''}{update_text}
     """.replace('    ', '')
     await edit_message(
         message,
