@@ -25,7 +25,8 @@ class FieldsCheck(CheckClass):
         "ignored_members": [],
         "ignored_global_members": [],
         "auto_exit_from_chat": False,
-        "auto_exit_from_chat_add_to_black_list": False
+        "auto_exit_from_chat_add_to_black_list": False,
+        "sloumo": []
     }
 
     def check(self):

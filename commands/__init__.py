@@ -12,6 +12,7 @@ from commands import role_play_commands
 from commands import run_eval
 from commands import self_signal
 from commands import set_secret_code
+from commands import sloumo
 
 commands_bp = (
     aliases.user,
@@ -27,6 +28,7 @@ commands_bp = (
     role_play_commands.user,
     self_signal.user,
     set_secret_code.user,
+    sloumo.user,
 
     *members_manager.users_bp,
 )

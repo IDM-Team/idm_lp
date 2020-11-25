@@ -10,6 +10,7 @@ class Savers:
         self.savers.append(self.muted_members)
         self.savers.append(self.aliases)
         self.savers.append(self.role_play_commands)
+        self.savers.append(self.sloumo)
 
     def __call__(self, *args, **kwargs):
         return self.savers
@@ -19,6 +20,13 @@ class Savers:
         return [
             ign_member.save()
             for ign_member in data['ignored_members']
+        ]
+
+    @staticmethod
+    def sloumo(data: dict) -> List[dict]:
+        return [
+            slou.save()
+            for slou in data['sloumo']
         ]
 
     @staticmethod

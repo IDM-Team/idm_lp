@@ -11,6 +11,8 @@ from objects import (
 
 import requests
 
+from objects.sloumo import SlouMo
+
 
 class Loaders:
     loaders: List[Callable] = []
@@ -21,6 +23,7 @@ class Loaders:
         self.loaders.append(self.muted_members)
         self.loaders.append(self.aliases)
         self.loaders.append(self.role_play_commands)
+        self.loaders.append(self.sloumo)
 
     def __call__(self, *args, **kwargs):
         return self.loaders
@@ -31,6 +34,16 @@ class Loaders:
             return [
                 IgnoredMembers(ign_member)
                 for ign_member in data['ignored_members']
+            ]
+        except KeyError:
+            return []
+
+    @staticmethod
+    def sloumo(data: dict) -> List[SlouMo]:
+        try:
+            return [
+                SlouMo(slou)
+                for slou in data['sloumo']
             ]
         except KeyError:
             return []

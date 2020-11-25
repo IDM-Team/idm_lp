@@ -18,6 +18,7 @@ from objects.json_orm.errors import DatabaseWarning, DatabaseError
 from objects.json_orm.loaders import Loaders
 from objects.json_orm.mixins import ContextInstanceMixin
 from objects.json_orm.savers import Savers
+from objects.sloumo import SlouMo
 
 
 class Database(DotDict, ContextInstanceMixin):
@@ -35,6 +36,7 @@ class Database(DotDict, ContextInstanceMixin):
     delete_all_notify: bool
     auto_exit_from_chat: bool
     auto_exit_from_chat_add_to_black_list: bool
+    sloumo: List[SlouMo]
 
     __all_fields__ = [
         'tokens',
@@ -50,7 +52,8 @@ class Database(DotDict, ContextInstanceMixin):
         'duty_prefixes',
         'delete_all_notify',
         'auto_exit_from_chat',
-        'auto_exit_from_chat_add_to_black_list'
+        'auto_exit_from_chat_add_to_black_list',
+        'sloumo'
     ]
 
     loaders = Loaders()
