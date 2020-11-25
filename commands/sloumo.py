@@ -1,5 +1,6 @@
 import time
 
+from vkbottle.framework.framework.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
 from logger import logger_decorator
@@ -38,9 +39,9 @@ async def sloumo_proc_wrapper(message: Message):
     db.save()
 
 
-@user.on.message_handler(text="<prefix:service_prefix> +слоумо <delay_time:int>\n<warn_text>")
-@user.on.message_handler(text="<prefix:service_prefix> +слоумо <delay_time:int>")
-@user.on.message_handler(text="<prefix:service_prefix> +слоумо")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +слоумо <delay_time:int>\n<warn_text>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +слоумо <delay_time:int>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +слоумо")
 @logger_decorator
 async def enable_sloumo_wrapper(
         message: Message,
@@ -78,7 +79,7 @@ async def enable_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> -слоумо")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -слоумо")
 @logger_decorator
 async def disable_sloumo_wrapper(
         message: Message,
@@ -97,7 +98,7 @@ async def disable_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> слоумо")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> слоумо")
 @logger_decorator
 async def show_sloumo_wrapper(
         message: Message,
@@ -126,7 +127,7 @@ async def show_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> слоумо +белый список [id<user_id:int>|<foo>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> слоумо +белый список [id<user_id:int>|<foo>")
 @logger_decorator
 async def show_sloumo_wrapper(
         message: Message,
@@ -156,7 +157,7 @@ async def show_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> слоумо -белый список [id<user_id:int>|<foo>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> слоумо -белый список [id<user_id:int>|<foo>")
 @logger_decorator
 async def show_sloumo_wrapper(
         message: Message,
@@ -187,7 +188,7 @@ async def show_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> слоумо время <delay_time:int>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> слоумо время <delay_time:int>")
 @logger_decorator
 async def show_sloumo_wrapper(
         message: Message,
@@ -210,7 +211,7 @@ async def show_sloumo_wrapper(
     )
 
 
-@user.on.message_handler(text="<prefix:service_prefix> слоумо текст <text>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> слоумо текст <text>")
 @logger_decorator
 async def show_sloumo_wrapper(
         message: Message,

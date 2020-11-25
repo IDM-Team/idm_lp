@@ -1,4 +1,4 @@
-from vkbottle.rule import ChatActionRule
+from vkbottle.rule import ChatActionRule, FromMe
 from vkbottle.user import Blueprint, Message
 
 from logger import logger_decorator
@@ -16,7 +16,7 @@ async def set_auto_exit(db: Database, auto_exit: bool, black_list: bool):
     db.save()
 
 
-@user.on.message_handler(text="<prefix:service_prefix> +автовыход")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автовыход")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -24,7 +24,7 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     await edit_message(message, "&#9989; Настройка изменена")
 
 
-@user.on.message_handler(text="<prefix:service_prefix> -автовыход")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовыход")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -32,7 +32,7 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     await edit_message(message, "&#9989; Настройка изменена")
 
 
-@user.on.message_handler(text="<prefix:service_prefix> +автовыходчс")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автовыходчс")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -40,7 +40,7 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     await edit_message(message, "&#9989; Настройка изменена")
 
 
-@user.on.message_handler(text="<prefix:service_prefix> -автовыходчс")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовыходчс")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
