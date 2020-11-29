@@ -70,8 +70,7 @@ async def show_ignore_global_members(
         '<prefix:service_prefix> +глоигнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> +глоигнор https://vk.com/<domain>',
         '<prefix:service_prefix> +глоигнор',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def add_ignored_global_member_wrapper(
@@ -124,8 +123,7 @@ async def add_ignored_global_member_wrapper(
         '<prefix:service_prefix> -глоигнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> -глоигнор https://vk.com/<domain>',
         '<prefix:service_prefix> -глоигнор',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def remove_ignored_global_member_wrapper(
@@ -176,8 +174,7 @@ async def remove_ignored_global_member_wrapper(
     text=[
         '<prefix:service_prefix> глоигнорлист',
         '<prefix:service_prefix> глоигнор лист',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def show_ignore_members_wrapper(message: Message, **kwargs):

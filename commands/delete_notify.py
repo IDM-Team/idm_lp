@@ -17,7 +17,7 @@ async def delete_notify_wrapper(message: Message):
     await message.api.messages.delete(message_ids=[message.id])
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -уведы", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -уведы")
 @logger_decorator
 async def activate_delete_all_notify_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -29,7 +29,7 @@ async def activate_delete_all_notify_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +уведы", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +уведы")
 @logger_decorator
 async def deactivate_delete_all_notify_wrapper(message: Message, **kwargs):
     db = Database.get_current()

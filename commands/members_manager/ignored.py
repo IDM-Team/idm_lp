@@ -71,8 +71,7 @@ async def show_ignore_members(
         '<prefix:service_prefix> +игнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> +игнор https://vk.com/<domain>',
         '<prefix:service_prefix> +игнор',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def add_ignored_member_wrapper(
@@ -126,8 +125,7 @@ async def add_ignored_member_wrapper(
         '<prefix:service_prefix> -игнор [club<group_id:int>|<foo>',
         '<prefix:service_prefix> -игнор https://vk.com/<domain>',
         '<prefix:service_prefix> -игнор',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def remove_ignored_member_wrapper(
@@ -179,8 +177,7 @@ async def remove_ignored_member_wrapper(
     text=[
         '<prefix:service_prefix> игнорлист',
         '<prefix:service_prefix> игнор лист',
-    ],
-    lower=True
+    ]
 )
 @logger_decorator
 async def show_ignore_members_wrapper(message: Message, **kwargs):

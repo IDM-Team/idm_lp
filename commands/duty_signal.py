@@ -11,7 +11,7 @@ user = Blueprint(
 )
 
 
-@user.on.message_handler(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>', lower=True)
+@user.on.message_handler(text='<prefix:duty_prefix> [id<user_id:int>|<name>] <signal>')
 @logger_decorator
 async def duty_signal(message: Message, prefix: str, user_id: int, signal: str, **kwargs):
     db = Database.get_current()

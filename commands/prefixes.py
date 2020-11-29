@@ -48,7 +48,7 @@ def remove_duty_prefix(database: Database, prefix: str) -> None:
     database.save()
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> префиксы свои", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> префиксы свои")
 @logger_decorator
 async def show_self_prefixes_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -58,7 +58,7 @@ async def show_self_prefixes_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> префиксы дежурный", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> префиксы дежурный")
 @logger_decorator
 async def show_duty_prefixes_wrapper(message: Message, **kwargs):
     db = Database.get_current()
@@ -68,7 +68,7 @@ async def show_duty_prefixes_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +префикс свой <new_prefix>")
 @logger_decorator
 async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     db = Database.get_current()
@@ -86,7 +86,7 @@ async def add_self_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +префикс дежурный <new_prefix>")
 @logger_decorator
 async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     db = Database.get_current()
@@ -104,7 +104,7 @@ async def add_duty_prefix_wrapper(message: Message, new_prefix: str, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -префикс свой <old_prefix>")
 @logger_decorator
 async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
     db = Database.get_current()
@@ -122,7 +122,7 @@ async def remove_self_prefix_wrapper(message: Message, old_prefix: str, **kwargs
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -префикс дежурный <old_prefix>")
 @logger_decorator
 async def remove_duty_prefix_wrapper(message: Message, old_prefix: str, **kwargs):
     db = Database.get_current()

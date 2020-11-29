@@ -13,7 +13,7 @@ user = Blueprint(
 )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> инфо", lower=True)
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> инфо")
 @logger_decorator
 async def info_wrapper(message: Message, **kwargs):
     db = Database.get_current()

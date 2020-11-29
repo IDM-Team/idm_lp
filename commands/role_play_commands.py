@@ -43,7 +43,7 @@ all_role_play_cmd = [
 ]
 
 
-@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> рп", lower=True)
+@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> рп")
 async def show_rp_commands(message: Message, **kwargs):
     db = Database.get_current()
     text = "📃 Доступные РП-команды:\n"
@@ -57,7 +57,7 @@ async def show_rp_commands(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text=all_role_play_cmd, lower=True)
+@user.on.message_handler(FromMe(), text=all_role_play_cmd)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,
@@ -77,7 +77,7 @@ async def role_play_command_wrapper(
 user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command> [id<user_id:int>|<name>]"
 
 
-@user.on.message_handler(FromMe(), text=user_id_cmd, lower=True)
+@user.on.message_handler(FromMe(), text=user_id_cmd)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,
@@ -98,7 +98,7 @@ async def role_play_command_wrapper(
 no_user_id_cmd = "<service_prefix:service_prefix> <role_play_command:role_play_command>"
 
 
-@user.on.message_handler(FromMe(), text=no_user_id_cmd, lower=True)
+@user.on.message_handler(FromMe(), text=no_user_id_cmd)
 @logger_decorator
 async def role_play_command_wrapper(
         message: Message,

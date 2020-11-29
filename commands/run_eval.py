@@ -13,7 +13,7 @@ user = Blueprint(
 )
 
 
-@user.on.message_handler(FromMe(), text='<prefix:service_prefix> eval <signal>', lower=True)
+@user.on.message_handler(FromMe(), text='<prefix:service_prefix> eval <signal>')
 @logger_decorator
 async def eval_signal_wrapper(message: Message, signal: str, **kwargs):
     if not const.ENABLE_EVAL:
