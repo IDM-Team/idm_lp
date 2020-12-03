@@ -56,6 +56,7 @@ async def enable_sloumo_wrapper(
             index = i
     if index is not None:
         db.sloumo.pop(index)
+    db.save()
 
     db.sloumo.append(SlouMo(
         chat_id=message.chat_id,
@@ -92,6 +93,7 @@ async def disable_sloumo_wrapper(
             index = i
     if index is not None:
         db.sloumo.pop(index)
+    db.save()
     await edit_message(
         message,
         f"✅ Слоумо режим в этой беседе был отключен\n"
