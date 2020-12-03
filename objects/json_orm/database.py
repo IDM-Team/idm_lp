@@ -35,6 +35,7 @@ class Database(DotDict, ContextInstanceMixin):
     duty_prefixes: List[str]
     delete_all_notify: bool
     auto_exit_from_chat: bool
+    auto_exit_from_chat_delete_chat: bool
     auto_exit_from_chat_add_to_black_list: bool
     sloumo: List[SlouMo]
 
@@ -52,6 +53,7 @@ class Database(DotDict, ContextInstanceMixin):
         'duty_prefixes',
         'delete_all_notify',
         'auto_exit_from_chat',
+        'auto_exit_from_chat_delete_chat',
         'auto_exit_from_chat_add_to_black_list',
         'sloumo'
     ]

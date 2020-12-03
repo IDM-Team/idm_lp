@@ -10,9 +10,17 @@ user = Blueprint(
 )
 
 
-async def set_auto_exit(db: Database, auto_exit: bool, black_list: bool):
-    db.auto_exit_from_chat = auto_exit
-    db.auto_exit_from_chat_add_to_black_list = black_list
+async def set_auto_exit(
+        db: Database,
+        auto_exit: bool = None,
+        delete_chat: bool = None,
+        black_list: bool = None
+):
+    db.auto_exit_from_chat = auto_exit if auto_exit is not None else db.auto_exit_from_chat
+    db.auto_exit_from_chat_delete_chat = delete_chat if delete_chat is not None else db.auto_exit_from_chat_delete_chat
+    db.auto_exit_from_chat_add_to_black_list = (
+        black_list if black_list is not None else db.auto_exit_from_chat_add_to_black_list
+    )
     db.save()
 
 
@@ -32,19 +40,35 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     await edit_message(message, "&#9989; Настройка изменена")
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автовыходчс")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автовыход +чс")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    await set_auto_exit(db, True, True)
+    await set_auto_exit(db, black_list=True)
     await edit_message(message, "&#9989; Настройка изменена")
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовыходчс")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автовыход -чс")
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    await set_auto_exit(db, True, False)
+    await set_auto_exit(db,  black_list=False)
+    await edit_message(message, "&#9989; Настройка изменена")
+
+
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автовыход +удаление")
+@logger_decorator
+async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
+    await set_auto_exit(db, delete_chat=True)
+    await edit_message(message, "&#9989; Настройка изменена")
+
+
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автовыход -удаление")
+@logger_decorator
+async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
+    await set_auto_exit(db,  delete_chat=False)
     await edit_message(message, "&#9989; Настройка изменена")
 
 
@@ -55,6 +79,7 @@ async def auto_exit_from_wrapper(message: Message):
         db = Database.get_current()
         if db.auto_exit_from_chat:
             await message.api.messages.remove_chat_user(chat_id=message.chat_id, member_id=await message.api.user_id)
+        if db.auto_exit_from_chat_delete_chat:
             await message.api.messages.delete_conversation(peer_id=message.peer_id)
         if db.auto_exit_from_chat_add_to_black_list:
             await message.api.account.ban(owner_id=message.from_id)

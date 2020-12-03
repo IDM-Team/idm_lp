@@ -25,6 +25,7 @@ class FieldsCheck(CheckClass):
         "ignored_members": [],
         "ignored_global_members": [],
         "auto_exit_from_chat": False,
+        "auto_exit_from_chat_delete_chat": False,
         "auto_exit_from_chat_add_to_black_list": False,
         "sloumo": []
     }

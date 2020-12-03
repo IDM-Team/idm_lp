@@ -37,6 +37,7 @@ async def info_wrapper(message: Message, **kwargs):
     ▶ Алиасов: {len(db.aliases)}
 
     ▶ Выходить из бесед: {"&#9989;" if db.auto_exit_from_chat else "&#10060;"}
+    ▶ Удалять диалог: {"&#9989;" if db.auto_exit_from_chat_delete_chat else "&#10060;"}
     ▶ Добавлять пригласившего в ЧС: {"&#9989;" if db.auto_exit_from_chat_add_to_black_list else "&#10060;"}
     
     
