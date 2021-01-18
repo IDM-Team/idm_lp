@@ -1,5 +1,6 @@
 import argparse
 import traceback
+import json
 
 import requests
 from vkbottle.api import UserApi
@@ -14,6 +15,7 @@ from utils import check_ping
 
 if const.ALLOW_SENTRY:
     import sentry_sdk
+
     sentry_sdk.init(
         const.SENTRY_URL,
         traces_sample_rate=1.0
@@ -84,6 +86,7 @@ def lp_startup(database):
             message=text
         )
         await check_ping(database.secret_code)
+
     return _lp_startup
 
 
@@ -113,6 +116,14 @@ if __name__ == '__main__':
         Database.set_current(db)
     except DatabaseError as ex:
         exit(-1)
+    except json.JSONDecodeError as ex:
+        logger.error(
+            f'При запуске произошла ошибка базы данных.\n'
+            f'Проверте целостность данных.\n'
+            f'Строка: {ex.lineno}, столбец: {ex.colno}.'
+        )
+        exit(-1)
+
     except Exception as ex:
         logger.error(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n{traceback.format_exc()}')
         exit(-1)
