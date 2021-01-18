@@ -1,12 +1,12 @@
 from typing import Optional, List, Iterable
 
-from aiohttp import ClientSession
+import aiohttp
 from vkbottle import VKError
 from vkbottle.api import UserApi
 from vkbottle.user import Message
-import logger
-import aiohttp
+
 import const
+import logger
 
 __all__ = (
     'edit_message',
@@ -17,41 +17,44 @@ __all__ = (
     'check_ping'
 )
 
-session: ClientSession = aiohttp.ClientSession()
-
 
 async def send_request(request_data: dict):
     logger.logger.debug(f"Send request to server with data: {request_data}")
-    global session
     api = UserApi.get_current()
-
-    if session.closed:
-        session = aiohttp.ClientSession()
-
     message = ""
-    async with session.post(const.CALLBACK_LINK, json=request_data) as resp:
-        if resp.status != 200:
-            message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил кодом {resp.status}."
-        else:
-            data_json = await resp.json()
-            if data_json['response'] == 'ok':
-                return
-            elif data_json['response'] == "error":
-                if data_json.get('error_code') == 1:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Пустой запрос>>"
-                elif data_json.get('error_code') == 2:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Неизвестный тип сигнала>>"
-                elif data_json.get('error_code') == 3:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Пара пользователь/секрет не найдены>>"
-                elif data_json.get('error_code') == 4:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Беседа не привязана>>"
-                elif data_json.get('error_code') == 10:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Не удалось связать беседу>>"
-                else:
-                    message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Ошибка #{data_json.get('error_code')}>>"
-            elif data_json['response'] == "vk_error":
-                message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Ошибка VK #{data_json.get('error_code')} " \
-                          f"{data_json.get('error_message', '')}>>"
+    async with aiohttp.ClientSession() as session:
+        async with session.post(const.CALLBACK_LINK, json=request_data) as resp:
+            if resp.status != 200:
+                message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил кодом {resp.status}."
+            else:
+                data_json = await resp.json()
+                if data_json['response'] == 'ok':
+                    return
+                elif data_json['response'] == "error":
+                    if data_json.get('error_code') == 1:
+                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Пустой запрос>>"
+                    elif data_json.get('error_code') == 2:
+                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Неизвестный тип сигнала>>"
+                    elif data_json.get('error_code') == 3:
+                        message = (
+                            f"⚠ Ошибка сервера IDM Multi. "
+                            f"Сервер, ответил: <<Пара пользователь/секрет не найдены>>"
+                        )
+                    elif data_json.get('error_code') == 4:
+                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Беседа не привязана>>"
+                    elif data_json.get('error_code') == 10:
+                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Не удалось связать беседу>>"
+                    else:
+                        message = (
+                            f"⚠ Ошибка сервера IDM Multi. "
+                            f"Сервер, ответил: <<Ошибка #{data_json.get('error_code')}>>"
+                        )
+                elif data_json['response'] == "vk_error":
+                    message = (
+                        f"⚠ Ошибка сервера IDM Multi. "
+                        f"Сервер, ответил: "
+                        f"<<Ошибка VK #{data_json.get('error_code')} {data_json.get('error_message', '')}>>"
+                    )
     if message:
         await api.messages.send(
             random_id=0,
