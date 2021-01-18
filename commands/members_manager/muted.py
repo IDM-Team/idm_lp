@@ -95,6 +95,12 @@ async def add_muted_member_wrapper(
         return
 
     member_id = member_ids[0]
+    if member_id == await message.api.user_id:
+        await edit_message(
+            message,
+            f'⚠ Нельзя занести себя в мутлист!'
+        )
+        return
 
     if member_id > 0:
         name = f'Пользователь [id{member_id}|{await get_full_name_by_member_id(message.api, member_id)}]'
