@@ -58,4 +58,3 @@ async def duty_signal(message: Message, alias: Alias, signal: str = None):
 async def duty_signal_new_line(message: Message, alias: Alias, signal: str):
     db = Database.get_current()
     await send_signal(db, message, alias, '\n', signal)
-

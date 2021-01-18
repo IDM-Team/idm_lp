@@ -17,7 +17,6 @@ class CheckClass(object):
 
 
 class FieldsCheck(CheckClass):
-
     fix_database = {
         "ru_captcha_key": "",
         "delete_all_notify": False,

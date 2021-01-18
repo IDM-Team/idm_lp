@@ -1,7 +1,5 @@
-import requests
 from vkbottle.user import Blueprint, Message
 
-from const import CALLBACK_LINK
 from logger import logger_decorator
 from objects import Database
 from utils import send_request

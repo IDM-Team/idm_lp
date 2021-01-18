@@ -1,6 +1,6 @@
 from typing import Dict
 
-from objects import DotDict
+from objects.dotdict import DotDict
 
 
 class RolePlayCommand(DotDict):

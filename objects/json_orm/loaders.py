@@ -1,5 +1,7 @@
 from typing import List, Callable
 
+import requests
+
 import const
 from objects import (
     IgnoredMembers,
@@ -8,9 +10,6 @@ from objects import (
     Alias,
     RolePlayCommand
 )
-
-import requests
-
 from objects.sloumo import SlouMo
 
 

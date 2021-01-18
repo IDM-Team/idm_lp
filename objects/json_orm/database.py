@@ -2,9 +2,8 @@ import json
 import os
 from typing import List
 
-from logger import logger
-
 import const
+from logger import logger
 from objects import (
     DotDict,
     IgnoredMembers,

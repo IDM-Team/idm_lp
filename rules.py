@@ -8,7 +8,8 @@ class DeleteNotifyRule(AbstractMessageRule):
         'all',
         'online',
         'here',
-        'everyone'
+        'everyone',
+
         'все',
         'онлайн',
         'здесь',

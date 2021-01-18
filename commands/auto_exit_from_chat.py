@@ -52,7 +52,7 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    await set_auto_exit(db,  black_list=False)
+    await set_auto_exit(db, black_list=False)
     await edit_message(message, "&#9989; Настройка изменена")
 
 
@@ -68,7 +68,7 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
 @logger_decorator
 async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
     db = Database.get_current()
-    await set_auto_exit(db,  delete_chat=False)
+    await set_auto_exit(db, delete_chat=False)
     await edit_message(message, "&#9989; Настройка изменена")
 
 

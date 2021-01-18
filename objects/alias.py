@@ -1,4 +1,4 @@
-from objects import DotDict
+from objects.dotdict import DotDict
 
 
 class Alias(DotDict):

@@ -1,5 +1,3 @@
-
-
 class DatabaseWarning(Exception):
 
     def __init__(self, name: str, description: str):
