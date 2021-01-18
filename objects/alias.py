@@ -1,7 +1,7 @@
-from objects.dotdict import DotDict
+from objects.base import BaseModel
 
 
-class Alias(DotDict):
+class Alias(BaseModel):
     name: str
     command_from: str
     command_to: str

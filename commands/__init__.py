@@ -1,3 +1,4 @@
+from commands import add_to_friends_on_chat_enter
 from commands import aliases
 from commands import aliases_manager
 from commands import auto_exit_from_chat
@@ -15,6 +16,7 @@ from commands import set_secret_code
 from commands import sloumo
 
 commands_bp = (
+    add_to_friends_on_chat_enter.user,
     aliases.user,
     aliases_manager.user,
     auto_exit_from_chat.user,

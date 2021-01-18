@@ -11,6 +11,7 @@ class Savers:
         self.savers.append(self.aliases)
         self.savers.append(self.role_play_commands)
         self.savers.append(self.sloumo)
+        self.savers.append(self.add_to_friends_on_chat_enter)
 
     def __call__(self, *args, **kwargs):
         return self.savers
@@ -55,4 +56,11 @@ class Savers:
         return [
             role_play_command.save()
             for role_play_command in data['role_play_commands']
+        ]
+
+    @staticmethod
+    def add_to_friends_on_chat_enter(data: dict) -> List[dict]:
+        return [
+            chat_enter_model.save()
+            for chat_enter_model in data['add_to_friends_on_chat_enter']
         ]

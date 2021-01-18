@@ -26,6 +26,15 @@ class DeleteNotifyRule(AbstractMessageRule):
         return False
 
 
+class ChatEnterRule(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        db = Database.get_current()
+        for chat_enter_model in db.add_to_friends_on_chat_enter:
+            if chat_enter_model.peer_id == message.peer_id:
+                return True
+        return False
+
+
 class IgnoredMembersRule(AbstractMessageRule):
 
     async def check(self, message: Message) -> bool:

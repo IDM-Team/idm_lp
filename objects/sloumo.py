@@ -1,9 +1,9 @@
 from typing import Dict, Any, List
 
-from objects import DotDict
+from objects.base import BaseModel
 
 
-class LastMessage(DotDict):
+class LastMessage(BaseModel):
     date: float
     from_id: int
 
@@ -14,7 +14,7 @@ class LastMessage(DotDict):
         }
 
 
-class SlouMo(DotDict):
+class SlouMo(BaseModel):
     chat_id: int
     last_message: LastMessage
     white_list: List[int]

@@ -1,9 +1,8 @@
 from typing import Dict
+from objects.base import BaseModel
 
-from objects.dotdict import DotDict
 
-
-class RolePlayCommand(DotDict):
+class RolePlayCommand(BaseModel):
     """
         :param name: Имя РПшки
         :param gen: Падеж в какой возводить РПшку

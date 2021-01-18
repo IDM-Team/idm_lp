@@ -10,7 +10,8 @@ from objects import (
     IgnoredGlobalMembers,
     MutedMembers,
     Alias,
-    RolePlayCommand
+    RolePlayCommand,
+    ChatEnterModel
 )
 from objects.json_orm.checks import CheckClass
 from objects.json_orm.errors import DatabaseWarning, DatabaseError
@@ -36,6 +37,7 @@ class Database(DotDict, ContextInstanceMixin):
     auto_exit_from_chat: bool
     auto_exit_from_chat_delete_chat: bool
     auto_exit_from_chat_add_to_black_list: bool
+    add_to_friends_on_chat_enter: List[ChatEnterModel]
     sloumo: List[SlouMo]
 
     __all_fields__ = [
@@ -54,7 +56,8 @@ class Database(DotDict, ContextInstanceMixin):
         'auto_exit_from_chat',
         'auto_exit_from_chat_delete_chat',
         'auto_exit_from_chat_add_to_black_list',
-        'sloumo'
+        'add_to_friends_on_chat_enter',
+        'sloumo',
     ]
 
     loaders = Loaders()
@@ -138,6 +141,7 @@ class Database(DotDict, ContextInstanceMixin):
         checks = CheckClass.get_all_checks()
         issues = 0
         for cls in checks:
+            logger.debug(f"Проверка {cls.__name__}")
             try:
                 cls(self).check()
             except DatabaseWarning as ex:

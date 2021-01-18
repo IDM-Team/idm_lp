@@ -1,3 +1,5 @@
+from vkbottle.utils import logger
+
 from objects.json_orm.errors import *
 
 
@@ -26,13 +28,15 @@ class FieldsCheck(CheckClass):
         "auto_exit_from_chat": False,
         "auto_exit_from_chat_delete_chat": False,
         "auto_exit_from_chat_add_to_black_list": False,
-        "sloumo": []
+        "sloumo": [],
+        "add_to_friends_on_chat_enter": []
     }
 
     def check(self):
         for key in self.database.__all_fields__:
             if key not in self.database:
                 if key in self.fix_database:
+                    logger.warning(f"[DATABASE]: Поле {key} отсутствовало. Использую стандартное значение.")
                     self.database.update({key: self.fix_database[key]})
                     self.database.save()
                 else:

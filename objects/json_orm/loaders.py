@@ -8,9 +8,10 @@ from objects import (
     IgnoredGlobalMembers,
     MutedMembers,
     Alias,
-    RolePlayCommand
+    RolePlayCommand,
+    ChatEnterModel,
+    SlouMo
 )
-from objects.sloumo import SlouMo
 
 
 class Loaders:
@@ -23,6 +24,7 @@ class Loaders:
         self.loaders.append(self.aliases)
         self.loaders.append(self.role_play_commands)
         self.loaders.append(self.sloumo)
+        self.loaders.append(self.add_to_friends_on_chat_enter)
 
     def __call__(self, *args, **kwargs):
         return self.loaders
@@ -89,6 +91,16 @@ class Loaders:
                 RolePlayCommand(role_play_command)
                 for role_play_command in
                 role_play_commands
+            ]
+        except KeyError:
+            return []
+
+    @staticmethod
+    def add_to_friends_on_chat_enter(data: dict) -> List[ChatEnterModel]:
+        try:
+            return [
+                ChatEnterModel(chat_enter_model)
+                for chat_enter_model in data['add_to_friends_on_chat_enter']
             ]
         except KeyError:
             return []

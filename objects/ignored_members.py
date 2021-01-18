@@ -1,6 +1,5 @@
 from typing import Dict
-
-from objects import DotDict
+from objects.base import BaseModel
 
 __all__ = (
     'IgnoredMembers',
@@ -9,7 +8,9 @@ __all__ = (
 )
 
 
-class IgnoredMembers(DotDict):
+
+
+class IgnoredMembers(BaseModel):
     member_id: int
     chat_id: int
 
@@ -20,7 +21,7 @@ class IgnoredMembers(DotDict):
         }
 
 
-class IgnoredGlobalMembers(DotDict):
+class IgnoredGlobalMembers(BaseModel):
     member_id: int
 
     def save(self) -> Dict[str, int]:
@@ -29,7 +30,7 @@ class IgnoredGlobalMembers(DotDict):
         }
 
 
-class MutedMembers(DotDict):
+class MutedMembers(BaseModel):
     member_id: int
     chat_id: int
 
