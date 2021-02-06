@@ -196,3 +196,65 @@ async def show_ignore_members_wrapper(message: Message, **kwargs):
             message.peer_id
         )
     )
+
+
+def get_link(peer_id):
+    if peer_id > 2e9:
+        return f"vk.com/im?sel={peer_id - int(2e9)}"
+    return f"vk.com/im?sel={peer_id}"
+
+
+def get_push_by_id(users, groups, member_id):
+    if member_id > 0:
+        for user in users:
+            if user.id == member_id:
+                return f"[id{user.id}|{user.first_name} {user.last_name}]"
+    else:
+        for group in groups:
+            if group.id == abs(member_id):
+                return f"[public{group.id}|{group.name}]"
+
+
+@user.on.message_handler(
+    FromMe(),
+    text=[
+        '<prefix:service_prefix> игнорлист все',
+        '<prefix:service_prefix> игнор лист все',
+    ]
+)
+@logger_decorator
+async def show_all_ignore_members_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
+
+    user_ids = [
+        ignore_member.member_id
+        for ignore_member in db.ignored_members
+        if ignore_member.member_id > 0
+    ]
+    group_ids = [
+        abs(ignore_member.member_id)
+        for ignore_member in db.ignored_members
+        if ignore_member.member_id < 0
+    ]
+
+    if not user_ids and not group_ids:
+        return "📃 Ваш игнор-лист пуст"
+    users = await message.api.users.get(user_ids=user_ids) if user_ids else []
+    groups = await message.api.groups.get_by_id(group_ids=group_ids) if group_ids else []
+
+    ignored = {}
+    for _ignored in db.ignored_members:
+        ignored.setdefault(_ignored.chat_id, [])
+        ignored[_ignored.chat_id] += [_ignored]
+
+    text = "📃 Ваш игнор-лист по всем чатам:\n"
+
+    for k in ignored.keys():
+        text += f"\n{get_link(k)}\n"
+        index = 1
+        for member in ignored[k]:
+            text += f"{index}. {get_push_by_id(users, groups, member.member_id)}\n"
+            index += 1
+    await edit_message(
+        message, text
+    )
