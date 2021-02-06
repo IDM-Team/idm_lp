@@ -12,8 +12,8 @@
     ".слп"
   ],
   "self_prefixes": [
-    "!л_",
-    ".л_"
+    "!л",
+    ".л"
   ],
   "duty_prefixes": [
     "!лд",
@@ -23,5 +23,7 @@
   "auto_exit_from_chat": false,
   "auto_exit_from_chat_delete_chat": false,
   "auto_exit_from_chat_add_to_black_list": false,
-  "add_to_friends_on_chat_enter": []
+  "add_to_friends_on_chat_enter": [],
+  "role_play_commands": [],
+  "disable_notifications": true
 }

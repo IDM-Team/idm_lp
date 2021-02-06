@@ -30,6 +30,7 @@ async def info_wrapper(message: Message, **kwargs):
 
     ▶ Ключ рукаптчи: {"&#9989;" if db.ru_captcha_key else "&#10060;"}
     ▶ Удаление уведомлений: {"&#9989;" if db.delete_all_notify else "&#10060;"}
+    ▶ Выключение уведомлений: {"&#9989;" if db.disable_notifications else "&#10060;"}
 
     ▶ В игноре: {len(db.ignored_members)}
     ▶ В глобальном игноре: {len(db.ignored_global_members)}

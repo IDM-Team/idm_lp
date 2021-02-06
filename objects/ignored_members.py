@@ -8,8 +8,6 @@ __all__ = (
 )
 
 
-
-
 class IgnoredMembers(BaseModel):
     member_id: int
     chat_id: int

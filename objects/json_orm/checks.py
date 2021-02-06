@@ -29,7 +29,8 @@ class FieldsCheck(CheckClass):
         "auto_exit_from_chat_delete_chat": False,
         "auto_exit_from_chat_add_to_black_list": False,
         "sloumo": [],
-        "add_to_friends_on_chat_enter": []
+        "add_to_friends_on_chat_enter": [],
+        "disable_notifications": False
     }
 
     def check(self):

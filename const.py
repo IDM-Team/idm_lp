@@ -1,4 +1,4 @@
-__version__ = '1.4.1'
+__version__ = '1.5.0'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {
@@ -25,7 +25,8 @@ DEFAULT_DATABASE = {
   "sloumo": [],
   "auto_exit_from_chat": False,
   "auto_exit_from_chat_delete_chat": False,
-  "auto_exit_from_chat_add_to_black_list": False
+  "auto_exit_from_chat_add_to_black_list": False,
+  "disable_notifications": False,
 }
 
 CONFIG_PATH = "config.json"

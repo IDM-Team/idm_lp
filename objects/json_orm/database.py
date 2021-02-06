@@ -37,6 +37,7 @@ class Database(DotDict, ContextInstanceMixin):
     auto_exit_from_chat: bool
     auto_exit_from_chat_delete_chat: bool
     auto_exit_from_chat_add_to_black_list: bool
+    disable_notifications: bool
     add_to_friends_on_chat_enter: List[ChatEnterModel]
     sloumo: List[SlouMo]
 
@@ -57,6 +58,7 @@ class Database(DotDict, ContextInstanceMixin):
         'auto_exit_from_chat_delete_chat',
         'auto_exit_from_chat_add_to_black_list',
         'add_to_friends_on_chat_enter',
+        'disable_notifications',
         'sloumo',
     ]
 

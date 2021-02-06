@@ -73,13 +73,28 @@ async def auto_exit_setting_on_exit_wrapper(message: Message, **kwargs):
 
 
 @user.on.chat_message(ChatActionRule("chat_invite_user"))
+@user.on.chat_message(ChatActionRule("chat_invite_user_by_link"))
 @logger_decorator
-async def auto_exit_from_wrapper(message: Message):
+async def to_chat_wrapper(message: Message):
     if message.action.member_id == await message.api.user_id:
         db = Database.get_current()
-        if db.auto_exit_from_chat:
-            await message.api.messages.remove_chat_user(chat_id=message.chat_id, member_id=await message.api.user_id)
-        if db.auto_exit_from_chat_delete_chat:
-            await message.api.messages.delete_conversation(peer_id=message.peer_id)
-        if db.auto_exit_from_chat_add_to_black_list:
-            await message.api.account.ban(owner_id=message.from_id)
+        if message.action.type == "chat_invite_user":
+            if db.disable_notifications:
+                await user.api.account.set_silence_mode(
+                    time=-1,
+                    peer_id=message.peer_id,
+                    sound=0
+                )
+            if db.auto_exit_from_chat:
+                await message.api.messages.remove_chat_user(chat_id=message.chat_id, member_id=await message.api.user_id)
+            if db.auto_exit_from_chat_delete_chat:
+                await message.api.messages.delete_conversation(peer_id=message.peer_id)
+            if db.auto_exit_from_chat_add_to_black_list:
+                await message.api.account.ban(owner_id=message.from_id)
+        else:
+            if db.disable_notifications:
+                await user.api.account.set_silence_mode(
+                    time=-1,
+                    peer_id=message.peer_id,
+                    sound=0
+                )
