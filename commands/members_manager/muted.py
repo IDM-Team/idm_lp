@@ -201,7 +201,7 @@ async def show_mute_members_wrapper(message: Message, **kwargs):
 
 def get_link(peer_id):
     if peer_id > 2e9:
-        return f"vk.com/im?sel={peer_id - int(2e9)}"
+        return f"vk.com/im?sel=c{peer_id - int(2e9)}"
     return f"vk.com/im?sel={peer_id}"
 
 
