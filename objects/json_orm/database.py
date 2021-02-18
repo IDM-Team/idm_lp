@@ -19,6 +19,7 @@ from objects.json_orm.loaders import Loaders
 from objects.json_orm.mixins import ContextInstanceMixin
 from objects.json_orm.savers import Savers
 from objects.sloumo import SlouMo
+from objects.trusted_user import TrustedUser
 
 
 class Database(DotDict, ContextInstanceMixin):
@@ -38,6 +39,9 @@ class Database(DotDict, ContextInstanceMixin):
     auto_exit_from_chat_delete_chat: bool
     auto_exit_from_chat_add_to_black_list: bool
     disable_notifications: bool
+    repeater_word: str
+    repeater_active: str
+    trusted: List[TrustedUser]
     add_to_friends_on_chat_enter: List[ChatEnterModel]
     sloumo: List[SlouMo]
 
@@ -60,6 +64,9 @@ class Database(DotDict, ContextInstanceMixin):
         'add_to_friends_on_chat_enter',
         'disable_notifications',
         'sloumo',
+        'repeater_word',
+        'repeater_active',
+        'trusted'
     ]
 
     loaders = Loaders()
