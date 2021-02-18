@@ -19,19 +19,21 @@ class CheckClass(object):
 
 
 class FieldsCheck(CheckClass):
-    fix_database = {
-        "ru_captcha_key": "",
-        "delete_all_notify": False,
-        "role_play_commands": [],
-        "ignored_members": [],
-        "ignored_global_members": [],
-        "auto_exit_from_chat": False,
-        "auto_exit_from_chat_delete_chat": False,
-        "auto_exit_from_chat_add_to_black_list": False,
-        "sloumo": [],
-        "add_to_friends_on_chat_enter": [],
-        "disable_notifications": False
-    }
+    fix_database = dict(
+        ru_captcha_key="",
+        delete_all_notify=False,
+        role_play_commands=[],
+        ignored_members=[],
+        ignored_global_members=[],
+        auto_exit_from_chat=False,
+        auto_exit_from_chat_delete_chat=False,
+        auto_exit_from_chat_add_to_black_list=False,
+        sloumo=[], add_to_friends_on_chat_enter=[],
+        disable_notifications=False,
+        repeater_word="..",
+        repeater_active=False,
+        trusted=[]
+    )
 
     def check(self):
         for key in self.database.__all_fields__:

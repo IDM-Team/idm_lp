@@ -12,6 +12,7 @@ from objects import (
     ChatEnterModel,
     SlouMo
 )
+from objects.trusted_user import TrustedUser
 
 
 class Loaders:
@@ -25,6 +26,7 @@ class Loaders:
         self.loaders.append(self.role_play_commands)
         self.loaders.append(self.sloumo)
         self.loaders.append(self.add_to_friends_on_chat_enter)
+        self.loaders.append(self.trusted)
 
     def __call__(self, *args, **kwargs):
         return self.loaders
@@ -101,6 +103,16 @@ class Loaders:
             return [
                 ChatEnterModel(chat_enter_model)
                 for chat_enter_model in data['add_to_friends_on_chat_enter']
+            ]
+        except KeyError:
+            return []
+
+    @staticmethod
+    def trusted(data: dict) -> List[TrustedUser]:
+        try:
+            return [
+                TrustedUser(trusted_user)
+                for trusted_user in data['trusted']
             ]
         except KeyError:
             return []

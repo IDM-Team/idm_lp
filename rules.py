@@ -57,11 +57,11 @@ class IgnoredGlobalMembersRule(AbstractMessageRule):
 
 class MutedMembersRule(AbstractMessageRule):
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message):
         db = Database.get_current()
         for muted_member in db.muted_members:
             if muted_member.chat_id == message.peer_id and muted_member.member_id == message.from_id:
-                return True
+                return dict(member=muted_member)
         return False
 
 
@@ -71,5 +71,15 @@ class SlouMoRule(AbstractMessageRule):
         db = Database.get_current()
         for slou in db.sloumo:
             if slou.chat_id == message.chat_id:
+                return True
+        return False
+
+
+class TrustedRule(AbstractMessageRule):
+
+    async def check(self, message: Message) -> bool:
+        db = Database.get_current()
+        for trusted in db.trusted:
+            if trusted.user_id == message.from_id:
                 return True
         return False

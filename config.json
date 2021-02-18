@@ -25,5 +25,8 @@
   "auto_exit_from_chat_add_to_black_list": false,
   "add_to_friends_on_chat_enter": [],
   "role_play_commands": [],
-  "disable_notifications": true
+  "disable_notifications": true,
+  "trusted": [],
+  "repeater_word": "..",
+  "repeater_active": false
 }

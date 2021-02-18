@@ -11,11 +11,12 @@ user = Blueprint(
 )
 
 
-def add_muted_member(database: Database, member_id: int, peer_id: int) -> None:
+def add_muted_member(database: Database, member_id: int, peer_id: int, delay: int) -> None:
     database.muted_members.append(
         MutedMembers(
             member_id=member_id,
-            chat_id=peer_id
+            chat_id=peer_id,
+            delay=delay
         )
     )
     database.save()
@@ -71,6 +72,10 @@ async def show_muted_members(
         '<prefix:service_prefix> +мут [club<group_id:int>|<foo>',
         '<prefix:service_prefix> +мут https://vk.com/<domain>',
         '<prefix:service_prefix> +мут',
+        '<prefix:service_prefix> +мут [id<user_id:int>|<foo>] <delay:int>',
+        '<prefix:service_prefix> +мут [club<group_id:int>|<foo>] <delay:int>',
+        '<prefix:service_prefix> +мут https://vk.com/<domain> <delay:int>',
+        '<prefix:service_prefix> +мут <delay:int>',
     ]
 )
 @logger_decorator
@@ -79,6 +84,7 @@ async def add_muted_member_wrapper(
         domain: str = None,
         user_id: int = None,
         group_id: int = None,
+        delay: int = 0,
         **kwargs
 ):
     db = Database.get_current()
@@ -117,7 +123,7 @@ async def add_muted_member_wrapper(
             f'⚠ {name} уже в мутлисте'
         )
         return
-    add_muted_member(db, member_id, message.peer_id)
+    add_muted_member(db, member_id, message.peer_id, delay)
     await edit_message(
         message,
         f'✅ {name} добавлен в мутлист'
@@ -196,7 +202,6 @@ async def show_mute_members_wrapper(message: Message, **kwargs):
             message.peer_id
         )
     )
-
 
 
 def get_link(peer_id):

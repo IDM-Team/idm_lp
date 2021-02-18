@@ -35,13 +35,16 @@ async def info_wrapper(message: Message, **kwargs):
     ▶ В игноре: {len(db.ignored_members)}
     ▶ В глобальном игноре: {len(db.ignored_global_members)}
     ▶ В муте: {len(db.muted_members)}
+    ▶ Довов: {len(db.trusted)}
     ▶ Алиасов: {len(db.aliases)}
 
     ▶ Выходить из бесед: {"&#9989;" if db.auto_exit_from_chat else "&#10060;"}
     ▶ Удалять диалог: {"&#9989;" if db.auto_exit_from_chat_delete_chat else "&#10060;"}
     ▶ Добавлять пригласившего в ЧС: {"&#9989;" if db.auto_exit_from_chat_add_to_black_list else "&#10060;"}
     
-    
+    ▶ Повторялка: {"&#9989;" if db.repeater_active else "&#10060;"}
+    ▶ Триггер на повторялку: {db.repeater_word}
+        
     ▶ Сервисные префиксы: {' '.join(db.service_prefixes)}
     ▶ Свои префиксы: {' '.join(db.self_prefixes) if db.self_prefixes else ''}
     ▶ Префиксы дежурного: {' '.join(db.duty_prefixes) if db.duty_prefixes else ''}{update_text}
