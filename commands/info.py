@@ -37,6 +37,7 @@ async def info_wrapper(message: Message, **kwargs):
     ▶ В муте: {len(db.muted_members)}
     ▶ Довов: {len(db.trusted)}
     ▶ Алиасов: {len(db.aliases)}
+    ▶ Шаблонов для удаления: {len(db.regex_deleter)}
 
     ▶ Выходить из бесед: {"&#9989;" if db.auto_exit_from_chat else "&#10060;"}
     ▶ Удалять диалог: {"&#9989;" if db.auto_exit_from_chat_delete_chat else "&#10060;"}

@@ -1,3 +1,5 @@
+import re
+
 from vkbottle.rule import AbstractMessageRule, Message
 
 from objects import Database
@@ -82,4 +84,15 @@ class TrustedRule(AbstractMessageRule):
         for trusted in db.trusted:
             if trusted.user_id == message.from_id:
                 return True
+        return False
+
+
+class RegexDeleter(AbstractMessageRule):
+
+    async def check(self, message: Message) -> bool:
+        db = Database.get_current()
+        for regex_del in db.regex_deleter:
+            if regex_del.chat_id == message.peer_id:
+                if re.findall(regex_del.regex, message.text):
+                    return True
         return False

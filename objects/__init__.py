@@ -4,6 +4,7 @@ from objects.ignored_members import IgnoredMembers, IgnoredGlobalMembers, MutedM
 from objects.role_play_commands import RolePlayCommand
 from objects.chat_enter import ChatEnterModel
 from objects.sloumo import SlouMo
+from objects.regex_deleter import RegexDeleter
 
 
 from objects.json_orm import Database
