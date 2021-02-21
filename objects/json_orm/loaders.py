@@ -10,7 +10,7 @@ from objects import (
     Alias,
     RolePlayCommand,
     ChatEnterModel,
-    SlouMo
+    SlouMo, RegexDeleter
 )
 from objects.trusted_user import TrustedUser
 
@@ -27,6 +27,7 @@ class Loaders:
         self.loaders.append(self.sloumo)
         self.loaders.append(self.add_to_friends_on_chat_enter)
         self.loaders.append(self.trusted)
+        self.loaders.append(self.regex_deleter)
 
     def __call__(self, *args, **kwargs):
         return self.loaders
@@ -113,6 +114,16 @@ class Loaders:
             return [
                 TrustedUser(trusted_user)
                 for trusted_user in data['trusted']
+            ]
+        except KeyError:
+            return []
+
+    @staticmethod
+    def regex_deleter(data: dict) -> List[RegexDeleter]:
+        try:
+            return [
+                RegexDeleter(regex_del)
+                for regex_del in data['regex_deleter']
             ]
         except KeyError:
             return []

@@ -28,5 +28,6 @@
   "disable_notifications": true,
   "trusted": [],
   "repeater_word": "..",
-  "repeater_active": false
+  "repeater_active": false,
+  "regex_deleter": []
 }

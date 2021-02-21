@@ -52,3 +52,11 @@ def repeater_word(value: str):
     db = Database.get_current()
     if value.startswith(db.repeater_word):
         return value.replace(db.repeater_word, '', 1)
+
+
+@validator
+def yes_or_no(value: str):
+    if value in ('да', '+', '1'):
+        return True
+    elif value in ('нет', '-', '0'):
+        return False

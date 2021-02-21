@@ -10,6 +10,7 @@ from commands import info
 from commands import members_manager
 from commands import ping
 from commands import prefixes
+from commands import regex_deleter
 from commands import repeat
 from commands import role_play_commands
 from commands import run_eval
@@ -30,6 +31,7 @@ commands_bp = (
     ping.user,
     info.user,
     prefixes.user,
+    regex_deleter.user,
     repeat.user,
     role_play_commands.user,
     self_signal.user,

@@ -11,7 +11,7 @@ from objects import (
     MutedMembers,
     Alias,
     RolePlayCommand,
-    ChatEnterModel
+    ChatEnterModel, RegexDeleter
 )
 from objects.json_orm.checks import CheckClass
 from objects.json_orm.errors import DatabaseWarning, DatabaseError
@@ -44,6 +44,7 @@ class Database(DotDict, ContextInstanceMixin):
     trusted: List[TrustedUser]
     add_to_friends_on_chat_enter: List[ChatEnterModel]
     sloumo: List[SlouMo]
+    regex_deleter: List[RegexDeleter]
 
     __all_fields__ = [
         'tokens',
@@ -66,7 +67,8 @@ class Database(DotDict, ContextInstanceMixin):
         'sloumo',
         'repeater_word',
         'repeater_active',
-        'trusted'
+        'trusted',
+        'regex_deleter'
     ]
 
     loaders = Loaders()

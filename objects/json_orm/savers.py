@@ -72,3 +72,10 @@ class Savers:
             trusted_user.save()
             for trusted_user in data['trusted']
         ]
+
+    @staticmethod
+    def regex_deleter(data: dict) -> List[dict]:
+        return [
+            regex_del.save()
+            for regex_del in data['regex_deleter']
+        ]
