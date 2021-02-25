@@ -6,9 +6,9 @@
   ],
   "secret_code": "IDM secret code",
   "delete_all_notify": false,
-  "ru_captcha_key": "ruCaptcha API key",
-  "igrored_members": [],
-  "igrored_global_members": [],
+  "ru_captcha_key": "",
+  "ignored_members": [],
+  "ignored_global_members": [],
   "muted_members": [],
   "aliases": [],
   "service_prefixes": [
@@ -22,5 +22,16 @@
   "duty_prefixes": [
     "!лд",
     ".лд"
-  ]
+  ],
+  "sloumo": [],
+  "auto_exit_from_chat": false,
+  "auto_exit_from_chat_delete_chat": false,
+  "auto_exit_from_chat_add_to_black_list": false,
+  "add_to_friends_on_chat_enter": [],
+  "role_play_commands": [],
+  "disable_notifications": true,
+  "trusted": [],
+  "repeater_word": "..",
+  "repeater_active": false,
+  "regex_deleter": []
 }
