@@ -46,6 +46,7 @@ async def info_wrapper(message: Message, **kwargs):
     ▶ Повторялка: {"&#9989;" if db.repeater_active else "&#10060;"}
     ▶ Триггер на повторялку: {db.repeater_word}
         
+    ▶ Префикс ДД: {db.dd_prefix}
     ▶ Сервисные префиксы: {' '.join(db.service_prefixes)}
     ▶ Свои префиксы: {' '.join(db.self_prefixes) if db.self_prefixes else ''}
     ▶ Префиксы дежурного: {' '.join(db.duty_prefixes) if db.duty_prefixes else ''}{update_text}

@@ -32,7 +32,8 @@ class FieldsCheck(CheckClass):
         disable_notifications=False,
         repeater_word="..",
         repeater_active=False,
-        trusted=[]
+        trusted=[],
+        dd_prefix="дд"
     )
 
     def check(self):

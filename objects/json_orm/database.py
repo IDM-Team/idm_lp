@@ -46,6 +46,8 @@ class Database(DotDict, ContextInstanceMixin):
     sloumo: List[SlouMo]
     regex_deleter: List[RegexDeleter]
 
+    dd_prefix: str
+
     __all_fields__ = [
         'tokens',
         'secret_code',
@@ -68,7 +70,8 @@ class Database(DotDict, ContextInstanceMixin):
         'repeater_word',
         'repeater_active',
         'trusted',
-        'regex_deleter'
+        'regex_deleter',
+        'dd_prefix'
     ]
 
     loaders = Loaders()

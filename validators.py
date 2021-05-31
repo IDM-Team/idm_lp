@@ -34,6 +34,23 @@ def self_prefix(value: str):
 
 
 @validator
+def dd_prefix(value: str):
+    db = Database.get_current()
+    if value.lower() in db.dd_prefix:
+        return value
+
+
+@validator
+def dd_value(value: str):
+    db = Database.get_current()
+    if db.dd_prefix in value.lower():
+        try:
+            return int(value.lower().replace(db.dd_prefix, ''))
+        except:
+            ...
+
+
+@validator
 def duty_prefix(value: str):
     db = Database.get_current()
     if value.lower() in db.duty_prefixes:
