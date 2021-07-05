@@ -1,29 +1,33 @@
-from commands import add_to_friends_on_chat_enter
-from commands import aliases
-from commands import aliases_manager
-from commands import auto_exit_from_chat
-from commands import delete_messages
-from commands import delete_messages_vks
-from commands import delete_notify
-from commands import disable_notifications
-from commands import duty_signal
-from commands import info
-from commands import members_manager
-from commands import ping
-from commands import prefixes
-from commands import regex_deleter
-from commands import repeat
-from commands import role_play_commands
-from commands import run_eval
-from commands import self_signal
-from commands import set_secret_code
-from commands import sloumo
+from commands import (
+    add_to_friends_on_chat_enter,
+    aliases,
+    aliases_manager,
+    auto_exit_from_chat,
+    bio_wars,
+    delete_messages,
+    delete_messages_vks,
+    delete_notify,
+    disable_notifications,
+    duty_signal,
+    info,
+    members_manager,
+    ping,
+    prefixes,
+    regex_deleter,
+    repeat,
+    role_play_commands,
+    run_eval,
+    self_signal,
+    set_secret_code,
+    sloumo
+)
 
 commands_bp = (
     add_to_friends_on_chat_enter.user,
     aliases.user,
     aliases_manager.user,
     auto_exit_from_chat.user,
+    bio_wars.user,
     delete_messages.user,
     delete_messages_vks.user,
     delete_notify.user,

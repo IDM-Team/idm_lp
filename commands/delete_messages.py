@@ -4,7 +4,7 @@ from vkbottle.user import Blueprint, Message
 
 import rules
 from logger import logger_decorator
-from objects import MutedMembers, Database
+from objects import Database
 
 user = Blueprint(
     name='delete_messages_blueprint'

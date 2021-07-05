@@ -1,4 +1,5 @@
 import re
+from typing import List, Union
 
 from vkbottle.rule import AbstractMessageRule, Message
 
@@ -96,3 +97,21 @@ class RegexDeleter(AbstractMessageRule):
                 if re.findall(regex_del.regex, message.text):
                     return True
         return False
+
+
+class ContainsRule(AbstractMessageRule):
+
+    def __init__(self, words: Union[str, List[str]], not_include: List[str] = [], upper: bool = True):
+        self.words = words if isinstance(words, list) else [words]
+        self.not_include = not_include if isinstance(not_include, list) else [not_include]
+        self.upper = upper
+
+    async def check(self, message: Message) -> bool:
+        checked = False
+        for word in self.words:
+            if word.upper() in message.text.upper():
+                checked = True
+        for ni_word in self.not_include:
+            if ni_word.upper() in message.text.upper():
+                checked = False
+        return checked

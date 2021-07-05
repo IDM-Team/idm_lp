@@ -33,7 +33,8 @@ class FieldsCheck(CheckClass):
         repeater_word="..",
         repeater_active=False,
         trusted=[],
-        dd_prefix="дд"
+        dd_prefix="дд",
+        bio_reply=False
     )
 
     def check(self):

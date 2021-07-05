@@ -45,6 +45,7 @@ class Database(DotDict, ContextInstanceMixin):
     add_to_friends_on_chat_enter: List[ChatEnterModel]
     sloumo: List[SlouMo]
     regex_deleter: List[RegexDeleter]
+    bio_reply: bool
 
     dd_prefix: str
 
@@ -71,7 +72,8 @@ class Database(DotDict, ContextInstanceMixin):
         'repeater_active',
         'trusted',
         'regex_deleter',
-        'dd_prefix'
+        'dd_prefix',
+        'bio_reply'
     ]
 
     loaders = Loaders()
