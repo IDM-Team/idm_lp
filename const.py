@@ -54,7 +54,7 @@ SENTRY_URL = "https://7a3f1b116c67453c91600ad54d4b7087@o481403.ingest.sentry.io/
 with open(os.path.join(os.path.dirname(__file__), 'lp_dc_config.json'), 'r', encoding='utf-8') as file:
     data = json.loads(file.read())
     APP_ID = data.get('app_id', 0)
-    APP_SECRET = data.get('app_secret', 0)
+    APP_SECRET = data.get('app_secret', "public")
 
 
 APP_USER_AGENT = f"IDMLP({APP_ID};{APP_SECRET})"
