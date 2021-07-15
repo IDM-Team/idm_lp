@@ -22,7 +22,7 @@ async def send_request(request_data: dict):
     logger.logger.debug(f"Send request to server with data: {request_data}")
     api = UserApi.get_current()
     message = ""
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
         async with session.post(const.CALLBACK_LINK, json=request_data) as resp:
             if resp.status != 200:
                 message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил кодом {resp.status}."

@@ -1,4 +1,7 @@
-__version__ = '1.9.0'
+import os
+import json
+
+__version__ = '1.10.0'
 __author__ = 'lordralinc'
 
 DEFAULT_DATABASE = {
@@ -48,4 +51,10 @@ ENABLE_EVAL = False
 ALLOW_SENTRY = True
 SENTRY_URL = "https://7a3f1b116c67453c91600ad54d4b7087@o481403.ingest.sentry.io/5529960"
 
+with open(os.path.join(os.path.dirname(__file__), 'lp_dc_config.json'), 'r', encoding='utf-8') as file:
+    data = json.loads(file.read())
+    APP_ID = data.get('app_id', 0)
+    APP_SECRET = data.get('app_secret', 0)
 
+
+APP_USER_AGENT = f"IDMLP({APP_ID};{APP_SECRET})"

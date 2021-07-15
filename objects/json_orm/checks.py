@@ -66,12 +66,3 @@ class TokensCountCheck(CheckClass):
                 description='Слишком мало токенов, рекомендуемое количество 3 и более.'
             )
 
-
-class SecretCodeCheck(CheckClass):
-
-    def check(self):
-        if not self.database.secret_code:
-            raise DatabaseError(
-                name='Нет секретного кода',
-                description='Укажите секретный код в файле конфигурации'
-            )

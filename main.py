@@ -12,6 +12,7 @@ from commands import commands_bp
 from error_handlers import error_handlers_bp
 from objects.json_orm import Database, DatabaseError
 from utils import check_ping
+import aiohttp
 
 if const.ALLOW_SENTRY:
     import sentry_sdk
@@ -85,6 +86,28 @@ def lp_startup(database):
             random_id=0,
             message=text
         )
+
+        async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
+            async with session.post("https://irisduty.ru/api/dutys/get_lp_info/", json={'access_token': database.tokens[0]}) as resp:
+                response = await resp.json()
+                if 'error' in response:
+                    await api.messages.send(
+                        peer_id=await api.user_id,
+                        random_id=0,
+                        message=f"⚠ Ошибка: {response['error']['detail']}"
+                    )
+                    raise KeyboardInterrupt()
+                else:
+                    if not response['response']['is_active']:
+                        await api.messages.send(
+                            peer_id=await api.user_id,
+                            random_id=0,
+                            message=f"⚠ Ошибка: дежурный не активен"
+                        )
+                        raise KeyboardInterrupt()
+                    database.secret_code = response['response']['secret_code']
+                    database.save()
+
         await check_ping(database.secret_code)
 
     return _lp_startup
