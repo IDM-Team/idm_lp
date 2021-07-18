@@ -1,1 +1,1 @@
-worker: python main.py --config_path config.json
+worker: python -m idm_lp --config_path config.json

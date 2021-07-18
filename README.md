@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.10.0-blue)
+![Version](https://img.shields.io/badge/version-1.11.1-blue)
 ![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 
@@ -68,14 +68,14 @@ _Инструкцию ~~любезно~~ предоставил [Юн Дэмин
 cd путь_до_папки
 py -m venv env
 env\Scripts\activate.bat
-pip install -r requirements.txt
-```
-Заполняем `config.json`
-```shell script
+py -m pip install -U idm_lp
+py -m idm_lp setup
+
 Запуск:
 cd путь_до_папки
 env\Scripts\activate.bat
-py main.py
+cd idm_lp
+py -m idm_lp 
 ```
 
 ### Linux (Ubuntu 16.04 Server)
@@ -93,12 +93,10 @@ make -j {число ядер} && sudo make altinstall
 ```shell script
 cd /root/
 sudo apt-get install git nano -y
-git clone https://github.com/lordralinc/idm_lp.git
-cd idm_lp
-nano config.json
 
 python3.7 -m venv env
-env/bin/python3.7 -m pip install -r requirements.txt
+/root/env/bin/pip install idm_lp
+/root/env/bin/python3.7 -m idm_lp setup
 ```
 Создаем сервис для запуска
 ```shell script
@@ -113,8 +111,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/idmmulti_lp
-ExecStart=/root/idm_lp/env/bin/python3.7 /root/idm_lp/main.py --config_path /root/idm_lp/config.json
+WorkingDirectory=/root/idm_lp
+ExecStart=/root/env/bin/python3.7 -m idm_lp --config_path /root/idm_lp/config.json
 
 [Install]
 WantedBy=multi-user.target
@@ -192,6 +190,8 @@ service idmlp start
 - `{сервисный префикс}` +уведы — не будет удалять упоминания типа `@all`, `@online`...
 ***
 - `{сервисный префикс}` рп — просмотр РП команд
+- `{сервисный префикс}` +мрп `{имя}` `{падеж}`\n`{форматер для мужчин}`\n`{форматер для женщин}`\n`{окончание для всех}` — просмотр РП команд
+- `{сервисный префикс}` -мрп `{имя}` — просмотр РП команд
 ***
 - `{сервисный префикс}` секретный код — установка секретного кода
 ***
