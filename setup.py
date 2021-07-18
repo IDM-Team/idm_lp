@@ -29,7 +29,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Operating System :: OS Independent",
     ],
-    install_requires=["aiohttp", "pydantic", "python-rucaptcha", "sentry-sdk", 'vkbottle', 'requests'],
+    install_requires=["aiohttp", "pydantic", "python-rucaptcha", "sentry-sdk", 'vkbottle==2.7.8', 'requests'],
     include_package_data=True,
 )
 

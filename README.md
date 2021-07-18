@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.11.1-blue)
+![Version](https://img.shields.io/badge/version-1.11.2-blue)
 ![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 

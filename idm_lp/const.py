@@ -1,7 +1,7 @@
 import os
 import json
 
-__version__ = '1.11.1'
+__version__ = '1.11.2'
 __author__ = 'lordralinc'
 __description__ = "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. Так же он добавляет игнор, глоигнор, мут и алиасы."
 
