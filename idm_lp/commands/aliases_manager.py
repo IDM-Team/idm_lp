@@ -15,7 +15,7 @@ user = Blueprint(
 
 
 def add_alias(database: Database, name: str, command_from: str, command_to: str) -> Alias:
-    new_alias = Alias({
+    new_alias = Alias(**{
         'name': name,
         'command_from': command_from,
         'command_to': command_to
@@ -53,7 +53,7 @@ def delete_last_space(value: str) -> str:
     text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>"
 )
 @logger_decorator
-async def add_alias_wrapper(message: Message, alias_name: str, command_from: str, command_to: str, **kwargs):
+async def add_alias_wrapper(message: Message, alias_name: str, command_from: str, command_to: str, *args, **kwargs):
     db = Database.get_current()
     logger.info(f"Создание алиаса\n")
     alias_name = delete_last_space(alias_name)
@@ -114,7 +114,7 @@ def get_alias_packs() -> Dict[str, List[Alias]]:
     for key in data.keys():
         packs.update({
             key: [
-                Alias(dict_alias) for dict_alias in data[key]
+                Alias(**dict_alias) for dict_alias in data[key]
             ]
         })
     return packs

@@ -139,6 +139,9 @@ def run_lp():
         db = Database.load()
         Database.set_current(db)
     except DatabaseError as ex:
+        logger.error(
+            f"{ex.name} | {ex.description}"
+        )
         exit(-1)
     except json.JSONDecodeError as ex:
         logger.error(

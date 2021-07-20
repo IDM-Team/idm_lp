@@ -133,3 +133,5 @@ dmypy.json
 .pyre/
 config.json
 .vscode
+
+test/

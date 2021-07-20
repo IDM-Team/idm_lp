@@ -1,37 +1,10 @@
 import os
 import json
 
-__version__ = '1.11.2'
+__version__ = '1.11.3'
 __author__ = 'lordralinc'
 __description__ = "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. Так же он добавляет игнор, глоигнор, мут и алиасы."
 
-DEFAULT_DATABASE = {
-  "tokens": [],
-  "secret_code": "",
-  "delete_all_notify": False,
-  "ru_captcha_key": "",
-  "ignored_members": [],
-  "ignored_global_members": [],
-  "muted_members": [],
-  "aliases": [],
-  "service_prefixes": [
-    "!слп",
-    ".слп"
-  ],
-  "self_prefixes": [
-    "!л",
-    ".л"
-  ],
-  "duty_prefixes": [
-    "!лд",
-    ".лд"
-  ],
-  "sloumo": [],
-  "auto_exit_from_chat": False,
-  "auto_exit_from_chat_delete_chat": False,
-  "auto_exit_from_chat_add_to_black_list": False,
-  "disable_notifications": False,
-}
 
 CONFIG_PATH = "config.json"
 USE_APP_DATA = False
@@ -46,7 +19,6 @@ GITHUB_LINK = "https://github.com/lordralinc/idm_lp"
 VERSION_REST = "https://raw.githubusercontent.com/lordralinc/idmmulti_lp-rest/master/version.json"
 ALIASES_REST = "https://raw.githubusercontent.com/lordralinc/idmmulti_lp-rest/master/aliases.json"
 ROLE_PLAY_COMMANDS_REST = "https://raw.githubusercontent.com/lordralinc/idmmulti_lp-rest/master/role_play_commands.json"
-ROLE_PLAY_COMMANDS_USE_REST = True
 
 ENABLE_EVAL = False
 ALLOW_SENTRY = True

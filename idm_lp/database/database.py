@@ -83,11 +83,22 @@ class Database(BaseModel, ContextInstanceMixin):
         path_to_file = Database.get_path()
         try:
             with open(path_to_file, 'r', encoding='utf-8') as file:
-                return Database(**json.loads(file.read()))
+                db = Database(**json.loads(file.read()))
         except FileNotFoundError:
-            db = Database(**const.DEFAULT_DATABASE)
-            db.save()
-            return db
+            db = None
+        
+        if not db:
+             raise DatabaseError(
+                'IDMLP не установлен',
+                f"Для начала запустите процесс установки командой setup"
+            )
+
+        if not db.tokens:
+            raise DatabaseError(
+                'Нет токенов',
+                f"Укажите токены в файле конфигурации по пути: {path_to_file}"
+            )
+        return db
 
     def save(self):
         path_to_file = Database.get_path()

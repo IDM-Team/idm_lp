@@ -3,8 +3,11 @@ import os
 from idm_lp.database import Database
 
 def setup():
-    os.mkdir('idm_lp')
-
+    try:
+        os.mkdir('idm_lp')
+    except:
+        pass
+    
     tokens = []
     while len(tokens) != 3:
         token = input("Введите токен VK (85 символов) >> ")

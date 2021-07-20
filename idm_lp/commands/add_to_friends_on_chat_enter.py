@@ -45,7 +45,7 @@ async def add_chat_enter_model_wrapper(message: Message, hello_text: Optional[st
             )
             return
     db.add_to_friends_on_chat_enter.append(
-        ChatEnterModel(dict(peer_id=message.peer_id, hello_text=hello_text))
+        ChatEnterModel(peer_id=message.peer_id, hello_text=hello_text)
     )
     db.save()
     await edit_message(
