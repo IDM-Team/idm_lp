@@ -37,6 +37,14 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '--base_domain',
+    type=str,
+    dest="base_domain",
+    default="https://irisduty.ru",
+    help='Базовый домен'
+)
+
+parser.add_argument(
     '--use_app_data',
     dest="use_app_data",
     action="store_const",
@@ -89,7 +97,7 @@ def lp_startup(database):
         )
 
         async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
-            async with session.post("https://irisduty.ru/api/dutys/get_lp_info/", json={'access_token': database.tokens[0]}) as resp:
+            async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
                 response = await resp.json()
                 if 'error' in response:
                     await api.messages.send(
@@ -118,6 +126,7 @@ def run_lp():
     args = parser.parse_args()
 
     const.CONFIG_PATH = args.config_path
+    const.BASE_DOMAIN = args.base_domain
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
     const.LOG_TO_PATH = args.log_to_path if args.log_to_path else False
     const.LOGGER_LEVEL = args.logger_level
@@ -132,7 +141,10 @@ def run_lp():
         f" -> Уровень логгирования VKBottle     -> {const.VKBOTTLE_LOGGER_LEVEL}\n"
         f" -> Логи в файл                       -> {const.LOG_TO_PATH}\n"
         f" -> Путь до файла с конфингом         -> {Database.get_path()}\n"
-        f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n\n"
+        f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
+        f" -> Базовый домен                     -> {const.BASE_DOMAIN}\n"
+        f" -> API                               -> {const.GET_LP_INFO_LINK()}\n"
+        f" -> Callback link                     -> {const.CALLBACK_LINK()}\n\n"
     )
 
     try:

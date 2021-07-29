@@ -3,7 +3,6 @@ import time
 from typing import Callable, Union
 
 from vkbottle import Message
-import time
 
 
 class LoggerLevel:

@@ -1,5 +1,5 @@
 ### IDM multi - LP module
-![Version](https://img.shields.io/badge/version-1.11.3-blue)
+![Version](https://img.shields.io/badge/version-1.11.4-blue)
 ![GitHub](https://img.shields.io/github/license/lordralinc/idm_lp)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lordralinc/idm_lp)
 
@@ -128,6 +128,7 @@ service idmlp start
 - `--config_path CONFIG_PATH` — Путь до файла с конфингом
 - `--use_app_data` — Использовать папку AppData/IDM (Windows). При использовании этой настройки AppData/IDM и config_path складываются
 - `--log_to_path` — Логи в файл
+- `--base_domain BASE_DOMAIN` — Базовый домен
 
 
 ## Структура конфигурационного файла config.json
