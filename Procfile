@@ -1,0 +1,1 @@
+worker: python -m pip install -U idm_lp && python -m idm_lp
