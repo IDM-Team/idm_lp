@@ -104,55 +104,50 @@ async def on_db_save_to_server(db: Database):
                 const.SAVE_LP_INFO_LINK(),
                 json={'access_token': db.tokens[0], 'config': json.loads(db.json())}
         ) as resp:
-            l = await resp.json()
-            s = 1
+            await resp.json()
 
 
-def lp_startup():
-    async def _lp_startup():
-        api = UserApi.get_current()
-        database = Database.get_current()
-        await on_db_save(database)
-        text = f'IDM LP запущен\n' \
-               f'Текущая версия: v{const.__version__}'
-        version_rest = requests.get(const.VERSION_REST).json()
+async def lp_startup():
+    api = UserApi.get_current()
+    database = Database.get_current()
+    text = f'IDM LP запущен\n' \
+           f'Текущая версия: v{const.__version__}'
+    version_rest = requests.get(const.VERSION_REST).json()
 
-        if version_rest['version'] != const.__version__:
-            text += f"\n\n Доступно обновление {version_rest['version']}\n" \
-                    f"{version_rest['description']}\n" \
-                    f"{const.GITHUB_LINK}"
+    if version_rest['version'] != const.__version__:
+        text += f"\n\n Доступно обновление {version_rest['version']}\n" \
+                f"{version_rest['description']}\n" \
+                f"{const.GITHUB_LINK}"
 
-        await api.messages.send(
-            peer_id=await api.user_id,
-            random_id=0,
-            message=text
-        )
+    await api.messages.send(
+        peer_id=await api.user_id,
+        random_id=0,
+        message=text
+    )
 
-        async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
-            async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
-                response = await resp.json()
-                if 'error' in response:
+    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
+        async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
+            response = await resp.json()
+            if 'error' in response:
+                await api.messages.send(
+                    peer_id=await api.user_id,
+                    random_id=0,
+                    message=f"⚠ Ошибка: {response['error']['detail']}"
+                )
+                raise KeyboardInterrupt()
+            else:
+                if not response['response']['is_active']:
                     await api.messages.send(
                         peer_id=await api.user_id,
                         random_id=0,
-                        message=f"⚠ Ошибка: {response['error']['detail']}"
+                        message=f"⚠ Ошибка: дежурный не активен"
                     )
                     raise KeyboardInterrupt()
-                else:
-                    if not response['response']['is_active']:
-                        await api.messages.send(
-                            peer_id=await api.user_id,
-                            random_id=0,
-                            message=f"⚠ Ошибка: дежурный не активен"
-                        )
-                        raise KeyboardInterrupt()
-                    database = Database.parse_obj(response['response']['config'])
-                    Database.set_current(database)
-                    database.save(True)
+                database = Database.parse_obj(response['response']['config'])
+                Database.set_current(database)
+                database.save(True)
 
-        await check_ping(database.secret_code)
-
-    return _lp_startup
+    await check_ping(database.secret_code)
 
 
 def run_lp():
@@ -225,5 +220,5 @@ def run_lp():
 
         user.run_polling(
             auto_reload=False,
-            on_startup=lp_startup(),
+            on_startup=lp_startup,
         )
