@@ -97,11 +97,21 @@ async def on_db_save(db: Database):
     const.scheduler.resume()
 
 
-def lp_startup(database):
+@Database.add_on_save
+async def on_db_save_to_server(db: Database):
+    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
+        async with session.post(
+                const.SAVE_LP_INFO_LINK(),
+                json={'access_token': db.tokens[0], 'config': json.loads(db.json())}
+        ) as resp:
+            l = await resp.json()
+            s = 1
+
+def lp_startup():
     async def _lp_startup():
         api = UserApi.get_current()
-        db = Database.get_current()
-        await on_db_save(db)
+        database = Database.get_current()
+        await on_db_save(database)
         text = f'IDM LP запущен\n' \
                f'Текущая версия: v{const.__version__}'
         version_rest = requests.get(const.VERSION_REST).json()
@@ -135,8 +145,9 @@ def lp_startup(database):
                             message=f"⚠ Ошибка: дежурный не активен"
                         )
                         raise KeyboardInterrupt()
-                    database.secret_code = response['response']['secret_code']
-                    database.save()
+                    database = Database.parse_obj(response['response']['config'])
+                    Database.set_current(database)
+                    database.save(True)
 
         await check_ping(database.secret_code)
 
@@ -213,5 +224,5 @@ def run_lp():
 
         user.run_polling(
             auto_reload=False,
-            on_startup=lp_startup(db),
+            on_startup=lp_startup(),
         )

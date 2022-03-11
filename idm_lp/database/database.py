@@ -24,7 +24,7 @@ from . import (
 
 class Database(BaseModel, ContextInstanceMixin):
     secret_code: str = ""
-    ru_captcha_key: str = ""
+    ru_captcha_key: typing.Optional[str] = ""
     repeater_word: str = ".."
     dd_prefix: str = "дд"
 
@@ -121,9 +121,8 @@ class Database(BaseModel, ContextInstanceMixin):
 
     def save(self, force_listeners: bool = False):
         path_to_file = Database.get_path()
-        if force_listeners:
-            for __on_save_listener in self.__on_save_listeners:
-                asyncio.create_task(__on_save_listener(self))
+        for __on_save_listener in self.__on_save_listeners:
+            asyncio.create_task(__on_save_listener(self))
         with open(path_to_file, 'w', encoding='utf-8') as file:
             file.write(
                 self.json(exclude={'__on_save_listeners'}, **{"ensure_ascii": False, "indent": 2})
