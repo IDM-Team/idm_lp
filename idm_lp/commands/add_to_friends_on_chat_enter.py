@@ -60,19 +60,18 @@ async def add_chat_enter_model_wrapper(message: Message, hello_text: Optional[st
 ])
 @logger_decorator
 async def add_chat_enter_model_wrapper(message: Message, **kwargs):
-    db = Database.get_current()
-    model = None
-    for i in range(len(db.add_to_friends_on_chat_enter)):
-        if db.add_to_friends_on_chat_enter[i].peer_id == message.peer_id:
-            model = db.add_to_friends_on_chat_enter[i]
-    if model is None:
-        await edit_message(
-            message,
-            "⚠ Добавление новичков в друзья в этом чате не настроено"
-        )
-        return
-    db.add_to_friends_on_chat_enter.remove(model)
-    db.save()
+    with Database.get_current() as db:
+        model = None
+        for i in range(len(db.add_to_friends_on_chat_enter)):
+            if db.add_to_friends_on_chat_enter[i].peer_id == message.peer_id:
+                model = db.add_to_friends_on_chat_enter[i]
+        if model is None:
+            await edit_message(
+                message,
+                "⚠ Добавление новичков в друзья в этом чате не настроено"
+            )
+            return
+        db.add_to_friends_on_chat_enter.remove(model)
     await edit_message(
         message,
         "✅ Добавление новичков в друзья в этом чате выключено"

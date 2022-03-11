@@ -1,26 +1,19 @@
 import argparse
-import traceback
 import json
-import aiohttp
+import traceback
 
+import aiohttp
 import requests
+import vkbottle.api
 from vkbottle.api import UserApi
 from vkbottle.user import User
-from idm_lp.logger import logger, Logger, LoggerLevel
 
-from idm_lp import const
+from idm_lp import const, timers
 from idm_lp.commands import commands_bp
-from idm_lp.error_handlers import error_handlers_bp
 from idm_lp.database import Database, DatabaseError
+from idm_lp.error_handlers import error_handlers_bp
+from idm_lp.logger import logger, Logger, LoggerLevel
 from idm_lp.utils import check_ping
-
-if const.ALLOW_SENTRY:
-    import sentry_sdk
-
-    sentry_sdk.init(
-        const.SENTRY_URL,
-        traces_sample_rate=1.0
-    )
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
@@ -39,7 +32,7 @@ parser.add_argument(
     '--base_domain',
     type=str,
     dest="base_domain",
-    default="https://irisduty.ru",
+    default="https://idmduty.ru",
     help='Базовый домен'
 )
 
@@ -85,23 +78,44 @@ parser.add_argument(
 )
 
 
+@Database.add_on_save
+async def on_db_save(db: Database):
+    api = vkbottle.api.API(tokens=db.tokens)
+    const.scheduler.pause()
+    const.scheduler.remove_all_jobs()
+    if db.auto_infection:
+        const.scheduler.add_job(
+            timers.auto_infection_timer,
+            id='auto_infection_timer',
+            name='Таймер на авто заражение',
+            args=(api, db,),
+            trigger='interval',
+            seconds=db.auto_infection_interval,
+            max_instances=1
+        )
+        await timers.auto_infection_timer(api, db)
+    const.scheduler.resume()
+
+
 def lp_startup(database):
     async def _lp_startup():
         api = UserApi.get_current()
-        text = f'IDM multi LP запущен\n' \
+        db = Database.get_current()
+        await on_db_save(db)
+        text = f'IDM LP запущен\n' \
                f'Текущая версия: v{const.__version__}'
-        version_rest = requests.get(const.VERSION_REST).json()
-
-        if version_rest['version'] != const.__version__:
-            text += f"\n\n Доступно обновление {version_rest['version']}\n" \
-                    f"{version_rest['description']}\n" \
-                    f"{const.GITHUB_LINK}"
-
-        await api.messages.send(
-            peer_id=await api.user_id,
-            random_id=0,
-            message=text
-        )
+        # version_rest = requests.get(const.VERSION_REST).json()
+        #
+        # if version_rest['version'] != const.__version__:
+        #     text += f"\n\n Доступно обновление {version_rest['version']}\n" \
+        #             f"{version_rest['description']}\n" \
+        #             f"{const.GITHUB_LINK}"
+        #
+        # await api.messages.send(
+        #     peer_id=await api.user_id,
+        #     random_id=0,
+        #     message=text
+        # )
 
         async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
             async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
@@ -195,6 +209,7 @@ def run_lp():
             *commands_bp,
             *error_handlers_bp,
         )
+        const.scheduler.start()
 
         user.run_polling(
             auto_reload=False,

@@ -1,0 +1,115 @@
+{
+  "стандартный": [
+    {
+      "name": "помощь",
+      "command_from": "помощь",
+      "command_to": "помощь"
+    },
+    {
+      "name": "инфо",
+      "command_from": "инфо",
+      "command_to": "инфо"
+    },
+    {
+      "name": "шаблон",
+      "command_from": "шаб",
+      "command_to": "шаб"
+    },
+    {
+      "name": "шаблоны",
+      "command_from": "шабы",
+      "command_to": "шабы"
+    },
+    {
+      "name": "голосовой шаблон",
+      "command_from": "гшаб",
+      "command_to": "гшаб"
+    },
+    {
+      "name": "голосовые шаблоны",
+      "command_from": "гшабы",
+      "command_to": "гшабы"
+    },
+    {
+      "name": "динамический шаблон",
+      "command_from": "дшаб",
+      "command_to": "дшаб"
+    },
+    {
+      "name": "динамические шаблоны",
+      "command_from": "дшабы",
+      "command_to": "дшабы"
+    },
+    {
+      "name": "в друзья",
+      "command_from": "+др",
+      "command_to": "+др"
+    },
+    {
+      "name": "из друзей",
+      "command_from": "-др",
+      "command_to": "-др"
+    },
+    {
+      "name": "в чс",
+      "command_from": "+чс",
+      "command_to": "+чс"
+    },
+    {
+      "name": "из чс",
+      "command_from": "-чс",
+      "command_to": "-чс"
+    }
+  ],
+  "дд": [
+    {
+      "name": "дд",
+      "command_from": "дд",
+      "command_to": "дд"
+    },
+    {
+      "name": "рр",
+      "command_from": "рр",
+      "command_to": "рр"
+    },
+    {
+      "name": "рр-",
+      "command_from": "рр-",
+      "command_to": "рр-"
+    }
+  ],
+  "настройки": [
+    {
+      "name": "Включить решение каптчи",
+      "command_from": "+каптча",
+      "command_to": "н 1 6 +"
+    },
+    {
+      "name": "Выключить решение каптчи",
+      "command_from": "-каптча",
+      "command_to": "н 1 6 -"
+    },
+
+    {
+      "name": "Включить решение каптчи",
+      "command_from": "+автодрузья",
+      "command_to": "н 2 1 +"
+    },
+    {
+      "name": "Выключить решение каптчи",
+      "command_from": "-автодрузья",
+      "command_to": "н 2 1 -"
+    },
+
+    {
+      "name": "Включить автоонлайн",
+      "command_from": "+автоонлайн",
+      "command_to": "н 2 2 +"
+    },
+    {
+      "name": "Выключить автоонлайн",
+      "command_from": "-автоонлайн",
+      "command_to": "н 2 2 -"
+    }
+  ]
+}

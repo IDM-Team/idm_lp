@@ -1,11 +1,12 @@
-from pydantic import BaseModel, validator
+import asyncio
+import json
+import os
+import typing
 from typing import List
 
-import os
+from pydantic import BaseModel, validator
+
 from idm_lp import const
-
-import json
-
 from . import (
     Alias,
     ChatEnterModel,
@@ -17,10 +18,8 @@ from . import (
     RolePlayCommand,
     TrustedUser,
     SlouMo,
-    DatabaseError,
-    DatabaseWarning
+    DatabaseError
 )
-from idm_lp import database
 
 
 class Database(BaseModel, ContextInstanceMixin):
@@ -28,6 +27,11 @@ class Database(BaseModel, ContextInstanceMixin):
     ru_captcha_key: str = ""
     repeater_word: str = ".."
     dd_prefix: str = "дд"
+
+    auto_infection: bool = False
+    auto_infection_interval: int = 3600
+    auto_infection_peer_id: int = -174105461
+    auto_infection_argument: str = "р"
 
     bio_reply: bool = False
     repeater_active: bool = False
@@ -57,6 +61,14 @@ class Database(BaseModel, ContextInstanceMixin):
     add_to_friends_on_chat_enter: List[ChatEnterModel] = []
     sloumo: List[SlouMo] = []
     regex_deleter: List[RegexDeleter] = []
+
+    __on_save_listeners: typing.List[typing.Callable] = []
+
+    def __enter__(self) -> "Database":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.save()
 
     @validator('tokens')
     def name_must_contain_space(cls, v):
@@ -102,9 +114,17 @@ class Database(BaseModel, ContextInstanceMixin):
             )
         return db
 
-    def save(self):
+    @classmethod
+    def add_on_save(cls, func):
+        cls.__on_save_listeners.append(func)
+        return func
+
+    def save(self, force_listeners: bool = False):
         path_to_file = Database.get_path()
+        if force_listeners:
+            for __on_save_listener in self.__on_save_listeners:
+                asyncio.create_task(__on_save_listener(self))
         with open(path_to_file, 'w', encoding='utf-8') as file:
             file.write(
-                self.json(**{"ensure_ascii": False, "indent": 2})
+                self.json(exclude={'__on_save_listeners'}, **{"ensure_ascii": False, "indent": 2})
             )

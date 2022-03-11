@@ -11,11 +11,9 @@ from idm_lp.logger import logger_decorator
 from idm_lp.database import Database
 from idm_lp.utils import edit_message
 
-
 user = Blueprint(
     name='bio_wars_blueprint'
 )
-
 
 RegexFindAllBase = namedtuple('RegexFindAll', ['regex', 'groups_map'])
 
@@ -30,7 +28,6 @@ class RegexFindAll(RegexFindAllBase):
             else:
                 return namedtuple('RegexFindAllResult', self.groups_map)(str(re_result[0]))
         return None
-
 
 
 USER_ID_REGEX = RegexFindAll(
