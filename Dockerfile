@@ -1,4 +1,4 @@
-FROM python:3.8.10
+FROM python:3.8.12
 
 COPY idm_lp /opt/idm_lp
 RUN python -m pip install -U idm_lp
