@@ -103,14 +103,14 @@ class Database(BaseModel, ContextInstanceMixin):
 
         if not db:
             raise DatabaseError(
-                'IDMLP не установлен',
-                f"Для начала запустите процесс установки командой setup"
+                'Конфиг не найден',
+                f"Конфиг не найден по пути {path_to_file}"
             )
 
         if not db.tokens:
             raise DatabaseError(
                 'Нет токенов',
-                f"Укажите токены в файле конфигурации по пути: {path_to_file}"
+                f"Укажите токены в файле конфигурации по пути {path_to_file}"
             )
         return db
 

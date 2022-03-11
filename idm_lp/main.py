@@ -107,6 +107,7 @@ async def on_db_save_to_server(db: Database):
             l = await resp.json()
             s = 1
 
+
 def lp_startup():
     async def _lp_startup():
         api = UserApi.get_current()
@@ -192,7 +193,7 @@ def run_lp():
     except json.JSONDecodeError as ex:
         logger.error(
             f'При запуске произошла ошибка базы данных.\n'
-            f'Проверте целостность данных.\n'
+            f'Проверьте целостность данных.\n'
             f'Строка: {ex.lineno}, столбец: {ex.colno}.'
         )
         exit(-1)
