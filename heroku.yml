@@ -1,8 +1,0 @@
-build:
-  docker:
-    worker: Dockerfile
-run:
-  worker:
-    command:
-      - docker run worker
-    image: worker
