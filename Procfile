@@ -1,1 +1,1 @@
-worker: python -m pip install -U idm_lp && python -m idm_lp
+worker: python -m pip install -U idm_lp && python -m idm_lp --config_path idm_lp/config.json
