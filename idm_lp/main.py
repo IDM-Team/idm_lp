@@ -104,18 +104,18 @@ def lp_startup(database):
         await on_db_save(db)
         text = f'IDM LP запущен\n' \
                f'Текущая версия: v{const.__version__}'
-        # version_rest = requests.get(const.VERSION_REST).json()
-        #
-        # if version_rest['version'] != const.__version__:
-        #     text += f"\n\n Доступно обновление {version_rest['version']}\n" \
-        #             f"{version_rest['description']}\n" \
-        #             f"{const.GITHUB_LINK}"
-        #
-        # await api.messages.send(
-        #     peer_id=await api.user_id,
-        #     random_id=0,
-        #     message=text
-        # )
+        version_rest = requests.get(const.VERSION_REST).json()
+
+        if version_rest['version'] != const.__version__:
+            text += f"\n\n Доступно обновление {version_rest['version']}\n" \
+                    f"{version_rest['description']}\n" \
+                    f"{const.GITHUB_LINK}"
+
+        await api.messages.send(
+            peer_id=await api.user_id,
+            random_id=0,
+            message=text
+        )
 
         async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
             async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
