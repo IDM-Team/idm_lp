@@ -24,105 +24,11 @@ LP модуль позволяет работать приемнику сигн�
 4. [Команды модуля ЛП](#команды-модуля-лп)
 
 ## Установка
-### Heroku 
-_Инструкцию ~~любезно~~ предоставил [Юн Дэмин](https://vk.com/id616052556)_
 
-`<nick>` - ваш ник в гитхабе.<br>
-`<name>` - имя репозитория.
+Существует 2 вида установки:
+1. [Депой на Heroku](https://github.com/IDM-Team/idm_lp/blob/heroku-deploy/README.md)
+2. Установка на свое устройство
 
-1. Регистрируемся на [GitHub](https://github.com)
-2. Создаем закрытый репозиторий
-    ![](https://sun9-5.userapi.com/ZdunWUy0_UtICPscb8DDDXlKXrYpjY2GRHZK1Q/-tt19NoXdC4.jpg)
-3. Заходим в термукс или гит на ПК и пишем следующие команды:
-    ```shell script
-    git clone --bare https://github.com/lordralinc/idm_lp.git
-    cd idm_lp.git
-    git push --mirror https://github.com/<nick>/<name>.git
-    ```
-    _Может появится просьба войти в аккаунт, вводим логин и пароль от аккаунта и все готово_
-    ```shell script
-    cd ..
-    rm -rf idm_lp.git
-    ```
-4. Заходим на наш закрытый репозиторий и там где написано `2.0` изменяем на `master`.<br>
-5. Далее заходим в `config.json`, вставляем токен от Kate Mobile и секретный код IDM.
-6. Регистрируемся на [Heroku](https://heroku.com) и выбираем python.
-7. Переходим по ссылке: [dashboard.heroku.com/apps](https://dashboard.heroku.com/apps) и создаем приложение. 
-    Выбираем европу и название приложение любое, чтоб угодить хероку.
-8. После создания мы окажемся в панели управления, нажимаем на GitHub и входим в аккаунт.
-    ![](https://sun9-47.userapi.com/pLLeZCAo1P4sQR1brlFdBwHtfBWhBQGfuILR-g/edHTCYYZ2CE.jpg)
-9. Нам нужно имя закрытого репозитория, вставляем и нажимаем `Search`, выбираем нужный нам репозиторий и нажимаем на `Connect`.
-10. Листаем вниз и видим кнопку `Deploy Branch`, рядом с кнопкой будет `2.0`, нажимаем и выбираем `master`, далее тыкаем на кнопку `Deploy Branch` и ждем.
-11. Вверху нажимаем на кнопку `Resources`.
-12. Нажимаем на карандашик слева, включаем и тыкаем на `Confirm`.
-13. Переходим обратно в `Deploy` и мотаем вниз делаем все как по пункту 10
-
-### Windows
-
-Скачиваем и устанавливаем:
-1. [Visual C++](https://support.microsoft.com/ru-ru/help/2977003/the-latest-supported-visual-c-downloads) (Если не установленно)
-2. [Python](https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe)
-
-Открываем CMD (Win + R и вводим cmd)
-Вводим команды:
-```shell script
-cd путь_до_папки
-py -m venv env
-env\Scripts\activate.bat
-py -m pip install -U idm_lp
-py -m idm_lp setup
-
-Запуск:
-cd путь_до_папки
-env\Scripts\activate.bat
-cd idm_lp
-py -m idm_lp 
-```
-
-### Linux (Ubuntu 16.04 Server)
-```shell script
-sudo apt-get update -y
-sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
-
-wget https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tar.xz
-tar xf Python-3.7.7.tar.xz
-cd Python-3.7.7
-./configure
-make -j {число ядер} && sudo make altinstall
-```
-`{число ядер}` можно узнать командой `nproc`
-```shell script
-cd /root/
-sudo apt-get install git nano -y
-
-python3.7 -m venv env
-/root/env/bin/pip install idm_lp
-/root/env/bin/python3.7 -m idm_lp setup
-```
-Создаем сервис для запуска
-```shell script
-nano /etc/systemd/system/idmlp.service
-```
-Вводим
-```shell script
-[Unit]
-Description=LP
-After=network.target
-
-[Service]
-User=root
-Group=www-data
-WorkingDirectory=/root/idm_lp
-ExecStart=/root/env/bin/python3.7 -m idm_lp --config_path /root/idm_lp/config.json
-
-[Install]
-WantedBy=multi-user.target
-```
-Нажимаем `ctrl + x` выходим
-```shell script
-systemctl enable idmlp
-service idmlp start
-```
 
 ## Аргументы запуска 
 - `--logger_level [DEBUG | INFO | WARNING | ERROR | CRITICAL]` — Уровень логгирования
