@@ -96,6 +96,8 @@ def logger_decorator(func: Callable) -> Callable:
                    f"Delta: {delta}"
             logger.info(text)
             return result
+        except KeyboardInterrupt:
+            raise exit(0)
         except Exception as ex:
             text = f"Message {message.id} ({message.peer_id}/{message.from_id}) " \
                    f"handled with function «{func.__name__}». " \

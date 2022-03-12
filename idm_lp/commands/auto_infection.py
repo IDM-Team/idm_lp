@@ -14,9 +14,8 @@ user = Blueprint(
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автозаражение")
 @logger_decorator
 async def activate_auto_infection_wrapper(message: Message, **kwargs):
-    db = Database.get_current()
-    db.auto_infection = True
-    db.save(True)
+    with Database.get_current() as db:
+        db.auto_infection = True
     await edit_message(
         message,
         "✅ Автоматическое заражение включено"
@@ -26,9 +25,8 @@ async def activate_auto_infection_wrapper(message: Message, **kwargs):
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автозаражение")
 @logger_decorator
 async def deactivate_auto_infection_wrapper(message: Message, **kwargs):
-    db = Database.get_current()
-    db.auto_infection = False
-    db.save(True)
+    with Database.get_current() as db:
+        db.auto_infection = False
     await edit_message(
         message,
         "✅ Автоматическое заражение выключено"
@@ -47,7 +45,7 @@ async def set_auto_infection_interval_wrapper(message: Message, interval: int, *
         return
 
     db.auto_infection_interval = interval
-    db.save(True)
+    db.save()
     await edit_message(
         message,
         f"✅ Интервал автоматического заражения установлен на {interval} сек."
@@ -59,7 +57,7 @@ async def set_auto_infection_interval_wrapper(message: Message, interval: int, *
 async def set_auto_infection_argument_wrapper(message: Message, argument: str, **kwargs):
     db = Database.get_current()
     db.auto_infection_argument = argument
-    db.save(True)
+    db.save()
     await edit_message(
         message,
         "✅ Аргумент автоматического заражения изменен"
@@ -71,7 +69,7 @@ async def set_auto_infection_argument_wrapper(message: Message, argument: str, *
 async def set_auto_infection_chat_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     db.auto_infection_peer_id = message.peer_id
-    db.save(True)
+    db.save()
     await edit_message(
         message,
         "✅ Чат автоматического заражения изменен"

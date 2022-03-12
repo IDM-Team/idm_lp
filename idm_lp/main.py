@@ -2,7 +2,6 @@ import argparse
 import json
 import traceback
 
-import aiohttp
 import requests
 import vkbottle.api
 from vkbottle.api import UserApi
@@ -12,6 +11,7 @@ from idm_lp import const, timers
 from idm_lp.commands import commands_bp
 from idm_lp.database import Database, DatabaseError
 from idm_lp.error_handlers import error_handlers_bp
+from idm_lp.idm_api import IDMAPI
 from idm_lp.logger import logger, Logger, LoggerLevel
 from idm_lp.utils import check_ping
 
@@ -99,12 +99,8 @@ async def on_db_save(db: Database):
 
 @Database.add_on_save
 async def on_db_save_to_server(db: Database):
-    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
-        async with session.post(
-                const.SAVE_LP_INFO_LINK(),
-                json={'access_token': db.tokens[0], 'config': json.loads(db.json())}
-        ) as resp:
-            await resp.json()
+    await IDMAPI.get_current().save_lp_info(db.tokens[0], db.get_to_server())
+    logger.info("Конфиг отправлен на сервер")
 
 
 async def lp_startup():
@@ -118,35 +114,35 @@ async def lp_startup():
         text += f"\n\n Доступно обновление {version_rest['version']}\n" \
                 f"{version_rest['description']}\n" \
                 f"{const.GITHUB_LINK}"
+    const.__author__ = version_rest['author']
 
     await api.messages.send(
         peer_id=await api.user_id,
         random_id=0,
         message=text
     )
+    try:
+        response = await IDMAPI.get_current().get_lp_info(database.tokens[0])
+    except Exception as ex:
+        await api.messages.send(
+            peer_id=await api.user_id,
+            random_id=0,
+            message=f"⚠ Ошибка: {ex}"
+        )
+        raise KeyboardInterrupt()
 
-    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
-        async with session.post(const.GET_LP_INFO_LINK(), json={'access_token': database.tokens[0]}) as resp:
-            response = await resp.json()
-            if 'error' in response:
-                await api.messages.send(
-                    peer_id=await api.user_id,
-                    random_id=0,
-                    message=f"⚠ Ошибка: {response['error']['detail']}"
-                )
-                raise KeyboardInterrupt()
-            else:
-                if not response['response']['is_active']:
-                    await api.messages.send(
-                        peer_id=await api.user_id,
-                        random_id=0,
-                        message=f"⚠ Ошибка: дежурный не активен"
-                    )
-                    raise KeyboardInterrupt()
-                database = Database.parse_obj(response['response']['config'])
-                Database.set_current(database)
-                database.save(True)
+    if not response['is_active']:
+        await api.messages.send(
+            peer_id=await api.user_id,
+            random_id=0,
+            message=f"⚠ Ошибка: дежурный не активен"
+        )
+        raise KeyboardInterrupt()
 
+    database.load_from_server(response['config'])
+    database.secret_code = response['secret_code']
+    database.ru_captcha_key = response['ru_captcha_key']
+    database.save()
     await check_ping(database.secret_code)
 
 
@@ -172,10 +168,11 @@ def run_lp():
         f" -> Путь до файла с конфингом         -> {Database.get_path()}\n"
         f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
         f" -> Базовый домен                     -> {const.BASE_DOMAIN}\n"
-        f" -> API                               -> {const.GET_LP_INFO_LINK()}\n"
-        f" -> Callback link                     -> {const.CALLBACK_LINK()}\n"
         f" -> Разрешить eval/exec               -> {const.ENABLE_EVAL}\n\n"
     )
+
+    idm_api = IDMAPI(const.BASE_DOMAIN, const.APP_USER_AGENT)
+    IDMAPI.set_current(idm_api)
 
     try:
         db = Database.load()

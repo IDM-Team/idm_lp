@@ -2,7 +2,7 @@ import json
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-__version__ = '1.13.5'
+__version__ = '1.13.7'
 __author__ = 'lordralinc'
 __description__ = (
     "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. "
@@ -21,14 +21,6 @@ BASE_DOMAIN = "https://idmduty.ru"
 
 def CALLBACK_LINK():
     return f"{BASE_DOMAIN}/callback/"
-
-
-def GET_LP_INFO_LINK():
-    return f"{BASE_DOMAIN}/api/dutys/get_lp_info/"
-
-
-def SAVE_LP_INFO_LINK():
-    return f"{BASE_DOMAIN}/api/dutys/save_lp_info/"
 
 
 GITHUB_LINK = "https://github.com/IDM-Team/idm_lp"
