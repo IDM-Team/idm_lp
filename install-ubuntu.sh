@@ -1,5 +1,5 @@
 echo "Обновление пакетов"
-#sudo apt update > /dev/null
+sudo apt update > /dev/null
 
 echo "Установка python3.8"
 if command -v python3.8 >/dev/null 2>&1

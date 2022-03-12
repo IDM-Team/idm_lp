@@ -3,7 +3,8 @@
 1. Открываем терминал
 2. Вставляем следующие строки:
 ```bash
-sudo apt install curl
+sudo -i
+apt install curl
 curl https://raw.githubusercontent.com/IDM-Team/idm_lp/self-system-install/install-ubuntu.sh | sh
 ```
 
