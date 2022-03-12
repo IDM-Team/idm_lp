@@ -1,13 +1,21 @@
 echo "Обновление пакетов"
 sudo apt update > /dev/null
 
-echo "Установка git & curl"
-sudo apt install git curl> /dev/null
+echo "Установка GIT"
+if command -v git >/dev/null 2>&1
+  then echo "GIT уже установлен"
+  else sudo apt install git
+fi
 
 echo "Установка Heroku CLI"
-curl https://cli-assets.heroku.com/install.sh | sh > /dev/null
+if command -v heroku >/dev/null 2>&1
+  then echo "GIT уже установлен"
+  else curl https://cli-assets.heroku.com/install.sh | sh > /dev/null
+fi
 
 heroku login
+
+rm -rf idm_lp
 
 echo "Создание структуры проекта"
 mkdir idm_lp
