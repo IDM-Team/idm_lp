@@ -1,0 +1,14 @@
+[Unit]
+Description=IDM LP by lordralinc
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/root/idm_lp/
+ExecStartPre=/root/idm_lp/env/bin/python3.8 -m pip install -U idm_lp
+ExecStart=/root/idm_lp/env/bin/python3.8 -m idm_lp --config_path /root/idm_lp/config.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
