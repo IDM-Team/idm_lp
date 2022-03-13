@@ -1,8 +1,12 @@
 {
-  "version": "1.13.10",
+  "version": "1.13.11",
   "author": "lordralinc",
-  "description": "Автозаражение, фиксы, переработка",
+  "description": "Фикс зависания БД",
   "update_log": [
+    {
+      "version": "1.13.10",
+      "description": "— Автозаражение, фиксы, переработка"
+    },
     {
       "version": "1.12.0",
       "description": "— Режим NoMeta"

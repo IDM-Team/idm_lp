@@ -139,11 +139,12 @@ async def lp_startup():
         )
         raise KeyboardInterrupt()
 
-    database.load_from_server(response['config'])
-    database.secret_code = response['secret_code']
-    database.ru_captcha_key = response['ru_captcha_key']
-    database.save()
-    await check_ping(database.secret_code)
+    new_db = database.load_from_server(response['config'])
+    new_db.secret_code = response['secret_code']
+    new_db.ru_captcha_key = response['ru_captcha_key']
+    Database.set_current(new_db)
+    new_db.save()
+    await check_ping(new_db.secret_code)
 
 
 def run_lp():

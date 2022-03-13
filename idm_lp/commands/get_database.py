@@ -16,18 +16,20 @@ user = Blueprint(
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> получить бд")
 @logger_decorator
 async def set_db_wrapper(message: Message, **kwargs):
-    with Database.get_current() as db:
-        try:
-            response = await IDMAPI.get_current().get_lp_info(db.tokens[0])
-        except Exception as ex:
-            await edit_message(
-                message,
-                f"⚠ Ошибка: {ex}"
-            )
-            return
-        db.load_from_server(response['config'])
-        db.secret_code = response['secret_code']
-        db.ru_captcha_key = response['ru_captcha_key']
+    db = Database.get_current()
+    try:
+        response = await IDMAPI.get_current().get_lp_info(db.tokens[0])
+    except Exception as ex:
+        await edit_message(
+            message,
+            f"⚠ Ошибка: {ex}"
+        )
+        return
+    new_db = db.load_from_server(response['config'])
+    new_db.secret_code = response['secret_code']
+    new_db.ru_captcha_key = response['ru_captcha_key']
+    Database.set_current(new_db)
+    new_db.save()
     await edit_message(
         message,
         "✅ Конфигурация успешно обновлена с сервера"

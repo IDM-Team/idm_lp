@@ -123,17 +123,20 @@ class Database(BaseModel, ContextInstanceMixin):
         return func
 
     def load_from_server(self, server_response: dict):
+        new_database = {
+            "tokens": self.tokens,
+            "service_prefixes": self.service_prefixes
+        }
         for key, value in server_response.items():
             try:
                 field = self.__fields__[key]
                 extra = field.field_info.extra
                 if extra['from_server'] == 'exclude':
                     continue
-                setattr(self, key, value)
+                new_database[key] = value
             except:
                 pass
-        self.save()
-        logger.info("Конфиг загружен с сервера")
+        return Database.parse_obj(new_database)
 
     def get_to_server(self):
         to_server = {}
