@@ -52,9 +52,10 @@ async def bio_reply_handler(message: Message):
     if str(await message.api.user_id) not in message.text:
         return
 
-    user = USER_ID_REGEX.match(message.text)
-    if user:
-        return f"Заразить @id{user.user_id}"
+    lab_user = USER_ID_REGEX.match(message.text)
+    if lab_user:
+        # noinspection PyUnresolvedReferences
+        return f"Заразить @id{lab_user.user_id}"
 
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> -заражение")

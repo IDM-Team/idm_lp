@@ -1,4 +1,3 @@
-
 from typing import Optional
 
 from vkbottle.rule import FromMe
@@ -127,6 +126,7 @@ async def role_play_command_wrapper(
         )
     )
 
+
 mrp_create_text = [
     "<service_prefix:service_prefix> +мрп <name> <gen>\n<formatter_man>\n<formatter_woman>\n<all_ending>",
     "<service_prefix:service_prefix> +мрп <name>\n<formatter_man>\n<formatter_woman>\n<all_ending>"
@@ -147,38 +147,44 @@ async def role_play_command_create_wrapper(
     db = Database.get_current()
     try:
         gen = GenEnum(gen)
-    except:
+    except ValueError:
         await edit_message(
             message,
             f"⚠ Не верный падеж. Используйте следующие обозначения:\n"
-            "именительный – nom\nродительный – gen\nдательный – dat\nвинительный – acc\nтворительный – ins\nпредложный – abl"
+            "именительный – nom\n"
+            "родительный – gen\n"
+            "дательный – dat\n"
+            "винительный – acc\n"
+            "творительный – ins\n"
+            "предложный – abl"
         )
         return
-    
+
     if name.lower() in [r.name for r in db.role_play_commands]:
         await edit_message(
             message,
             f"⚠ Такая РП-команда уже существует"
         )
         return
-    
+
     db.role_play_commands.append(
         RolePlayCommand(
             name=name.lower(),
             gen=gen,
             formatter_man=formatter_man,
             formatter_woman=formatter_woman,
-            all_ending=all_ending 
+            all_ending=all_ending
         )
     )
     db.save()
-        
+
     await edit_message(
         message,
         f"✅ РП-команда «{name.lower()}» создана"
     )
 
-@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> -мрп <name>",)
+
+@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> -мрп <name>", )
 @logger_decorator
 async def role_play_command_create_wrapper(
         message: Message,
@@ -186,23 +192,23 @@ async def role_play_command_create_wrapper(
         **kwargs
 ):
     db = Database.get_current()
-    
+
     if name.lower() not in [r.name for r in db.role_play_commands]:
         await edit_message(
             message,
             f"⚠ РП-команды «{name.lower()}» не существует"
         )
         return
-    
+
     rp = None
     for rp_ in db.role_play_commands:
         if rp_.name == name.lower():
             rp = rp_
             break
-    
+
     db.role_play_commands.remove(rp)
     db.save()
-        
+
     await edit_message(
         message,
         f"✅ РП-команда «{name.lower()}» удалена"

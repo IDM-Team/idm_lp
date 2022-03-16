@@ -46,7 +46,7 @@ class Logger(object):
     def __init__(self, level: Union[int, str] = 1):
         self.logger_level = LoggerLevel.get_int(level)
 
-    def __getattr__(self, item):
+    def __getattribute__(self, item):
         if item in ["remove", "add", "level"]:
             return lambda *args, **kwargs: None
 
@@ -54,8 +54,7 @@ class Logger(object):
             new_logger = Logger(LoggerLevel.get_int(item))
             new_logger.global_logger_level = self.global_logger_level
             return new_logger
-
-        return super(Logger, self).__getattr__(item)
+        return super(Logger, self).__getattribute__(item)
 
     def __call__(self, message: str, *args, **kwargs):
         if self.logger_level < self.global_logger_level:
@@ -66,7 +65,7 @@ class Logger(object):
 
         try:
             message = str(message).format(*args, **kwargs)
-        except:
+        except KeyError:
             message = f"{message} {args} {kwargs}"
 
         output.write(
@@ -84,7 +83,6 @@ except ImportError:
 
 def logger_decorator(func: Callable) -> Callable:
     async def decorator(message: Message, *args, **kwargs):
-        global logger
         try:
             start = time.time()
             result = await func(message, *args, **kwargs)

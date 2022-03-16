@@ -1,8 +1,12 @@
 {
-  "version": "1.13.11",
+  "version": "1.14.0",
   "author": "lordralinc",
-  "description": "Фикс зависания БД",
+  "description": "Таймеры, возможность запуска с локального конфига",
   "update_log": [
+    {
+      "version": "1.13.12",
+      "description": "— Фикс зависания БД"
+    },
     {
       "version": "1.13.10",
       "description": "— Автозаражение, фиксы, переработка"

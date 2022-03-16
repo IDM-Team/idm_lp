@@ -1,76 +1,19 @@
+import typing
 from typing import Optional, List, Iterable
 
-import aiohttp
 from vkbottle import VKError
 from vkbottle.api import UserApi
 from vkbottle.user import Message
-
-from idm_lp import const
-from idm_lp import logger
 
 __all__ = (
     'edit_message',
     'get_id_by_domain',
     'get_ids_by_message',
     'get_full_name_by_member_id',
-    'send_request',
-    'check_ping'
+    'parse_cron_text',
+    'generate_user_or_groups_list',
+    'SemVer'
 )
-
-
-async def send_request(request_data: dict):
-    logger.logger.debug(f"Send request to server with data: {request_data}")
-    api = UserApi.get_current()
-    message = ""
-    async with aiohttp.ClientSession(headers={"User-Agent": const.APP_USER_AGENT}) as session:
-        async with session.post(const.CALLBACK_LINK(), json=request_data) as resp:
-            if resp.status != 200:
-                message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил кодом {resp.status}."
-            else:
-                data_json = await resp.json()
-                if data_json['response'] == 'ok':
-                    return
-                elif data_json['response'] == "error":
-                    if data_json.get('error_code') == 1:
-                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Пустой запрос>>"
-                    elif data_json.get('error_code') == 2:
-                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Неизвестный тип сигнала>>"
-                    elif data_json.get('error_code') == 3:
-                        message = (
-                            f"⚠ Ошибка сервера IDM Multi. "
-                            f"Сервер, ответил: <<Пара пользователь/секрет не найдены>>"
-                        )
-                    elif data_json.get('error_code') == 4:
-                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Беседа не привязана>>"
-                    elif data_json.get('error_code') == 10:
-                        message = f"⚠ Ошибка сервера IDM Multi. Сервер, ответил: <<Не удалось связать беседу>>"
-                    else:
-                        message = (
-                            f"⚠ Ошибка сервера IDM Multi. "
-                            f"Сервер, ответил: <<Ошибка #{data_json.get('error_code')}>>"
-                        )
-                elif data_json['response'] == "vk_error":
-                    message = (
-                        f"⚠ Ошибка сервера IDM Multi. "
-                        f"Сервер, ответил: "
-                        f"<<Ошибка VK #{data_json.get('error_code')} {data_json.get('error_message', '')}>>"
-                    )
-    if message:
-        await api.messages.send(
-            random_id=0,
-            peer_id=await api.user_id,
-            message=message
-        )
-
-
-async def check_ping(secret_code: str):
-    await send_request({
-        "user_id": await UserApi.get_current().user_id,
-        "method": "ping",
-        "secret": secret_code,
-        "message": {},
-        "object": {}
-    })
 
 
 async def edit_message(
@@ -150,3 +93,59 @@ async def get_full_name_by_member_id(
     else:
         group = (await api.groups.get_by_id(group_ids=abs(member_id)))[0]
         return group.name
+
+
+def parse_cron_text(cron: str) -> dict:
+    """Парс CRON выражения для планировщика задач"""
+    second, minute, hour, day, month, day_of_week, year = cron.split(' ')
+    return {
+        key: value
+        for key, value in dict(
+            second=second, minute=minute,
+            hour=hour, day=day,
+            month=month, day_of_week=day_of_week,
+            year=year
+        ).items()
+        if value != "?"
+    }
+
+
+async def generate_user_or_groups_list(
+        api: UserApi,
+        message: str,
+        user_ids: typing.Optional[typing.List[int]] = None,
+        group_ids: typing.Optional[typing.List[int]] = None
+):
+    if user_ids:
+        for index, vk_user in enumerate(await api.users.get(user_ids=user_ids), 1):
+            message += f"{index}. [id{vk_user.id}|{vk_user.first_name} {vk_user.last_name}]\n"
+    if group_ids:
+        for index, vk_group in enumerate(await api.groups.get_by_id(group_ids=group_ids), 1):
+            message += f'{index}. [club{vk_group.id}|{vk_group.name}]'
+            index += 1
+    return message
+
+
+class SemVer:
+
+    def __init__(self, sem_ver: str):
+        self.major, self.minor, self.patch = map(lambda x: int(x), sem_ver.split('.'))
+
+    def __eq__(self, other: "SemVer") -> bool:
+        return self.major == other.major and self.minor == other.minor and self.patch == other.patch
+
+    def __lt__(self, other: "SemVer") -> bool:
+        if self.major < other.major:
+            return True
+        if self.major == other.major and self.minor < other.minor:
+            return True
+        return self.major == other.major and self.minor == other.minor and self.patch < other.patch
+
+    def __le__(self, other: "SemVer") -> bool:
+        return self.__lt__(other) or self.__eq__(other)
+
+    def __gt__(self, other: "SemVer") -> bool:
+        return not self.__lt__(other) and not self.__eq__(other)
+
+    def __ge__(self, other: "SemVer") -> bool:
+        return not self.__lt__(other) or self.__eq__(other)

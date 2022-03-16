@@ -100,8 +100,11 @@ class RegexDeleter(AbstractMessageRule):
 
 
 class ContainsRule(AbstractMessageRule):
+    not_include: List[str]
 
-    def __init__(self, words: Union[str, List[str]], not_include: List[str] = [], upper: bool = True):
+    def __init__(self, words: Union[str, List[str]], not_include: List[str] = None, upper: bool = True):
+        if not_include is None:
+            not_include = []
         self.words = words if isinstance(words, list) else [words]
         self.not_include = not_include if isinstance(not_include, list) else [not_include]
         self.upper = upper

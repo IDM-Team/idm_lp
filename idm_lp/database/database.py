@@ -3,7 +3,7 @@ import json
 import os
 import typing
 from typing import List
-from idm_lp.logger import logger
+
 from pydantic import BaseModel, validator, Field
 
 from idm_lp import const
@@ -18,7 +18,8 @@ from . import (
     RolePlayCommand,
     TrustedUser,
     SlouMo,
-    DatabaseError
+    DatabaseError,
+    Timer
 )
 
 
@@ -32,6 +33,8 @@ class Database(BaseModel, ContextInstanceMixin):
     # Получаются исключительно с сервера
     repeater_word: str = Field("..", to_server='include', from_server='include')
     dd_prefix: str = Field("дд", to_server='include', from_server='include')
+
+    timers: typing.List[Timer] = Field([], to_server='include', from_server='include')
 
     auto_infection: bool = Field(False, to_server='include', from_server='include')
     auto_infection_interval: int = Field(3600, to_server='include', from_server='include')
@@ -99,8 +102,7 @@ class Database(BaseModel, ContextInstanceMixin):
     def load() -> 'Database':
         path_to_file = Database.get_path()
         try:
-            with open(path_to_file, 'r', encoding='utf-8') as file:
-                db = Database(**json.loads(file.read()))
+            db = Database.parse_file(path_to_file)
         except FileNotFoundError:
             db = None
 
@@ -134,20 +136,20 @@ class Database(BaseModel, ContextInstanceMixin):
                 if extra['from_server'] == 'exclude':
                     continue
                 new_database[key] = value
-            except:
+            except KeyError:
                 pass
         return Database.parse_obj(new_database)
 
     def get_to_server(self):
         to_server = {}
-        for key, value in self.dict().items():
+        for key, value in json.loads(self.json()).items():
             try:
                 field = self.__fields__[key]
                 extra = field.field_info.extra
                 if extra['to_server'] == 'exclude':
                     continue
                 to_server[key] = value
-            except:
+            except KeyError:
                 pass
         return to_server
 
@@ -155,7 +157,13 @@ class Database(BaseModel, ContextInstanceMixin):
         path_to_file = Database.get_path()
         for __on_save_listener in self.__on_save_listeners:
             asyncio.create_task(__on_save_listener(self))
+
         with open(path_to_file, 'w', encoding='utf-8') as file:
-            file.write(
-                self.json(include={'tokens', 'service_prefixes'}, **{"ensure_ascii": False, "indent": 2})
-            )
+            if const.USE_LOCAL_DB:
+                file.write(
+                    self.json(exclude={'__on_save_listeners'}, **{"ensure_ascii": False, "indent": 2})
+                )
+            else:
+                file.write(
+                    self.json(include={'tokens', 'service_prefixes'}, **{"ensure_ascii": False, "indent": 2})
+                )

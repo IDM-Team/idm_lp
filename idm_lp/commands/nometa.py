@@ -1,6 +1,7 @@
 import asyncio
 import time
 
+from vkbottle import VKError
 from vkbottle.framework.framework.rule import PrivateMessage
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
@@ -14,9 +15,9 @@ user = Blueprint(
 )
 
 
-def _r(r: list, t: str) -> list:
-    for l in r:
-        yield l + t
+def concat(element_list: list, postfix: str) -> list:
+    for item in element_list:
+        yield item + postfix
 
 
 HELLO_TEXTS_PATTERNS = [
@@ -32,8 +33,8 @@ HELLO_TEXTS_PATTERNS = [
 
 HELLO_TEXTS = [
     *HELLO_TEXTS_PATTERNS,
-    *_r(HELLO_TEXTS_PATTERNS, '!'),
-    *_r(HELLO_TEXTS_PATTERNS, '.'),
+    *concat(HELLO_TEXTS_PATTERNS, '!'),
+    *concat(HELLO_TEXTS_PATTERNS, '.'),
 ]
 
 HELLO_STICKER_IDS = [
@@ -50,7 +51,7 @@ async def nometa_checker(db: Database, message: Message):
         )
         if msgs.items:
             return
-    except:
+    except VKError:
         pass
 
     await message.api.messages.send(
@@ -76,7 +77,7 @@ async def nometa_message_wrapper(message: Message, **kwargs):
             time_prev = msgs.items[0].date
             if time.time() - time_prev < 60 * 60 * 12:
                 return
-    except:
+    except (VKError, IndexError):
         pass
 
     asyncio.ensure_future(nometa_checker(db, message))

@@ -29,7 +29,7 @@ async def sloumo_proc_wrapper(message: Message):
             db.sloumo[index].last_message.date + db.sloumo[index].time >= time.time() and
             db.sloumo[index].last_message.from_id == message.from_id
     ):
-        await message(f"!warn @id{message.from_id}\n{db.sloumo[index].warn_message}")
+        await message.reply(f"!warn @id{message.from_id}\n{db.sloumo[index].warn_message}")
 
     db.sloumo[index].last_message = LastMessage(
         date=message.date,
@@ -48,35 +48,33 @@ async def enable_sloumo_wrapper(
         warn_text: str = "Нарушение слоумо-режима",
         **kwargs
 ):
-    db = Database.get_current()
-    index = None
-    for i in range(len(db.sloumo)):
-        if db.sloumo[i].chat_id == message.chat_id:
-            index = i
-    if index is not None:
-        db.sloumo.pop(index)
-    db.save()
-
-    db.sloumo.append(SlouMo(
-        chat_id=message.chat_id,
-        last_message=dict(from_id=0, date=0),
-        white_list=[
-            message.from_id,
-            *[
-                item.member_id
-                for item in (await message.api.messages.get_conversation_members(peer_id=message.peer_id)).items
-                if item.is_admin and item.member_id > 0
-            ]
-        ],
-        warn_message=warn_text,
-        time=delay_time
-    ))
-    await edit_message(
-        message,
-        f"✅ Слоумо режим в этой беседе установлен:\n"
-        f"⏱ Задержка {delay_time} сек.\n"
-        f"⚠ Текст предупреждения: {warn_text}"
-    )
+    with Database.get_current() as db:
+        sloumo_item = None
+        for _sloumo_item in db.sloumo:
+            if _sloumo_item.chat_id == message.chat_id:
+                sloumo_item = _sloumo_item
+        if sloumo_item is not None:
+            db.sloumo.remove(sloumo_item)
+        db.sloumo.append(SlouMo(
+            chat_id=message.chat_id,
+            last_message=LastMessage(from_id=0, date=0),
+            white_list=[
+                message.from_id,
+                *[
+                    item.member_id
+                    for item in (await message.api.messages.get_conversation_members(peer_id=message.peer_id)).items
+                    if item.is_admin and item.member_id > 0
+                ]
+            ],
+            warn_message=warn_text,
+            time=delay_time
+        ))
+        await edit_message(
+            message,
+            f"✅ Слоумо режим в этой беседе установлен:\n"
+            f"⏱ Задержка {delay_time} сек.\n"
+            f"⚠ Текст предупреждения: {warn_text}"
+        )
 
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> -слоумо")

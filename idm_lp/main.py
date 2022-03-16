@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import json
 import traceback
 
@@ -11,9 +12,9 @@ from idm_lp import const, timers
 from idm_lp.commands import commands_bp
 from idm_lp.database import Database, DatabaseError
 from idm_lp.error_handlers import error_handlers_bp
-from idm_lp.idm_api import IDMAPI
+from idm_lp.idm_api import IDMAPI, IDMException
 from idm_lp.logger import logger, Logger, LoggerLevel
-from idm_lp.utils import check_ping
+from idm_lp.utils import SemVer
 
 parser = argparse.ArgumentParser(
     description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
@@ -50,17 +51,8 @@ parser.add_argument(
     dest="logger_level",
     type=str,
     default="INFO",
-    help='Уровень логгирования.'
+    help='Уровень логирования.'
 )
-
-parser.add_argument(
-    '--vkbottle_logger_level',
-    dest="vkbottle_logger_level",
-    type=str,
-    default="ERROR",
-    help='Уровень логгирования VKBottle.'
-)
-
 parser.add_argument(
     '--log_to_path',
     dest="log_to_path",
@@ -76,44 +68,86 @@ parser.add_argument(
     const=True,
     help='Разрешить eval/exec'
 )
+parser.add_argument(
+    '--use_local_db',
+    dest="use_local_db",
+    action="store_const",
+    const=True,
+    help='Не использовать ДБ IDM'
+)
+
+
+@Database.add_on_save
+async def clear_timers(db: Database):
+    now = datetime.datetime.now()
+    timers_copy = db.timers[:]
+    for timer in timers_copy:
+        if timer.type == timer.type.DATE:
+            if timer.run_date < now:
+                db.timers.remove(timer)
 
 
 @Database.add_on_save
 async def on_db_save(db: Database):
     api = vkbottle.api.API(tokens=db.tokens)
     const.scheduler.pause()
-    const.scheduler.remove_all_jobs()
+
+    timers_ids = [x.id for x in const.scheduler.get_jobs()]
     if db.auto_infection:
-        const.scheduler.add_job(
-            timers.auto_infection_timer,
-            id='auto_infection_timer',
-            name='Таймер на авто заражение',
-            args=(api, db,),
-            trigger='interval',
-            seconds=db.auto_infection_interval,
-            max_instances=1
-        )
-        await timers.auto_infection_timer(api, db)
+        if 'auto_infection_timer' not in timers_ids:
+            const.scheduler.add_job(
+                timers.auto_infection_timer,
+                id='auto_infection_timer',
+                name='Таймер на авто заражение',
+                args=(api, db,),
+                trigger='interval',
+                seconds=db.auto_infection_interval,
+                max_instances=1
+            )
+            await timers.auto_infection_timer(api, db)
+    for timer in db.timers:
+        if timer.method == timer.method.SEND_MESSAGE:
+            if timer.id not in timers_ids:
+                const.scheduler.add_job(
+                    timers.send_message_timer,
+                    **timer.scheduler_params,
+                    max_instances=1,
+                    args=(api, db, timer,)
+                )
+    db_timers_ids = ['auto_infection_timer', *[x.id.hex for x in db.timers]]
+    for job in const.scheduler.get_jobs():
+        if job.id not in db_timers_ids:
+            const.scheduler.remove_job(job.id)
     const.scheduler.resume()
 
 
 @Database.add_on_save
 async def on_db_save_to_server(db: Database):
-    await IDMAPI.get_current().save_lp_info(db.tokens[0], db.get_to_server())
-    logger.info("Конфиг отправлен на сервер")
+    if not const.USE_LOCAL_DB:
+        await IDMAPI.get_current().save_lp_info(db.tokens[0], db.get_to_server())
+        logger.info("Конфиг отправлен на сервер")
 
 
 async def lp_startup():
     api = UserApi.get_current()
     database = Database.get_current()
-    text = f'IDM LP запущен\n' \
-           f'Текущая версия: v{const.__version__}'
+    text = (
+        f'[IDM LP]\n'
+        f'❤ Запущена версия IDM LP {const.__version__}\n'
+    )
     version_rest = requests.get(const.VERSION_REST).json()
 
-    if version_rest['version'] != const.__version__:
-        text += f"\n\n Доступно обновление {version_rest['version']}\n" \
-                f"{version_rest['description']}\n" \
-                f"{const.GITHUB_LINK}"
+    last_stable = SemVer(version_rest['version'])
+    current = SemVer(const.__version__)
+
+    if current < last_stable:
+        text += (
+            f"\n💬 Доступно обновление {version_rest['version']}\n"
+            f"{version_rest['description']}"
+        )
+    elif current > last_stable:
+        text += "\n💬 Обратите внимание! Вы используете экспериментальную не стабильную версию."
+
     const.__author__ = version_rest['author']
 
     await api.messages.send(
@@ -123,11 +157,11 @@ async def lp_startup():
     )
     try:
         response = await IDMAPI.get_current().get_lp_info(database.tokens[0])
-    except Exception as ex:
+    except IDMException as ex:
         await api.messages.send(
             peer_id=await api.user_id,
             random_id=0,
-            message=f"⚠ Ошибка: {ex}"
+            message=f"[IDM LP]\n⚠ Произошла ошибка при получении информации о дежурном с сервера IDM:\n💬 {ex}"
         )
         raise KeyboardInterrupt()
 
@@ -135,16 +169,24 @@ async def lp_startup():
         await api.messages.send(
             peer_id=await api.user_id,
             random_id=0,
-            message=f"⚠ Ошибка: дежурный не активен"
+            message=f"[IDM LP]\n⚠ Произошла ошибка при запуске\n💬 Дежурный не активен"
         )
         raise KeyboardInterrupt()
 
-    new_db = database.load_from_server(response['config'])
-    new_db.secret_code = response['secret_code']
-    new_db.ru_captcha_key = response['ru_captcha_key']
-    Database.set_current(new_db)
-    new_db.save()
-    await check_ping(new_db.secret_code)
+    if not const.USE_LOCAL_DB:
+        database = database.load_from_server(response['config'])
+    Database.set_current(database)
+    database.save()
+
+    try:
+        await IDMAPI.get_current().ping()
+    except IDMException as ex:
+        await api.messages.send(
+            random_id=0,
+            peer_id=await api.user_id,
+            message=f"[IDM LP]\n⚠ Произошла ошибка при проверке подлинности секретного кода:\n💬 {ex}"
+        )
+        raise KeyboardInterrupt()
 
 
 def run_lp():
@@ -155,20 +197,20 @@ def run_lp():
     const.USE_APP_DATA = args.use_app_data if args.use_app_data else False
     const.LOG_TO_PATH = args.log_to_path if args.log_to_path else False
     const.LOGGER_LEVEL = args.logger_level
-    const.VKBOTTLE_LOGGER_LEVEL = args.vkbottle_logger_level
     const.ENABLE_EVAL = args.enable_eval if args.enable_eval else False
+    const.USE_LOCAL_DB = args.use_local_db if args.use_local_db else False
 
     if isinstance(logger, Logger):
         logger.global_logger_level = LoggerLevel.get_int(const.LOGGER_LEVEL)
 
     logger.warning(
         f"\n\nЗапуск с параметрами:\n"
-        f" -> Уровень логгирования              -> {const.LOGGER_LEVEL}\n"
-        f" -> Уровень логгирования VKBottle     -> {const.VKBOTTLE_LOGGER_LEVEL}\n"
+        f" -> Уровень логирования              -> {const.LOGGER_LEVEL}\n"
         f" -> Логи в файл                       -> {const.LOG_TO_PATH}\n"
-        f" -> Путь до файла с конфингом         -> {Database.get_path()}\n"
+        f" -> Путь до файла с конфигурацией     -> {Database.get_path()}\n"
         f" -> Использовать папку AppData/IDM    -> {const.USE_APP_DATA}\n"
         f" -> Базовый домен                     -> {const.BASE_DOMAIN}\n"
+        f" -> Использовать локальную БД         -> {const.USE_LOCAL_DB}\n"
         f" -> Разрешить eval/exec               -> {const.ENABLE_EVAL}\n\n"
     )
 
@@ -207,7 +249,7 @@ def run_lp():
 
         user = User(
             tokens=db.tokens,
-            debug=const.VKBOTTLE_LOGGER_LEVEL,
+            debug=const.LOGGER_LEVEL,
             log_to_path=const.LOG_TO_PATH
         )
         user.set_blueprints(
@@ -215,7 +257,6 @@ def run_lp():
             *error_handlers_bp,
         )
         const.scheduler.start()
-
         user.run_polling(
             auto_reload=False,
             on_startup=lp_startup,

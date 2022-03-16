@@ -6,7 +6,7 @@ from idm_lp import const
 from idm_lp.const import __version__, __author__
 from idm_lp.logger import logger_decorator
 from idm_lp.database import Database
-from idm_lp.utils import edit_message
+from idm_lp.utils import edit_message, SemVer
 
 user = Blueprint(
     name='info_blueprint'
@@ -19,9 +19,20 @@ async def info_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     version_rest = requests.get(const.VERSION_REST).json()
 
-    if version_rest['version'] != const.__version__:
-        update_text = f"\n\n⚠ Доступно обновление {version_rest['version']}\n" \
-                      f"{version_rest['description']}\n"
+    last_stable = SemVer(version_rest['version'])
+    current = SemVer(const.__version__)
+
+    if current < last_stable:
+        update_text = (
+            f"\n\nДоступно обновление {version_rest['version']}\n"
+            f"{version_rest['description']}\n"
+            f"{const.GITHUB_LINK}"
+        )
+    elif current > last_stable:
+        update_text = (
+            "\n\n⚠ Обратите внимание! Вы используете экспериментальную не стабильную версию.\n"
+            f"Текущая стабильная: {version_rest['version']}"
+        )
     else:
         update_text = ""
 

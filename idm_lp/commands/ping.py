@@ -18,7 +18,7 @@ async def get_ping(message: Message, answer: str) -> str:
     if delta < 0:
         delta = "666"
 
-    return f"{answer} Модуль ЛП\n" \
+    return f"{answer} IDM LP\n" \
            f"Ответ через {delta} с"
 
 

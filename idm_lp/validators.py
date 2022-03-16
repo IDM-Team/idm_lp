@@ -48,7 +48,7 @@ def dd_value(value: str):
     if db.dd_prefix in value.lower():
         try:
             return int(value.lower().replace(db.dd_prefix, ''))
-        except:
+        except ValueError:
             ...
 
 

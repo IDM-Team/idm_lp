@@ -11,7 +11,7 @@ user = Blueprint(
 
 @user.error_handler.captcha_handler
 async def solve_captcha(e: VKError):
-    db = Database.load()
+    db = Database.get_current()
 
     if not db.ru_captcha_key:
         return

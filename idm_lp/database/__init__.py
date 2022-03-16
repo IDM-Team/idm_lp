@@ -5,6 +5,7 @@ from .mixins import ContextInstanceMixin
 from .regex_deleter import RegexDeleter
 from .role_play_commands import RolePlayCommand, GenEnum
 from .sloumo import SlouMo, LastMessage
+from .timers import Timer, TimerType, TimerMethod
 from .trusted_user import TrustedUser
 
 from .errors import DatabaseError, DatabaseWarning

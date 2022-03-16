@@ -13,9 +13,8 @@ user = Blueprint(
 @user.on.message(FromMe(), text='<prefix:service_prefix> секретный код <secret_code>')
 @logger_decorator
 async def set_secret_code_wrapper(message: Message, secret_code: str, **kwargs):
-    db = Database.get_current()
-    db.secret_code = secret_code
-    db.save()
+    with Database.get_current() as db:
+        db.secret_code = secret_code
     await edit_message(
         message,
         "✅ Секретный код установлен"
@@ -24,10 +23,9 @@ async def set_secret_code_wrapper(message: Message, secret_code: str, **kwargs):
 
 @user.on.message(FromMe(), text='<prefix:service_prefix> токен каптчи <secret_code>')
 @logger_decorator
-async def set_secret_code_wrapper(message: Message, secret_code: str, **kwargs):
-    db = Database.get_current()
-    db.ru_captcha_key = secret_code
-    db.save()
+async def set_secret_code_wrapper(message: Message, ru_captcha_key: str, **kwargs):
+    with Database.get_current() as db:
+        db.ru_captcha_key = ru_captcha_key
     await edit_message(
         message,
         "✅ Токен каптчи установлен"

@@ -1,6 +1,6 @@
-from typing import Dict
-from pydantic import BaseModel
 from enum import Enum
+
+from pydantic import BaseModel
 
 
 class GenEnum(Enum):
@@ -13,14 +13,6 @@ class GenEnum(Enum):
 
 
 class RolePlayCommand(BaseModel):
-    """
-        :param name: Имя РПшки
-        :param gen: Падеж в какой возводить РПшку
-        :param formatter_man: форматтер при вызове одиночной РП (обнять @lllordralll)
-        :param formatter_woman: форматтер при вызове одиночной РП (обнять @lllordralll)
-            Должен содержать {first_user} {second_user}
-        :param all_ending: заменяет {second_user}
-    """
     name: str
     gen: GenEnum
     formatter_man: str

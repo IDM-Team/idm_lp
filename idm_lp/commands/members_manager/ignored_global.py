@@ -4,7 +4,7 @@ from vkbottle.user import Blueprint, Message
 
 from idm_lp.logger import logger_decorator
 from idm_lp.database import Database, IgnoredGlobalMembers
-from idm_lp.utils import edit_message, get_ids_by_message, get_full_name_by_member_id
+from idm_lp.utils import edit_message, get_ids_by_message, get_full_name_by_member_id, generate_user_or_groups_list
 
 user = Blueprint(
     name='ignored_global_members_blueprint'
@@ -47,20 +47,8 @@ async def show_ignore_global_members(
     if not user_ids and not group_ids:
         return "📃 Ваш глобальный игнор-лист пуст"
 
-    index = 1
     message = "📃 Ваш глобальный игнор-лист для этого чата\n"
-
-    if user_ids:
-        for vk_user in await api.users.get(user_ids=user_ids):
-            message += f"{index}. [id{vk_user.id}|{vk_user.first_name} {vk_user.last_name}]\n"
-            index += 1
-
-    if group_ids:
-        for vk_group in await api.groups.get_by_id(group_ids=group_ids):
-            message += f'{index}. [club{vk_group.id}|{vk_group.name}]'
-            index += 1
-
-    return message
+    return await generate_user_or_groups_list(api, message, user_ids, group_ids)
 
 
 @user.on.message_handler(

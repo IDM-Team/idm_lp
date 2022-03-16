@@ -22,7 +22,8 @@ from idm_lp.commands import (
     run_eval,
     self_signal,
     set_secret_code,
-    sloumo
+    sloumo,
+    timers
 )
 
 commands_bp = (
@@ -49,6 +50,8 @@ commands_bp = (
     self_signal.user,
     set_secret_code.user,
     sloumo.user,
+
+    timers.user,
 
     *members_manager.users_bp,
 )

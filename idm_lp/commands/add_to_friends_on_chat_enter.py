@@ -1,5 +1,6 @@
 from typing import Optional
 
+from vkbottle import VKError
 from vkbottle.rule import ChatActionRule, FromMe
 from vkbottle.user import Blueprint, Message
 
@@ -23,7 +24,7 @@ async def chat_enter_wrapper(message: Message):
             model = chat_enter_model
     try:
         await user.api.friends.add(user_id=message.action.member_id)
-    except:
+    except VKError:
         pass
     return model.hello_text
 

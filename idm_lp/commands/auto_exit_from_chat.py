@@ -86,7 +86,10 @@ async def to_chat_wrapper(message: Message):
                     sound=0
                 )
             if db.auto_exit_from_chat:
-                await message.api.messages.remove_chat_user(chat_id=message.chat_id, member_id=await message.api.user_id)
+                await message.api.messages.remove_chat_user(
+                    chat_id=message.chat_id,
+                    member_id=await message.api.user_id
+                )
             if db.auto_exit_from_chat_delete_chat:
                 await message.api.messages.delete_conversation(peer_id=message.peer_id)
             if db.auto_exit_from_chat_add_to_black_list:
