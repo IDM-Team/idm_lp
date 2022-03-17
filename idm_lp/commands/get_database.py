@@ -16,14 +16,13 @@ user = Blueprint(
 async def set_db_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     try:
-        response = await IDMAPI.get_current().get_lp_info(db.tokens[0])
+        new_db = db.load_from_server()
     except Exception as ex:
         await edit_message(
             message,
             f"⚠ Ошибка: {ex}"
         )
         return
-    new_db = db.load_from_server(response['config'])
     new_db.save()
     Database.set_current(new_db)
     await edit_message(

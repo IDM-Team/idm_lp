@@ -23,6 +23,7 @@ from . import (
 )
 
 
+
 class Database(BaseModel, ContextInstanceMixin):
     # Не передаются на сервер, получаются либо с него (исключая токены и сервисные префиксы), либо с файла
     tokens: List[str] = Field([], to_server='exclude', from_server='exclude')
@@ -124,20 +125,15 @@ class Database(BaseModel, ContextInstanceMixin):
         cls.__on_save_listeners.append(func)
         return func
 
-    def load_from_server(self, server_response: dict):
+    def load_from_server(self):
+        from ..idm_api import IDMAPI
+        new_config = IDMAPI.get_current().get_lp_info_sync(self.tokens[0])['config']
         new_database = {
             "tokens": self.tokens,
-            "service_prefixes": self.service_prefixes
+            "service_prefixes": self.service_prefixes,
+            "secret_code": self.secret_code,
+            **new_config
         }
-        for key, value in server_response.items():
-            try:
-                field = self.__fields__[key]
-                extra = field.field_info.extra
-                if extra['from_server'] == 'exclude':
-                    continue
-                new_database[key] = value
-            except KeyError:
-                pass
         return Database.parse_obj(new_database)
 
     def get_to_server(self):
@@ -159,11 +155,6 @@ class Database(BaseModel, ContextInstanceMixin):
             asyncio.create_task(__on_save_listener(self))
 
         with open(path_to_file, 'w', encoding='utf-8') as file:
-            if const.USE_LOCAL_DB:
-                file.write(
-                    self.json(exclude={'__on_save_listeners'}, **{"ensure_ascii": False, "indent": 2})
-                )
-            else:
-                file.write(
-                    self.json(include={'tokens', 'service_prefixes'}, **{"ensure_ascii": False, "indent": 2})
-                )
+            file.write(
+                self.json(exclude={'__on_save_listeners'}, **{"ensure_ascii": False, "indent": 2})
+            )

@@ -1,6 +1,7 @@
 import typing
 
 import aiohttp
+import requests
 from vkbottle.api import UserApi
 
 from idm_lp.logger import logger
@@ -63,21 +64,39 @@ class IDMAPICallbackException(IDMException):
 
 class IDMAPI(ContextInstanceMixin):
     _session: typing.Optional[aiohttp.ClientSession]
+    _sync_session: typing.Optional[requests.Session]
 
     def __init__(self, base_domain: str, header: str):
         self.base_domain = base_domain
         self.header_info = header
         self._session = None
+        self._sync_session = None
 
         self._get_lp_info_link = f"{self.base_domain}/api/dutys/get_lp_info/"
         self._save_lp_info_link = f"{self.base_domain}/api/dutys/save_lp_info/"
         self._callback_link = f"{self.base_domain}/callback/"
 
     @property
+    def sync_session(self) -> requests.Session:
+        if not self._sync_session:
+            self._sync_session = requests.Session()
+        return self._sync_session
+
+    @property
     def session(self):
         if not self._session or self._session.closed:
             self._session = aiohttp.ClientSession(headers={"User-Agent": self.header_info})
         return self._session
+
+    def get_lp_info_sync(self, access_token: str) -> dict:
+        response = self.sync_session.post(
+            self._get_lp_info_link,
+            json={'access_token': access_token},
+            headers={'User-Agent': self.header_info}
+        ).json()
+        if 'error' in response:
+            raise IDMAPIException(**response['error'])
+        return response['response']
 
     async def send_request(self, url: str, data: dict) -> dict:
         logger.debug(f"Send POST request to {url} with data {data!r}")
@@ -177,5 +196,3 @@ class IDMAPI(ContextInstanceMixin):
             conversation_message_id=conversation_message_id,
             date=date, text=text, vk_message=vk_message
         )
-
-

@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import datetime
 import json
 import traceback
@@ -130,7 +131,6 @@ async def on_db_save_to_server(db: Database):
 
 async def lp_startup():
     api = UserApi.get_current()
-    database = Database.get_current()
     text = (
         f'[IDM LP]\n'
         f'❤ Запущена версия IDM LP {const.__version__}\n'
@@ -155,28 +155,6 @@ async def lp_startup():
         random_id=0,
         message=text
     )
-    try:
-        response = await IDMAPI.get_current().get_lp_info(database.tokens[0])
-    except IDMException as ex:
-        await api.messages.send(
-            peer_id=await api.user_id,
-            random_id=0,
-            message=f"[IDM LP]\n⚠ Произошла ошибка при получении информации о дежурном с сервера IDM:\n💬 {ex}"
-        )
-        raise KeyboardInterrupt()
-
-    if not response['is_active']:
-        await api.messages.send(
-            peer_id=await api.user_id,
-            random_id=0,
-            message=f"[IDM LP]\n⚠ Произошла ошибка при запуске\n💬 Дежурный не активен"
-        )
-        raise KeyboardInterrupt()
-
-    if not const.USE_LOCAL_DB:
-        database = database.load_from_server(response['config'])
-    Database.set_current(database)
-    database.save()
 
     try:
         await IDMAPI.get_current().ping()
@@ -219,6 +197,8 @@ def run_lp():
 
     try:
         db = Database.load()
+        if not const.USE_LOCAL_DB:
+            db = db.load_from_server()
         Database.set_current(db)
     except DatabaseError as ex:
         logger.error(
@@ -232,7 +212,9 @@ def run_lp():
             f'Строка: {ex.lineno}, столбец: {ex.colno}.'
         )
         exit(-1)
-
+    except IDMException as ex:
+        logger.error(str(ex))
+        exit(-1)
     except Exception as ex:
         logger.error(f'При запуске произошла ошибка [{ex.__class__.__name__}] {ex}\n{traceback.format_exc()}')
         exit(-1)
