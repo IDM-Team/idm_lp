@@ -33,14 +33,14 @@ async def deactivate_auto_infection_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автозаражение интервал <int:interval>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> автозаражение интервал <interval:int>")
 @logger_decorator
 async def set_auto_infection_interval_wrapper(message: Message, interval: int, **kwargs):
     db = Database.get_current()
-    if interval < 120:
+    if interval < 60:
         await edit_message(
             message,
-            "⚠ Интервал автоматического заражения не может быть меньше 2х минут"
+            "⚠ Интервал автоматического заражения не может быть меньше 1 минуты"
         )
         return
 

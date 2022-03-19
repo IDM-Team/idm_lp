@@ -1,8 +1,9 @@
 import json
 
+import pytz
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-__version__ = '1.14.1'
+__version__ = '1.14.2'
 __author__ = 'lordralinc'
 __description__ = (
     "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. "
@@ -37,4 +38,4 @@ except FileNotFoundError:
 
 APP_USER_AGENT = f"IDMLP({APP_ID};{APP_SECRET})"
 
-scheduler = AsyncIOScheduler()
+scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Moscow'))

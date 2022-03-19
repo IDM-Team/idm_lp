@@ -106,6 +106,9 @@ async def on_db_save(db: Database):
                 max_instances=1
             )
             await timers.auto_infection_timer(api, db)
+    else:
+        if 'auto_infection_timer' in timers_ids:
+            const.scheduler.remove_job('auto_infection_timer')
     for timer in db.timers:
         if timer.method == timer.method.SEND_MESSAGE:
             if timer.id not in timers_ids:

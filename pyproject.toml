@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "idm_lp"
-version = "1.14.1"
+version = "1.14.2"
 description = "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. Так же он добавляет игнор, глоигнор, мут и алиасы."
 authors = ["lordralinc"]
 license = "MIT"
@@ -11,10 +11,10 @@ documentation = "https://github.com/IDM-Team/idm_lp"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-vkbottle = "2.7.12"
-pydantic = "1.7.3"
-python-rucaptcha = "3.0"
-APScheduler = "^3.9.1"
+vkbottle = "^2.7.12"
+pydantic = ">=1.7.3,<2.0"
+python-rucaptcha = ">=3.0,<4.0"
+APScheduler = ">=3.9.1,<4.0"
 
 [tool.poetry.dev-dependencies]
 
