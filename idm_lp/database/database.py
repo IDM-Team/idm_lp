@@ -23,7 +23,6 @@ from . import (
 )
 
 
-
 class Database(BaseModel, ContextInstanceMixin):
     # Не передаются на сервер, получаются либо с него (исключая токены и сервисные префиксы), либо с файла
     tokens: List[str] = Field([], to_server='exclude', from_server='exclude')
@@ -64,7 +63,7 @@ class Database(BaseModel, ContextInstanceMixin):
     muted_members: List[MutedMembers] = Field([], to_server='include', from_server='include')
     aliases: List[Alias] = Field([], to_server='include', from_server='include')
     role_play_commands: List[RolePlayCommand] = Field([], to_server='include', from_server='include')
-    trusted: List[TrustedUser] = Field([], to_server='include', from_server='include')
+    trusted: List[TrustedUser] = Field([], to_server='exclude', from_server='include')
     add_to_friends_on_chat_enter: List[ChatEnterModel] = Field([], to_server='include', from_server='include')
     sloumo: List[SlouMo] = Field([], to_server='include', from_server='include')
     regex_deleter: List[RegexDeleter] = Field([], to_server='include', from_server='include')

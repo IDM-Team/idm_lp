@@ -1,13 +1,12 @@
 import json
-from typing import Optional
+import re
 
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
 
+from idm_lp.database import Alias
 from idm_lp.idm_api import IDMAPI, IDMException
 from idm_lp.logger import logger_decorator
-from idm_lp.database import Database, Alias
-
 
 user = Blueprint(
     name='aliases_blueprint'
@@ -15,7 +14,6 @@ user = Blueprint(
 
 
 async def send_signal(
-        database: Database,
         message: Message,
         message_text: str
 ):
@@ -35,7 +33,11 @@ async def send_signal(
 
 @user.on.message_handler(FromMe(), text=['<alias:alias> <signal>', '<alias:alias>', '<alias:alias>\n<signal>'])
 @logger_decorator
-async def duty_signal(message: Message, alias: Alias, signal: str = None):
-    db = Database.get_current()
-    await send_signal(db, message, message.text.replace(alias.command_from, f".с {alias.command_to}"))
+async def duty_signal(message: Message, alias: Alias, **kwargs):
+    await send_signal(
+        message,
+        re.compile(alias.command_from, re.IGNORECASE).sub(
+            f".с {alias.command_to}", message.text
+        )
+    )
 
