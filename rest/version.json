@@ -1,8 +1,12 @@
 {
-  "version": "1.14.3",
+  "version": "1.14.4",
   "author": "lordralinc",
-  "description": "Фикс алиасов",
+  "description": "Фикс NoMeta",
   "update_log": [
+    {
+      "version": "1.14.3",
+      "description": "— Фикс алиасов"
+    },
     {
       "version": "1.14.2",
       "description": "— Фикс удаления таймера автозаражения и настройки интервала"

@@ -1,3 +1,5 @@
+import os
+
 import requests
 from vkbottle.rule import FromMe
 from vkbottle.user import Blueprint, Message
@@ -28,6 +30,10 @@ async def info_wrapper(message: Message, **kwargs):
             f"{version_rest['description']}\n"
             f"{const.GITHUB_LINK}"
         )
+        if 'DYNO' in os.environ:
+            update_text += (
+                "\n\nЧтобы обновить введите !с обновитьлп"
+            )
     elif current > last_stable:
         update_text = (
             "\n\n⚠ Обратите внимание! Вы используете экспериментальную не стабильную версию.\n"

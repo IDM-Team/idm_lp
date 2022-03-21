@@ -1,4 +1,5 @@
 import asyncio
+import string
 import time
 
 from vkbottle import VKError
@@ -20,26 +21,39 @@ def concat(element_list: list, postfix: str) -> list:
         yield item + postfix
 
 
-HELLO_TEXTS_PATTERNS = [
+HELLO_TEXTS = [
     "привет", "ку", "салам",
     "приветствую", "здрасте", "здравствуйте",
     "здарова", "йоу", 'хай',
-    'добрый день', 'доброе утро', 'добрый вечер',
-    'доброго времени суток', 'шалам', 'cалом алейкум',
-    'cалам алейкум', 'салам', 'салом', "приветствую вас", "приветствую",
-    "мы разделяем с тобой солнце", "мы разделяем с тобой луну",
+    'добрыйдень', 'доброеутро', 'добрыйвечер',
+    'доброговременисуток', 'шалам', 'cаломалейкум',
+    'cаламалейкум', 'салам', 'салом', "приветствуювас", "приветствую",
+    "мыразделяемстобой солнце", "мыразделяемстобойлуну",
     'бонжур', 'привiт', 'hi', 'hello', 'здравствуй', 'приветик', 'хаюшки'
 ]
 
-HELLO_TEXTS = [
-    *HELLO_TEXTS_PATTERNS,
-    *concat(HELLO_TEXTS_PATTERNS, '!'),
-    *concat(HELLO_TEXTS_PATTERNS, '.'),
-]
+REPLACE_SYMBOLS = string.punctuation + " "
 
 HELLO_STICKER_IDS = [
 
 ]
+
+
+def levenshtein_distance(a: str, b: str) -> int:
+    n, m = len(a), len(b)
+    if n > m:
+        a, b = b, a
+        n, m = m, n
+    current_row = range(n + 1)
+    for i in range(1, m + 1):
+        previous_row, current_row = current_row, [i] + [0] * n
+        for j in range(1, n + 1):
+            add, delete, change = previous_row[j] + 1, current_row[j - 1] + 1, previous_row[j - 1]
+            if a[j - 1] != b[i - 1]:
+                change += 1
+            current_row[j] = min(add, delete, change)
+
+    return current_row[n]
 
 
 async def nometa_checker(db: Database, message: Message):
@@ -62,11 +76,18 @@ async def nometa_checker(db: Database, message: Message):
     )
 
 
-@user.on.message_handler(FromMe(False), PrivateMessage(), text=HELLO_TEXTS)
+@user.on.message_handler(FromMe(False), PrivateMessage())
 @logger_decorator
 async def nometa_message_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     if not db.nometa_enable:
+        return
+
+    text_to_scan = message.text.lower()
+    for symb in REPLACE_SYMBOLS:
+        text_to_scan = text_to_scan.replace(symb, '')
+
+    if min(map(lambda x: levenshtein_distance(text_to_scan, x), HELLO_TEXTS)) > 3:
         return
     try:
         msgs = await message.api.messages.get_by_conversation_message_id(

@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import datetime
 import json
+import os
 import traceback
 
 import requests
@@ -148,6 +149,11 @@ async def lp_startup():
             f"\n💬 Доступно обновление {version_rest['version']}\n"
             f"{version_rest['description']}"
         )
+        if 'DYNO' in os.environ:
+            text += (
+                "\n\nЧтобы обновить введите !с обновитьлп"
+            )
+
     elif current > last_stable:
         text += "\n💬 Обратите внимание! Вы используете экспериментальную не стабильную версию."
 
