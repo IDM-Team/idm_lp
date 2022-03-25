@@ -148,10 +148,17 @@
       "all_ending": "сразу всех"
     },
     {
-      "name": "пригласить на чаёк",
+      "name": "пригласить на чай",
       "gen": "acc",
-      "formatter_man": "☕ | {first_user} пригласил на чаёк {second_user}",
-      "formatter_woman": "☕ | {first_user} пригласила на чаёк {second_user}",
+      "formatter_man": "🍵 | {first_user} пригласил на чай {second_user}",
+      "formatter_woman": "🍵 | {first_user} пригласила на чай {second_user}",
+      "all_ending": "сразу всех"
+    },
+    {
+      "name": "пригласить на кофе",
+      "gen": "acc",
+      "formatter_man": "☕ | {first_user} пригласил на кофе {second_user}",
+      "formatter_woman": "☕ | {first_user} пригласила на кофе {second_user}",
       "all_ending": "сразу всех"
     },
     {
