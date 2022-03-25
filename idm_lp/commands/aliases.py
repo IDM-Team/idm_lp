@@ -36,8 +36,7 @@ async def send_signal(
 async def duty_signal(message: Message, alias: Alias, **kwargs):
     await send_signal(
         message,
-        re.compile(alias.command_from, re.IGNORECASE).sub(
+        re.compile(alias.regexp, re.IGNORECASE).sub(
             f".с {alias.command_to}", message.text
         )
     )
-
