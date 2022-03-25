@@ -11,7 +11,6 @@ from . import (
     Alias,
     ChatEnterModel,
     IgnoredMembers,
-    IgnoredGlobalMembers,
     MutedMembers,
     ContextInstanceMixin,
     RegexDeleter,
@@ -59,16 +58,19 @@ class Database(BaseModel, ContextInstanceMixin):
     duty_prefixes: List[str] = Field([".лд", "!лд"], to_server='include', from_server='include')
 
     ignored_members: List[IgnoredMembers] = Field([], to_server='include', from_server='include')
-    ignored_global_members: List[IgnoredGlobalMembers] = Field([], to_server='include', from_server='include')
     muted_members: List[MutedMembers] = Field([], to_server='include', from_server='include')
     aliases: List[Alias] = Field([], to_server='include', from_server='include')
     role_play_commands: List[RolePlayCommand] = Field([], to_server='include', from_server='include')
-    trusted: List[TrustedUser] = Field([], to_server='exclude', from_server='include')
+    trusted: List[TrustedUser] = Field([], to_server='include', from_server='include')
     add_to_friends_on_chat_enter: List[ChatEnterModel] = Field([], to_server='include', from_server='include')
     sloumo: List[SlouMo] = Field([], to_server='include', from_server='include')
     regex_deleter: List[RegexDeleter] = Field([], to_server='include', from_server='include')
 
     __on_save_listeners: typing.List[typing.Callable] = []
+
+    @property
+    def ignored_global_members(self):
+        return [x for x in self.ignored_members if x.chat_id is None]
 
     def __enter__(self) -> "Database":
         return self

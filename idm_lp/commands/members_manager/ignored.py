@@ -218,12 +218,12 @@ async def show_all_ignore_members_wrapper(message: Message, **kwargs):
     user_ids = [
         ignore_member.member_id
         for ignore_member in db.ignored_members
-        if ignore_member.member_id > 0
+        if ignore_member.member_id > 0 and ignore_member.chat_id is not None
     ]
     group_ids = [
         abs(ignore_member.member_id)
         for ignore_member in db.ignored_members
-        if ignore_member.member_id < 0
+        if ignore_member.member_id < 0 and ignore_member.chat_id is not None
     ]
 
     if not user_ids and not group_ids:
@@ -232,7 +232,7 @@ async def show_all_ignore_members_wrapper(message: Message, **kwargs):
     groups = await message.api.groups.get_by_id(group_ids=group_ids) if group_ids else []
 
     ignored = {}
-    for _ignored in db.ignored_members:
+    for _ignored in [x for x in db.ignored_members if x.chat_id is not None]:
         ignored.setdefault(_ignored.chat_id, [])
         ignored[_ignored.chat_id] += [_ignored]
 

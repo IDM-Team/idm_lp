@@ -1,8 +1,12 @@
 {
-  "version": "1.14.4",
+  "version": "1.15.0",
   "author": "lordralinc",
-  "description": "Фикс NoMeta",
+  "description": "Внутренние изменения",
   "update_log": [
+    {
+      "version": "1.14.4",
+      "description": "— Фикс NoMeta"
+    },
     {
       "version": "1.14.3",
       "description": "— Фикс алиасов"
