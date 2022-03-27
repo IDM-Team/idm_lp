@@ -66,6 +66,10 @@ class Database(BaseModel, ContextInstanceMixin):
     sloumo: List[SlouMo] = Field([], to_server='include', from_server='include')
     regex_deleter: List[RegexDeleter] = Field([], to_server='include', from_server='include')
 
+    spy_check_online: List[int] = Field([], to_server='include', from_server='include')
+    spy_check_typing: List[int] = Field([], to_server='include', from_server='include')
+    spy_check_messages: List[int] = Field([], to_server='include', from_server='include')
+
     __on_save_listeners: typing.List[typing.Callable] = []
 
     @property
