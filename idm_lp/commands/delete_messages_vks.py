@@ -28,7 +28,7 @@ DD_SCRIPT = (
     text=["<count:dd_value>", "<s:dd_prefix>"],
 )
 @logger_decorator
-async def dd_handler(message: Message, count: int = 2, **kwargs):
+async def dd_handler(message: Message, count: int = 1, **kwargs):
     count += 1
     await message.api.execute(
         DD_SCRIPT % (

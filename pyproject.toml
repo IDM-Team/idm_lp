@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "idm_lp"
-version = "1.15.2"
-description = "LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах. Так же он добавляет игнор, глоигнор, мут и алиасы."
+version = "1.15.3"
+description = "LP модуль позволяет работать приемнику сигналов «IDM» работать в любых чатах."
 authors = ["lordralinc"]
 license = "MIT"
 readme = "README.md"

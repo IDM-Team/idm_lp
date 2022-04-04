@@ -2,7 +2,6 @@ import asyncio
 import json
 import os
 import typing
-from typing import List
 
 from pydantic import BaseModel, validator, Field
 
@@ -16,7 +15,6 @@ from . import (
     RegexDeleter,
     RolePlayCommand,
     TrustedUser,
-    SlouMo,
     DatabaseError,
     Timer
 )
@@ -24,10 +22,10 @@ from . import (
 
 class Database(BaseModel, ContextInstanceMixin):
     # Не передаются на сервер, получаются либо с него (исключая токены и сервисные префиксы), либо с файла
-    tokens: List[str] = Field([], to_server='exclude', from_server='exclude')
+    tokens: typing.List[str] = Field([], to_server='exclude', from_server='exclude')
     secret_code: str = Field("", to_server='exclude', from_server='include')
     ru_captcha_key: typing.Optional[str] = Field("", to_server='exclude', from_server='include')
-    service_prefixes: List[str] = Field([".слп", "!слп"], to_server='exclude', from_server='exclude')
+    service_prefixes: typing.List[str] = Field([".слп", "!слп"], to_server='exclude', from_server='exclude')
 
     # Получаются исключительно с сервера
     repeater_word: str = Field("..", to_server='include', from_server='include')
@@ -51,26 +49,51 @@ class Database(BaseModel, ContextInstanceMixin):
 
     nometa_enable: bool = Field(False, to_server='include', from_server='include')
     nometa_message: str = Field("nometa.xyz", to_server='include', from_server='include')
-    nometa_attachments: List[str] = Field([], to_server='include', from_server='include')
+    nometa_attachments: typing.List[str] = Field([], to_server='include', from_server='include')
     nometa_delay: float = Field(5 * 60, to_server='include', from_server='include')
 
-    self_prefixes: List[str] = Field([".л", "!л"], to_server='include', from_server='include')
-    duty_prefixes: List[str] = Field([".лд", "!лд"], to_server='include', from_server='include')
+    self_prefixes: typing.List[str] = Field([".л", "!л"], to_server='include', from_server='include')
+    duty_prefixes: typing.List[str] = Field([".лд", "!лд"], to_server='include', from_server='include')
 
-    ignored_members: List[IgnoredMembers] = Field([], to_server='include', from_server='include')
-    muted_members: List[MutedMembers] = Field([], to_server='include', from_server='include')
-    aliases: List[Alias] = Field([], to_server='include', from_server='include')
-    role_play_commands: List[RolePlayCommand] = Field([], to_server='include', from_server='include')
-    trusted: List[TrustedUser] = Field([], to_server='include', from_server='include')
-    add_to_friends_on_chat_enter: List[ChatEnterModel] = Field([], to_server='include', from_server='include')
-    sloumo: List[SlouMo] = Field([], to_server='include', from_server='include')
-    regex_deleter: List[RegexDeleter] = Field([], to_server='include', from_server='include')
+    ignored_members: typing.List[IgnoredMembers] = Field([], to_server='include', from_server='include')
+    muted_members: typing.List[MutedMembers] = Field([], to_server='include', from_server='include')
+    aliases: typing.List[Alias] = Field([], to_server='include', from_server='include')
+    role_play_commands: typing.List[RolePlayCommand] = Field([], to_server='include', from_server='include')
+    trusted: typing.List[TrustedUser] = Field([], to_server='include', from_server='include')
+    add_to_friends_on_chat_enter: typing.List[ChatEnterModel] = Field([], to_server='include', from_server='include')
+    regex_deleter: typing.List[RegexDeleter] = Field([], to_server='include', from_server='include')
 
-    spy_check_online: List[int] = Field([], to_server='include', from_server='include')
-    spy_check_typing: List[int] = Field([], to_server='include', from_server='include')
-    spy_check_messages: List[int] = Field([], to_server='include', from_server='include')
+    spy_check_online: typing.List[int] = Field([], to_server='include', from_server='include')
+    spy_check_typing: typing.List[int] = Field([], to_server='include', from_server='include')
+    spy_check_messages: typing.List[int] = Field([], to_server='include', from_server='include')
 
     __on_save_listeners: typing.List[typing.Callable] = []
+
+    @validator('service_prefixes')
+    def service_prefixes_validator(cls, v: typing.List[str]) -> typing.List[str]:
+        if not v:
+            return ['!слп', '.слп']
+        return list(set([x.lower() for x in v]))
+
+    @validator('self_prefixes')
+    def self_prefixes_validator(cls, v: typing.List[str]) -> typing.List[str]:
+        if not v:
+            return [".л", "!л"]
+        return list(set([x.lower() for x in v]))
+
+    @validator('duty_prefixes')
+    def duty_prefixes_validator(cls, v: typing.List[str]) -> typing.List[str]:
+        if not v:
+            return [".лд", "!лд"]
+        return list(set([x.lower() for x in v]))
+
+    @validator('repeater_word', 'dd_prefix')
+    def to_lower_validator(cls, v: str) -> str:
+        return v.lower()
+
+    @validator('spy_check_online', 'spy_check_typing', 'spy_check_messages', 'tokens')
+    def unique_validator(cls, v: typing.List) -> typing.List:
+        return list(set(v))
 
     @property
     def ignored_global_members(self):
@@ -81,15 +104,6 @@ class Database(BaseModel, ContextInstanceMixin):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.save()
-
-    @validator('tokens')
-    def name_must_contain_space(cls, v):
-        if not v:
-            raise DatabaseError(
-                name='Нет токенов',
-                description='Укажите токены в файле конфигурации'
-            )
-        return v
 
     @staticmethod
     def get_path() -> str:

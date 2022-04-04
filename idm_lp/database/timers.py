@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 
 import pydantic
+from pydantic import validator, ValidationError
 
 from idm_lp.utils import parse_cron_text
 
@@ -39,6 +40,25 @@ class Timer(pydantic.BaseModel):
     cron: typing.Optional[str]
     run_date: typing.Optional[datetime]
     interval: typing.Optional[int]
+
+    @validator('name')
+    def to_lower_validator(cls, v: str) -> str:
+        return v.lower()
+
+    @validator('interval')
+    def interval_validator(cls, v: typing.Optional[int]) -> typing.Optional[int]:
+        if v is not None and v <= 0:
+            raise ValueError('Интервал не может быть меньше 1')
+        return v
+
+    @validator('cron')
+    def cron_validator(cls, v: typing.Optional[str]) -> typing.Optional[str]:
+        if v is not None:
+            try:
+                parse_cron_text(v)
+            except:
+                raise ValueError('Не верное CRON значение')
+        return v
 
     @property
     def cron_params(self):

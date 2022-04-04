@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class GenEnum(Enum):
@@ -18,3 +18,7 @@ class RolePlayCommand(BaseModel):
     formatter_man: str
     formatter_woman: str
     all_ending: str
+
+    @validator('name')
+    def to_lower_validator(cls, v: str) -> str:
+        return v.lower()

@@ -123,7 +123,7 @@ async def show_timers_from_scheduler_wrapper(
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +таймер <name> смс <text_message>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +таймер <name:lower_str> смс <text_message>")
 @logger_decorator
 async def add_date_timer_wrapper(
         message: Message,
@@ -134,7 +134,7 @@ async def add_date_timer_wrapper(
     await create_timer(message, name, text_message, TimerType.DATE)
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +цтаймер <name> смс <text_message>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +цтаймер <name:lower_str> смс <text_message>")
 @logger_decorator
 async def add_interval_timer_wrapper(
         message: Message,
@@ -145,7 +145,7 @@ async def add_interval_timer_wrapper(
     await create_timer(message, name, text_message, TimerType.INTERVAL)
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +ктаймер <name> смс <text_message>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> +ктаймер <name:lower_str> смс <text_message>")
 @logger_decorator
 async def add_cron_timer_wrapper(
         message: Message,

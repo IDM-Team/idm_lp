@@ -128,8 +128,8 @@ async def role_play_command_wrapper(
 
 
 mrp_create_text = [
-    "<service_prefix:service_prefix> +мрп <name> <gen>\n<formatter_man>\n<formatter_woman>\n<all_ending>",
-    "<service_prefix:service_prefix> +мрп <name>\n<formatter_man>\n<formatter_woman>\n<all_ending>"
+    "<service_prefix:service_prefix> +мрп <name:lower_str> <gen>\n<formatter_man>\n<formatter_woman>\n<all_ending>",
+    "<service_prefix:service_prefix> +мрп <name:lower_str>\n<formatter_man>\n<formatter_woman>\n<all_ending>"
 ]
 
 
@@ -184,7 +184,7 @@ async def role_play_command_create_wrapper(
     )
 
 
-@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> -мрп <name>", )
+@user.on.message_handler(FromMe(), text="<service_prefix:service_prefix> -мрп <name:lower_str>", )
 @logger_decorator
 async def role_play_command_create_wrapper(
         message: Message,

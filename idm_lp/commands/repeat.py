@@ -38,7 +38,7 @@ async def repeat_wrapper(message: Message, **kwargs):
     await edit_message(message, "✅ Повторялка выключена")
 
 
-@user.on.message_handler(FromMe(), text='<prefix:service_prefix> повторялка <text>')
+@user.on.message_handler(FromMe(), text='<prefix:service_prefix> повторялка <text:lower_str>')
 @logger_decorator
 async def repeat_wrapper(message: Message, text: str, **kwargs):
     db = Database.get_current()

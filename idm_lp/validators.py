@@ -67,6 +67,11 @@ def service_prefix(value: str):
 
 
 @validator
+def lower_str(value: str):
+    return value.lower()
+
+
+@validator
 def repeater_word(value: str):
     db = Database.get_current()
     if value.startswith(db.repeater_word):

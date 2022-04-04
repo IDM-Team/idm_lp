@@ -68,16 +68,6 @@ class MutedMembersRule(AbstractMessageRule):
         return False
 
 
-class SlouMoRule(AbstractMessageRule):
-
-    async def check(self, message: Message) -> bool:
-        db = Database.get_current()
-        for slou in db.sloumo:
-            if slou.chat_id == message.chat_id:
-                return True
-        return False
-
-
 class TrustedRule(AbstractMessageRule):
 
     async def check(self, message: Message) -> bool:

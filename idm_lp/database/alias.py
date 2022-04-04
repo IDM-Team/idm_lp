@@ -1,10 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Alias(BaseModel):
     name: str
     command_from: str
     command_to: str
+
+    @validator('name')
+    def to_lower_validator(cls, v: str) -> str:
+        return v.lower()
 
     @property
     def regexp(self) -> str:

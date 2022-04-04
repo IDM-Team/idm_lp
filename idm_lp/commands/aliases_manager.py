@@ -50,7 +50,7 @@ def delete_last_space(value: str) -> str:
 
 @user.on.message_handler(
     FromMe(),
-    text="<prefix:service_prefix> +алиас <alias_name>\n<command_from>\n<command_to>"
+    text="<prefix:service_prefix> +алиас <alias_name:lower_str>\n<command_from>\n<command_to>"
 )
 @logger_decorator
 async def add_alias_wrapper(message: Message, alias_name: str, command_from: str, command_to: str, *args, **kwargs):
@@ -87,7 +87,7 @@ async def show_aliases_wrapper(message: Message, **kwargs):
     )
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -алиас <alias_name>")
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -алиас <alias_name:lower_str>")
 @logger_decorator
 async def remove_alias_wrapper(message: Message, alias_name: str, **kwargs):
     db = Database.get_current()

@@ -26,8 +26,8 @@ async def repeat_wrapper(message: Message, **kwargs):
 @user.on.message_handler(
     FromMe(),
     text=[
-        '<prefix:service_prefix> +regex <name> <regex> <for_all:yes_or_no>',
-        '<prefix:service_prefix> +regex <name> <regex>',
+        '<prefix:service_prefix> +regex <name:lower_str> <regex> <for_all:yes_or_no>',
+        '<prefix:service_prefix> +regex <name:lower_str> <regex>',
     ]
 )
 @logger_decorator
@@ -42,7 +42,7 @@ async def repeat_wrapper(message: Message, name: str, regex: str, for_all: bool 
     await edit_message(message, "✅ Добавлено")
 
 
-@user.on.message_handler(FromMe(), text='<prefix:service_prefix> -regex <name>')
+@user.on.message_handler(FromMe(), text='<prefix:service_prefix> -regex <name:lower_str>')
 @logger_decorator
 async def repeat_wrapper(message: Message,  name: str, **kwargs):
     db = Database.get_current()

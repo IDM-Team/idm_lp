@@ -1,5 +1,4 @@
 import argparse
-import asyncio
 import datetime
 import json
 import os
@@ -19,8 +18,7 @@ from idm_lp.logger import logger, Logger, LoggerLevel
 from idm_lp.utils import SemVer
 
 parser = argparse.ArgumentParser(
-    description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.\n'
-                'Так же он добавляет игнор, глоигнор, мут и алиасы.'
+    description='LP модуль позволяет работать приемнику сигналов «IDM multi» работать в любых чатах.'
 )
 
 parser.add_argument(
