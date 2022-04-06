@@ -62,10 +62,9 @@ async def bio_reply_handler(message: Message):
 
 @user.on.message_handler(rules.ContainsRule(['У вас горячка']))
 @logger_decorator
-async def bio_bio_auto_vaccine_handler(message: Message):
+async def bio_auto_vaccine_handler(message: Message):
     if message.peer_id != -174105461 or not db.auto_vaccine:
         return
-    #time.sleep(2)
     await asyncio.sleep(2)
     return f"!купить вакцину"
 
