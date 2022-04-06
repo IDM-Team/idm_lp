@@ -39,6 +39,7 @@ class Database(BaseModel, ContextInstanceMixin):
     auto_infection_argument: str = Field("р", to_server='include', from_server='include')
 
     bio_reply: bool = Field(False, to_server='include', from_server='include')
+    auto_vaccine: bool = Field(False, to_server='include', from_server='include')
     repeater_active: bool = Field(False, to_server='include', from_server='include')
 
     delete_all_notify: bool = Field(False, to_server='include', from_server='include')
