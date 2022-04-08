@@ -46,19 +46,28 @@ async def bio_reply_handler(message: Message):
     if message.from_id > 0:
         return
 
-    db = Database.get_current()
-    if not db.bio_reply and not db.auto_vaccine:
-        return
-
     if str(await message.api.user_id) not in message.text:
         return
 
+    db = Database.get_current()
     lab_user = USER_ID_REGEX.match(message.text)
-    if 'Горячка' in message.text and db.auto_vaccine:
+    if not db.bio_reply and not db.auto_vaccine:
+        return
+    elif db.bio_reply and db.auto_vaccine and 'Горячка' in message.text:
+        text=f"!купить вакцину"
+        await api.messages.send(
+        peer_id=-174105461,
+        random_id=0,
+        message=text
+        )
+        await asyncio.sleep(3)
+    elif 'Горячка' in message.text and db.auto_vaccine:
         return f"!купить вакцину"
     if lab_user and db.bio_reply:
         # noinspection PyUnresolvedReferences
         return f"Заразить @id{lab_user.user_id}"
+    else:
+        return
 
 
 @user.on.message_handler(rules.ContainsRule(['У вас горячка']))
