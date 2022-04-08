@@ -71,7 +71,7 @@ async def bio_auto_vaccine_handler(message: Message):
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовакцина")
 @logger_decorator
-async def activate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
+async def deactivate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     db.auto_vaccine = False
     db.save()
@@ -83,7 +83,7 @@ async def activate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автовакцина")
 @logger_decorator
-async def deactivate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
+async def activate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     db.auto_vaccine = True
     db.save()
@@ -95,7 +95,7 @@ async def deactivate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> -заражение")
 @logger_decorator
-async def activate_bio_reply_wrapper(message: Message, **kwargs):
+async def deactivate_bio_reply_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     db.bio_reply = False
     db.save()
@@ -107,7 +107,7 @@ async def activate_bio_reply_wrapper(message: Message, **kwargs):
 
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> +заражение")
 @logger_decorator
-async def deactivate_bio_reply_wrapper(message: Message, **kwargs):
+async def activate_bio_reply_wrapper(message: Message, **kwargs):
     db = Database.get_current()
     db.bio_reply = True
     db.save()
