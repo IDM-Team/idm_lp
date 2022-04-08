@@ -61,7 +61,7 @@ async def bio_reply_handler(message: Message):
             random_id=0,
             message="!купить вакцину"
         )
-        await asyncio.sleep(2)
+        time.sleep(2)
     if lab_user and db.bio_reply:
         # noinspection PyUnresolvedReferences
         return f"Заразить @id{lab_user.user_id}"
@@ -73,7 +73,7 @@ async def bio_reply_handler(message: Message):
 async def bio_auto_vaccine_handler(message: Message):
     if not db.auto_vaccine or message.peer_id != -174105461:
         return
-    await asyncio.sleep(2)
+    time.sleep(2)
     return f"!купить вакцину"
 
 
