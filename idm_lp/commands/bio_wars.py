@@ -1,4 +1,5 @@
 import re
+import asyncio
 
 from collections import namedtuple
 from typing import Optional, NamedTuple
@@ -69,18 +70,6 @@ async def bio_auto_vaccine_handler(message: Message):
     return f"!купить вакцину"
 
 
-@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовакцина")
-@logger_decorator
-async def deactivate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
-    db = Database.get_current()
-    db.auto_vaccine = False
-    db.save()
-    await edit_message(
-        message,
-        "✅ -АвтоВакцина"
-    )
-
-
 @user.on.message_handler(FromMe(), text="<prefix:service_prefix> +автовакцина")
 @logger_decorator
 async def activate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
@@ -90,6 +79,18 @@ async def activate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
     await edit_message(
         message,
         "✅ +АвтоВакцина"
+    )
+
+
+@user.on.message_handler(FromMe(), text="<prefix:service_prefix> -автовакцина")
+@logger_decorator
+async def deactivate_bio_auto_vaccine_wrapper(message: Message, **kwargs):
+    db = Database.get_current()
+    db.auto_vaccine = False
+    db.save()
+    await edit_message(
+        message,
+        "✅ -АвтоВакцина"
     )
 
 
