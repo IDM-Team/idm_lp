@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "idm_lp"
-version = "1.15.3"
+version = "1.15.4"
 description = "LP модуль позволяет работать приемнику сигналов «IDM» работать в любых чатах."
 authors = ["lordralinc"]
 license = "MIT"

@@ -30,6 +30,7 @@ class Database(BaseModel, ContextInstanceMixin):
     # Получаются исключительно с сервера
     repeater_word: str = Field("..", to_server='include', from_server='include')
     dd_prefix: str = Field("дд", to_server='include', from_server='include')
+    editor_prefix: str = Field("рр", to_server='include', from_server='include')
 
     timers: typing.List[Timer] = Field([], to_server='include', from_server='include')
 
