@@ -36,7 +36,13 @@ parser.add_argument(
     default="https://idmduty.ru",
     help='Базовый домен'
 )
-
+parser.add_argument(
+    '--disable_startup_message',
+    dest="disable_startup_message",
+    action="store_const",
+    const=True,
+    help='Отключает приветственное сообщение'
+)
 parser.add_argument(
     '--use_app_data',
     dest="use_app_data",
@@ -133,35 +139,36 @@ async def on_db_save_to_server(db: Database):
 
 async def lp_startup():
     api = UserApi.get_current()
-    text = (
-        f'[IDM LP]\n'
-        f'❤ Запущена версия IDM LP {const.__version__}\n'
-    )
-    version_rest = requests.get(const.VERSION_REST).json()
-
-    last_stable = SemVer(version_rest['version'])
-    current = SemVer(const.__version__)
-
-    if current < last_stable:
-        text += (
-            f"\n💬 Доступно обновление {version_rest['version']}\n"
-            f"{version_rest['description']}"
+    if not const.DISABLE_STARTUP_MESSAGE:
+        text = (
+            f'[IDM LP]\n'
+            f'❤ Запущена версия IDM LP {const.__version__}\n'
         )
-        if 'DYNO' in os.environ:
+        version_rest = requests.get(const.VERSION_REST).json()
+
+        last_stable = SemVer(version_rest['version'])
+        current = SemVer(const.__version__)
+
+        if current < last_stable:
             text += (
-                "\n\nЧтобы обновить введите !с обновитьлп"
+                f"\n💬 Доступно обновление {version_rest['version']}\n"
+                f"{version_rest['description']}"
             )
+            if 'DYNO' in os.environ:
+                text += (
+                    "\n\nЧтобы обновить введите !с обновитьлп"
+                )
 
-    elif current > last_stable:
-        text += "\n💬 Обратите внимание! Вы используете экспериментальную не стабильную версию."
+        elif current > last_stable:
+            text += "\n💬 Обратите внимание! Вы используете экспериментальную не стабильную версию."
 
-    const.__author__ = version_rest['author']
+        const.__author__ = version_rest['author']
 
-    await api.messages.send(
-        peer_id=await api.user_id,
-        random_id=0,
-        message=text
-    )
+        await api.messages.send(
+            peer_id=await api.user_id,
+            random_id=0,
+            message=text
+        )
 
     try:
         await IDMAPI.get_current().ping()
@@ -184,6 +191,7 @@ def run_lp():
     const.LOGGER_LEVEL = args.logger_level
     const.ENABLE_EVAL = args.enable_eval if args.enable_eval else False
     const.USE_LOCAL_DB = args.use_local_db if args.use_local_db else False
+    const.DISABLE_STARTUP_MESSAGE = args.disable_startup_message if args.disable_startup_message else False
 
     if isinstance(logger, Logger):
         logger.global_logger_level = LoggerLevel.get_int(const.LOGGER_LEVEL)

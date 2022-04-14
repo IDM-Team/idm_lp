@@ -4,7 +4,8 @@ from vkbottle.user import Blueprint, Message
 
 from idm_lp.logger import logger_decorator
 from idm_lp.database import Database, MutedMembers
-from idm_lp.utils import edit_message, get_ids_by_message, get_full_name_by_member_id, generate_user_or_groups_list
+from idm_lp.utils import edit_message, get_ids_by_message, get_full_name_by_member_id, generate_user_or_groups_list, \
+    get_push_by_id, get_link
 
 user = Blueprint(
     name='muted_members_blueprint'
@@ -191,23 +192,6 @@ async def show_mute_members_wrapper(message: Message, **kwargs):
             message.peer_id
         )
     )
-
-
-def get_link(peer_id):
-    if peer_id > 2e9:
-        return f"vk.com/im?sel=c{peer_id - int(2e9)}"
-    return f"vk.com/im?sel={peer_id}"
-
-
-def get_push_by_id(users, groups, member_id):
-    if member_id > 0:
-        for push_user in users:
-            if push_user.id == member_id:
-                return f"[id{push_user.id}|{push_user.first_name} {push_user.last_name}]"
-    else:
-        for group in groups:
-            if group.id == abs(member_id):
-                return f"[public{group.id}|{group.name}]"
 
 
 @user.on.message_handler(

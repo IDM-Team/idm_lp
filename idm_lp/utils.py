@@ -126,6 +126,23 @@ async def generate_user_or_groups_list(
     return message
 
 
+def get_link(peer_id):
+    if peer_id > 2e9:
+        return f"vk.com/im?sel=c{peer_id - int(2e9)}"
+    return f"vk.com/im?sel={peer_id}"
+
+
+def get_push_by_id(users, groups, member_id):
+    if member_id > 0:
+        for push_user in users:
+            if push_user.id == member_id:
+                return f"[id{push_user.id}|{push_user.first_name} {push_user.last_name}]"
+    else:
+        for group in groups:
+            if group.id == abs(member_id):
+                return f"[public{group.id}|{group.name}]"
+
+
 class SemVer:
 
     def __init__(self, sem_ver: str):
