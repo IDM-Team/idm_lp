@@ -30,8 +30,15 @@ commands_bp = (
     aliases.user,
     aliases_manager.user,
     auto_exit_from_chat.user,
-    auto_infection.user,
-    bio_wars.user,
+
+    #
+    # Если захотите убрать коммент:
+    # https://vk.com/wall-174105461_15842772
+    #
+    # auto_infection.user,
+    # bio_wars.user,
+
+
     delete_messages.user,
     delete_messages_vks.user,
     delete_notify.user,

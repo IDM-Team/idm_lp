@@ -3,7 +3,7 @@ import json
 import pytz
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-__version__ = '1.15.5'
+__version__ = '1.15.6'
 __author__ = 'lordralinc'
 __description__ = (
     "LP модуль позволяет работать приемнику сигналов «IDM» работать в любых чатах."

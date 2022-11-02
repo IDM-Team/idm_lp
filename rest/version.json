@@ -1,8 +1,12 @@
 {
-  "version": "1.15.5",
+  "version": "1.15.6",
   "author": "lordralinc",
-  "description": "Внутренние изменения",
+  "description": "Отключение автоматизации био-войн",
   "update_log": [
+    {
+      "version": "1.15.5",
+      "description": "— Внутренние изменения"
+    },
     {
       "version": "1.14.4",
       "description": "— Фикс NoMeta"
